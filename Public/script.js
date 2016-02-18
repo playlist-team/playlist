@@ -1,21 +1,21 @@
 $(document).ready(function() {
 
-if(window.FileReader) { 
+if(window.FileReader) {
   addEventHandler(window, 'load', function() {
     var status = document.getElementById('status');
     var drop   = document.getElementById('drop');
     var list   = document.getElementById('list');
-  	
+
     function cancel(e) {
       if (e.preventDefault) { e.preventDefault(); }
       return false;
     }
-  
+
     // Tells the browser that we *can* drop on this target
     addEventHandler(drop, 'dragover', cancel);
     addEventHandler(drop, 'dragenter', cancel);
   });
-} else { 
+} else {
   document.getElementById('status').innerHTML = 'Your browser does not support the HTML5 FileReader.';
 }
 
@@ -35,7 +35,7 @@ function addEventHandler(obj, evt, handler) {
 var audio = new AudioContext;
 
 addEventHandler(drop, 'drop', function (e) {
-  e = e || window.event; // get window.event if e argument missing (in IE)   
+  e = e || window.event; // get window.event if e argument missing (in IE)
   if (e.preventDefault) { e.preventDefault(); } // stops the browser from redirecting.
 
   var dt = e.dataTransfer;
@@ -44,7 +44,7 @@ addEventHandler(drop, 'drop', function (e) {
   for (var i=0; i<files.length; i++) {
     var file = files[i];
     var reader = new FileReader();
-      
+
     //attach event handlers here...
     reader.addEventListener('load', function(event) {
       var data = event.target.result;
