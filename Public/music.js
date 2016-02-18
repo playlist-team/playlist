@@ -2,10 +2,12 @@ angular.module('musicApp', ['ngRoute'])
 
 .config(function($routeProvider){
   $routeProvider
-    .when('/youtube', {
+
+    .when('/', {
       templateUrl: '/youtube.html',
       controller: 'YouTubeController'
     })
+
 })
 
 .controller('YouTubeController', ['$scope', function($scope){
@@ -13,3 +15,5 @@ angular.module('musicApp', ['ngRoute'])
   $scope.message = 'This is working!';
 
 }])
+
+

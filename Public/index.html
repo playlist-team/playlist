@@ -15,24 +15,34 @@
       </div>
     </nav>
 
+    <br>
+    <br>
+    <br>
 
-    <div class="container">
+    <div class="container-fluid">
 
-      <div class="row row-offcanvas row-offcanvas-right">
+      <div class="row">
 
-        <div class="col-xs-12 col-sm-9">
-          <div class="jumbotron" id="drop">
+        <div class="col-md-3" id="queue">
+
+          <div class="list-group">
+            <h1>Queue</h1>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <!-- <div class="jumbotron" id="drop"> -->
 
             <div ng-view>
 
-          </div>
+          <!-- </div> -->
           <div class="jumbotron">
             <h1>Queue</h1>
           </div>
         </div>
 
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
-          <br><br><br>
+        <div class="col-md-3" id="sidebar">
+
           <div class="list-group">
             <h1>CHATS</h1>
           </div>
@@ -40,11 +50,9 @@
 
       </div>
 
-      <hr>
-
-      <footer>
+<!--       <footer>
         <p>Stegosaurus</p>
-      </footer>
+      </footer> -->
 
     </div>
 
@@ -56,7 +64,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular-route.js"></script>
     <script src="music.js"></script>
     <script src="youtube.js"></script>
-    <script src="script.js"></script>
+    <!-- <script src="script.js"></script> -->
   </body>
 </html>
 
