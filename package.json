@@ -1,0 +1,23 @@
+{
+  "name": "2016-01-greenfield",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abc810221/2016-01-greenfield.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abc810221/2016-01-greenfield/issues"
+  },
+  "homepage": "https://github.com/abc810221/2016-01-greenfield#readme",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}
