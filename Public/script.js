@@ -1,4 +1,4 @@
-$(document).ready(function() {
+/*$(document).ready(function() {*/
 
 if(window.FileReader) {
   addEventHandler(window, 'load', function() {
@@ -60,4 +60,4 @@ addEventHandler(drop, 'drop', function (e) {
   // return false;
 });
 
-});
+/*});*/
