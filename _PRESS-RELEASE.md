@@ -16,29 +16,29 @@ Oh, and I also like to write press-releases in what I call "Oprah-speak" for mai
 Once the project moves into development, the press release can be used as a touchstone; a guiding light. The product team can ask themselves, "Are we building what is in the press release?" If they find they're spending time building things that aren't in the press release (overbuilding), they need to ask themselves why. This keeps product development focused on achieving the customer benefits and not building extraneous stuff that takes longer to build, takes resources to maintain, and doesn't provide real customer benefit (at least not enough to warrant inclusion in the press release).
  -->
  
-## Heading ##
+## EZ Share ##
   > Name the product in a way the reader (i.e. your target customers) will understand.
 
 ## Sub-Heading ##
-  > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  > Easy real time media sharing and chat.
 
 ## Summary ##
-  > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  > The app is a collaborative YouTube and Soundcloud play list with chat functionality. Users can create play lists and view content with everyone in real time. Everyone can chat while they listen to music and watch videos.
 
 ## Problem ##
-  > Describe the problem your product solves.
+  > YouTube and Soundcloud content can not be easily viewed by friends and family at the same time.
 
 ## Solution ##
-  > Describe how your product elegantly solves the problem.
+  > The app gives the users a place to easily view content in real time and chat with each other while its playing.
 
 ## Quote from You ##
-  > A quote from a spokesperson in your company.
+  > "Enjoy music with friends."
 
 ## How to Get Started ##
-  > Describe how easy it is to get started.
+  > Go to www.EZShare.com. Share your music and start chatting.
 
 ## Customer Quote ##
-  > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  > "EZ Share is my favorite way to share music with friends!"
 
 ## Closing and Call to Action ##
-  > Wrap it up and give pointers where the reader should go next.
+  > Start sharing music at www.EZShare.com.
