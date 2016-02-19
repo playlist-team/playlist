@@ -1,8 +1,6 @@
-<div class="drop" style="margin-left:6px" ng-controller="YouTubeController">
+<div class="drop" style="margin-left:6px">
     <p>{{title}}
-    <form>
-        <button ng-click="sends('hi')"  type="submit" style="margin-top:3px"></button>
-      </form>
+    <button style="margin-top:3px" id="{{videoid}}">Queue</button>
     </p>
     <iframe class="video w100" width="176" height="99" src="//www.youtube.com/embed/{{videoid}}" frameborder="0" allowfullscreen></iframe>
 </div>

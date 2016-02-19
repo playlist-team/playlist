@@ -29,6 +29,10 @@ $(function() {
     $(window).on("resize", resetVideoHeight);
 });
 
+$(".thumbnails").on('click', 'button', function(e) {
+  socket.emit('enqueue', e.target.id);
+})
+
 function resetVideoHeight() {
     $(".video").css("height", $("#results").width() * 9/16);
 }
