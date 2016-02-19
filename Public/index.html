@@ -3,7 +3,7 @@
   <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" type="text/css" href="style.css">
-
+    <base href="/"></base>
   </head>
 
   <body ng-app="musicApp">
@@ -31,15 +31,18 @@
 
         <div ng-view></div>
 
-        <div class="col-md-3" id="chat">
+        <div class="col-md-3" id="chat" ng-controller="chatcontroller">
             <div style="height:500px; overflow-x:hidden; width:350px; overflow: auto">
               <ul class="display">
+                <li ng-repeat="message in messages track by $index">
+                 <span ng-class-odd="'odd'" ng-class-even="'even'">{{ message }}</span>
+                </li>
               </ul> 
             </div>
-            <div class="row" >
-              <form class="messages" style="margin-top:5px; margin-left:22px">
-                <input type="text" id="message" placeholder="Enter Message" autocomplete="on" style="width:180px"/>
-                <input type="submit" value="Send" style="margin-top:3px"></input>
+            <div class="row">
+               <form style="margin-top:5px; margin-left:22px">
+                <input ng-model='message' type="text" placeholder="Enter Message" autocomplete="on" style="width:180px"/>
+                <input type="submit" ng-click='send(message)' style="margin-top:3px"></input>
               </form>
   
             </div>
@@ -64,15 +67,34 @@
         socket.emit('message', 'hello world');
       });
 
-      $('.messages').on("submit", function(msg){
-        event.preventDefault()
-        socket.emit('send', $('#message').val());
-      })
+      // $('.messages').on("submit", function(msg){
+      //   event.preventDefault()
+      //   socket.emit('send', $('#message').val());
+      // })
 
-      socket.on('sent', function(data){
-        console.log(data);
-        var message = '<li style="list-style-type: none">'+data+'</li>';
-        $('.display').append(message)
+      // socket.on('sent', function(data){
+      //   var message = '<li style="list-style-type: none">'+data+'</li>';
+      //   $('.display').append(message)
+      // })
+
+      angular.module('chat', [])
+
+      .controller('chatcontroller', function($scope){
+
+
+        $scope.messages = [];
+
+        $scope.send = function(msg){
+          console.log(msg);
+          socket.emit('send', msg)
+        }
+
+        socket.on('sent', function(data){
+          $scope.messages.push(data);
+          console.log($scope.messages)
+          //var message = '<li style="list-style-type: none">'+data+'</li>';
+          //$('.display').append(message)
+        })
       })
 
     </script>
