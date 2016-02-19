@@ -2,6 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
 
   </head>
 
@@ -23,36 +24,17 @@
 
       <div class="row">
 
-        <div class="col-md-3" id="queue">
-
-          <div class="list-group">
+        <div class="col-md-4" id="queue">
             <h1>Queue</h1>
-          </div>
         </div>
 
-        <div class="col-md-6">
-          <!-- <div class="jumbotron" id="drop"> -->
+        <div ng-view></div>
 
-            <div ng-view>
-
-          <!-- </div> -->
-          <div class="jumbotron">
-            <h1>Queue</h1>
-          </div>
-        </div>
-
-        <div class="col-md-3" id="sidebar">
-
-          <div class="list-group">
-            <h1>CHATS</h1>
-          </div>
+        <div class="col-md-3" id="chat">
+            <h1>Chat</h1>
         </div>
 
       </div>
-
-<!--       <footer>
-        <p>Stegosaurus</p>
-      </footer> -->
 
     </div>
 
