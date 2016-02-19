@@ -14,8 +14,19 @@ angular.module('musicApp', ['ngRoute','chat'])
     $locationProvider.html5Mode(true);
 })
 
+
 .controller('YouTubeController', ['$scope', function($scope){
   $scope.message = 'This is working!';
+  $scope.queue = [];
+
+  $scope.sends = function(a) {
+    
+    socket.emit('send', a)
+    console.log('HI')
+    console.log(a);
+  };
+
+
 }])
 
 
