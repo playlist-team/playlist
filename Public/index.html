@@ -24,7 +24,7 @@
 
       <div class="row">
 
-        <div class="col-md-4" id="queue">
+        <div class="col-md-2" id="queue">
           <iframe  src="/search.html" width="210" height="600">
           </iframe>
         </div>
@@ -32,7 +32,17 @@
         <div ng-view></div>
 
         <div class="col-md-3" id="chat">
-            <h1>Chat</h1>
+            <div style="height:500px; overflow-x:hidden; width:350px; overflow: auto">
+              <ul class="display">
+              </ul> 
+            </div>
+            <div class="row" >
+              <form class="messages" style="margin-top:5px; margin-left:22px">
+                <input type="text" id="message" placeholder="Enter Message" autocomplete="on" style="width:180px"/>
+                <input type="submit" value="Send" style="margin-top:3px"></input>
+              </form>
+  
+            </div>
         </div>
 
       </div>
@@ -51,9 +61,19 @@
     <script>
       var socket = io.connect('http://localhost:3000');
       socket.on('connect', function(data){
-        console.log('connected to server');
         socket.emit('message', 'hello world');
       });
+
+      $('.messages').on("submit", function(msg){
+        event.preventDefault()
+        socket.emit('send', $('#message').val());
+      })
+
+      socket.on('sent', function(data){
+        console.log(data);
+        var message = '<li style="list-style-type: none">'+data+'</li>';
+        $('.display').append(message)
+      })
 
     </script>
 

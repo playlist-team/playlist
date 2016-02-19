@@ -15,9 +15,14 @@ var server = app.listen(port);
 var io = require('socket.io').listen(server);
 
 io.on('connection', function(socket){
-  console.log('user connected to socket');
   socket.on('message', function(data){
     console.log(data);
   })
+  socket.on('send', function(data){
+    console.log(data);
+    io.emit('sent', data);
+  })
 });
+
+
 
