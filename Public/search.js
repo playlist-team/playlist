@@ -8,13 +8,14 @@ $(function() {
             part: "snippet",
             type: "video",
             q: encodeURIComponent($("#search").val()).replace(/%20/g, "+"),
-            maxResults: 15,
+            maxResults: 10,
             order: "viewCount",
             publishedAfter: "2000-01-01T00:00:00Z"
        }); 
        // execute the request
        request.execute(function(response) {
           var results = response.result;
+          console.log(results)
           $(".drop").remove();
           $.each(results.items, function(index, item) {
             $.get("item.html", function(data) {
