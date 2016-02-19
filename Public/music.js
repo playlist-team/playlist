@@ -1,12 +1,18 @@
 angular.module('musicApp', ['ngRoute'])
 
-.config(function($routeProvider){
+.config(function($routeProvider, $locationProvider){
   $routeProvider
 
     .when('/', {
       templateUrl: '/youtube.html',
       controller: 'YouTubeController'
     })
+
+    .otherwise({
+      redirectTo: '/'
+    })
+
+  $locationProvider.html5Mode(true);
 
 })
 
