@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/abc810221/2016-01-greenfield#readme",
   "dependencies": {
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "socket.io": "^1.4.5"
   }
 }
