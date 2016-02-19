@@ -22,6 +22,9 @@ io.on('connection', function(socket){
     console.log(data);
     io.emit('sent', data);
   })
+  socket.on('enqueue', function(data) {
+    console.log('ENQUEUE : ID:', data)
+  })
 });
 
 
