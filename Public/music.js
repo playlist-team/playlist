@@ -1,4 +1,4 @@
-angular.module('musicApp', ['ngRoute'])
+angular.module('musicApp', ['ngRoute','chat'])
 
 .config(function($routeProvider, $locationProvider){
   $routeProvider
@@ -7,19 +7,16 @@ angular.module('musicApp', ['ngRoute'])
       templateUrl: '/youtube.html',
       controller: 'YouTubeController'
     })
-
     .otherwise({
-      redirectTo: '/'
+      redirectTo:'/'
     })
 
-  $locationProvider.html5Mode(true);
-
+    $locationProvider.html5Mode(true);
 })
 
 .controller('YouTubeController', ['$scope', function($scope){
-
   $scope.message = 'This is working!';
-
 }])
+
 
 

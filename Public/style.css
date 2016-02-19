@@ -5,3 +5,15 @@
 #chat {
   background-color: lightblue;
 }
+
+li{
+  list-style-type: none
+}
+
+.odd{
+  color:red;
+}
+
+.even{
+  color:blue;
+}
