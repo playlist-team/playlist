@@ -23,7 +23,8 @@ io.on('connection', function(socket){
     io.emit('sent', data);
   })
   socket.on('enqueue', function(data) {
-    console.log('ENQUEUE : ID:', data)
+    console.log('YTid:', data);
+    io.emit('addVideo', data);
   })
 });
 

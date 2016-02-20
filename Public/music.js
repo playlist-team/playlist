@@ -18,14 +18,12 @@ angular.module('musicApp', ['ngRoute','chat'])
 .controller('YouTubeController', ['$scope', function($scope){
   $scope.message = 'This is working!';
   $scope.queue = [];
-
-  $scope.sends = function(a) {
-    
-    socket.emit('send', a)
-    console.log('HI')
-    console.log(a);
-  };
-
+  socket.on('addVideo', function(data) {
+    $scope.$apply(function() {
+      $scope.queue.push(data);
+    })
+    console.log($scope.queue);
+  })
 
 }])
 
