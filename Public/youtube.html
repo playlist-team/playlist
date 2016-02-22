@@ -1,7 +1,19 @@
 <div class="col-md-12" id="player"></div>
 
 <div class="col-md-12" id="queue">
-  <ul>
-    <li ng-repeat="id in queue track by $index">{{ id }}</li>
-  </ul>
-</div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Play List.</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="id in queue track by $index">
+        <td>Song Name</td>
+        <td>Artist</td>
+        <td>{{ id }}</td>
+        <td><button>Remove Song</button></td>
+      </tr>
+    </tbody>
+  </table>
