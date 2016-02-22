@@ -11,7 +11,6 @@ angular.module('musicApp', ['ngRoute','chat'])
 
 .config(function($routeProvider, $locationProvider){
   $routeProvider
-
     .when('/', {
       templateUrl: '/youtube.html',
       controller: 'YouTubeController'
@@ -19,13 +18,13 @@ angular.module('musicApp', ['ngRoute','chat'])
     .otherwise({
       redirectTo:'/'
     })
-
     $locationProvider.html5Mode(true);
 })
 
 .service('VideoService', ['$window', '$rootScope', function($window, $rootScope){
+  var context = this;
   this.player;
-  this.state;
+  this.queue = [];
   $window.onYouTubeIframeAPIReady = function() {
     this.player = new YT.Player('player', {
       height: '400',
@@ -36,52 +35,65 @@ angular.module('musicApp', ['ngRoute','chat'])
         'onStateChange': onPlayerStateChange
       }
     })
-    //$rootScope.$apply();
   };
 
   function onPlayerReady (event)  {
     event.target.playVideo();
-    //$rootScope.$apply();
-    //this.state = 'playing';
   };
 
   function onPlayerStateChange(event) {
     if (event.data === YT.PlayerState.ENDED) {
-      //this.state = 'ended';
+      var nextVideo = checkQueue();
+      if (nextVideo) {
+        player.loadVideoById({ 'videoId': nextVideo.id });
+      } else {
+        player.loadVideoById({ 'videoId': '4ITLNzPoEqs' });
+      }
     }
   };
 
   function stopVideo() {
     this.player.stopVideo();
-    //this.state = 'ended'
-    //$rootScope.$apply();
   };
 
-  function checkQueue(queue){
-    if(queue.length===0){
+  function checkQueue(){
+    if(context.queue.length===0){
       return false;
     }
-    return queue.shift()
+    var next = context.queue.shift();
+    $rootScope.$emit('queueChange', context.queue);
+    return next;
   }
 
-  this.queue = [];
-  var context = this;
   socket.on('addVideo', function(data) {
     context.queue.push(data);
-    $rootScope.$emit('addToQueue', context.queue);
+    $rootScope.$emit('queueChange', context.queue);
   })
 
   this.getData = function(){
     return this.queue;
   }
 
+  socket.on('removeVideo', function(songId){
+    context.queue.forEach(function(song, index){
+      if(song.id === songId){
+        context.queue.splice(index, 1);
+      }
+    })
+    $rootScope.$emit('queueChange', context.queue);
+  })
+
 }])
 
 
 .controller('YouTubeController', ['$scope', 'VideoService', '$rootScope', function($scope, VideoService, $rootScope){
 
+  $scope.dequeue = function(songId){
+    socket.emit('dequeue', songId);
+  }
+
   $scope.list = VideoService.queue;
-  $rootScope.$on('addToQueue', function(){
+  $rootScope.$on('queueChange', function(){
     $scope.$apply(function() {
       $scope.list = VideoService.queue;
     });

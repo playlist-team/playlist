@@ -26,6 +26,9 @@ io.on('connection', function(socket){
     console.log('YTid:', data);
     io.emit('addVideo', data);
   })
+  socket.on('dequeue', function(data) {
+    io.emit('removeVideo', data);
+  })
 });
 
 

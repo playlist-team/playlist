@@ -14,7 +14,7 @@
         <td>{{song.title }}</td>
         <!-- <td>Artist</td> -->
         <td>{{ song.id }}</td>
-        <td><button>Remove Song</button></td>
+        <td><form><button type="button" ng-click='dequeue(song.id)' >Remove Song</button></form></td>
       </tr>
     </tbody>
   </table>
