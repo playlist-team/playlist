@@ -30,8 +30,6 @@ $(function() {
 });
 
 $(".thumbnails").on('click', 'button', function(e) {
-  console.log(e.target, '###########')
-  console.log(e.target.value + ' *************')
   socket.emit('enqueue', {id: e.target.id, title: e.target.value});
 })
 
