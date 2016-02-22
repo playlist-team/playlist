@@ -9,10 +9,11 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="id in queue track by $index">
-        <td>Song Name</td>
-        <td>Artist</td>
-        <td>{{ id }}</td>
+      <tr ng-repeat="song in queue track by $index">
+        <!-- <td>Song Name</td> -->
+        <td>{{song.title }}</td>
+        <!-- <td>Artist</td> -->
+        <td>{{ song.id }}</td>
         <td><button>Remove Song</button></td>
       </tr>
     </tbody>

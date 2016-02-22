@@ -25,15 +25,15 @@
 
       <div class="row">
 
-        <div class="col-md-2" id="queue">        
+        <div class="col-md-2" id="queue">
             <div class="row" style="overflow-x:hidden; height:600px; width:210px overflow: auto" >
               <form action="#" style="margin-top:5px; margin-left:22px">
                 <input type="text" id="search" placeholder="Keywords" autocomplete="on" style="width:180px"/>
                 <input type="submit" value="Search" style="margin-top:3px">
-              </form> 
+              </form>
                 <div class="thumbnails">
 
-                </div>  
+                </div>
             </div>
 
         </div>
@@ -46,12 +46,12 @@
                 <li ng-repeat="message in messages track by $index">
                  <span ng-class-odd="'odd'" ng-class-even="'even'">{{ message }}</span>
                 </li>
-              </ul> 
+              </ul>
             </div>
             <div class="row">
                <form style="margin-top:5px; margin-left:22px">
                 <input ng-model='message' type="text" placeholder="Enter Message" autocomplete="on" style="width:180px"/>
-                <input type="submit" ng-click='send(message)' style="margin-top:3px"></input>
+                <button type="button" ng-click='send(message)' style="margin-top:3px">Send</button>
               </form>
             </div>
         </div>

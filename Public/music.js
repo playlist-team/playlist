@@ -25,7 +25,10 @@ angular.module('musicApp', ['ngRoute','chat'])
     console.log($scope.queue);
   })
 
+
+
 }])
+
 
 
 
