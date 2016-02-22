@@ -23,8 +23,9 @@ angular.module('musicApp', ['ngRoute','chat'])
     $locationProvider.html5Mode(true);
 })
 
-.service('VideoService', ['$window','$rootScope', function($window, $rootScope){
+.service('VideoService', ['$window', '$rootScope', function($window, $rootScope){
   this.player;
+  this.state;
   $window.onYouTubeIframeAPIReady = function() {
     this.player = new YT.Player('player', {
       height: '400',
@@ -35,44 +36,56 @@ angular.module('musicApp', ['ngRoute','chat'])
         'onStateChange': onPlayerStateChange
       }
     })
-    $rootScope.$apply();
+    //$rootScope.$apply();
   };
 
   function onPlayerReady (event)  {
     event.target.playVideo();
-    $rootScope.$apply();
+    //$rootScope.$apply();
+    //this.state = 'playing';
   };
 
-  this.done = false;
   function onPlayerStateChange(event) {
-    if (event.data == YT.PlayerState.ENDED && !done) {
-      setTimeout(stopVideo, 6000);
-      this.done = true;
+    if (event.data === YT.PlayerState.ENDED) {
+      //this.state = 'ended';
     }
   };
 
   function stopVideo() {
     this.player.stopVideo();
-    $rootScope.$apply();
+    //this.state = 'ended'
+    //$rootScope.$apply();
   };
+
+  function checkQueue(queue){
+    if(queue.length===0){
+      return false;
+    }
+    return queue.shift()
+  }
+
+  this.queue = [];
+  var context = this;
+  socket.on('addVideo', function(data) {
+    context.queue.push(data);
+    $rootScope.$emit('addToQueue', context.queue);
+  })
+
+  this.getData = function(){
+    return this.queue;
+  }
 
 }])
 
 
-.controller('YouTubeController', ['$scope', 'VideoService', function($scope, VideoService){
+.controller('YouTubeController', ['$scope', 'VideoService', '$rootScope', function($scope, VideoService, $rootScope){
 
-  //VideoService.onPlayerReady();
-
-  $scope.message = 'This is working!';
-  $scope.queue = [];
-  socket.on('addVideo', function(data) {
+  $scope.list = VideoService.queue;
+  $rootScope.$on('addToQueue', function(){
     $scope.$apply(function() {
-      $scope.queue.push(data);
-    })
-    console.log($scope.queue);
-  })
-
-
+      $scope.list = VideoService.queue;
+    });
+  });
 
 }])
 
