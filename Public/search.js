@@ -8,10 +8,10 @@ $(function() {
             part: "snippet",
             type: "video",
             q: encodeURIComponent($("#search").val()).replace(/%20/g, "+"),
-            maxResults: 10,
+            maxResults: 5,
             order: "viewCount",
             publishedAfter: "2000-01-01T00:00:00Z"
-       }); 
+       });
        // execute the request
        request.execute(function(response) {
           var results = response.result;
@@ -25,12 +25,14 @@ $(function() {
           resetVideoHeight();
        });
     });
-    
+
     $(window).on("resize", resetVideoHeight);
 });
 
 $(".thumbnails").on('click', 'button', function(e) {
-  socket.emit('enqueue', e.target.id);
+  console.log(e.target, '###########')
+  console.log(e.target.value + ' *************')
+  socket.emit('enqueue', {id: e.target.id, title: e.target.value});
 })
 
 function resetVideoHeight() {
