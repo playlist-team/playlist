@@ -26,7 +26,7 @@
       <div class="row">
 
         <div class="col-md-2" id="queue">
-            <div class="row" style="overflow-x:hidden; height:600px; width:210px overflow: auto" >
+            <div class="row" style="overflow-x:hidden; height:640px; width:210px overflow: auto" >
               <form action="#" style="margin-top:5px; margin-left:22px">
                 <input type="text" id="search" placeholder="Keywords" autocomplete="on" style="width:180px"/>
                 <input type="submit" value="Search" style="margin-top:3px">
@@ -41,13 +41,27 @@
         <div ng-view class="col-md-7"></div>
 
         <div class="col-md-3" id="chat" ng-controller="chatcontroller">
-            <div style="height:500px; overflow-x:hidden; width:350px; overflow: auto">
-              <ul class="display">
-                <li ng-repeat="message in messages track by $index">
-                 <span ng-class-odd="'odd'" ng-class-even="'even'">{{ message }}</span>
-                </li>
-              </ul>
-            </div>
+
+
+          <div style="height:600px; overflow-x:hidden; width:330px; overflow: auto">
+
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Messages</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="msg in messages track by $index">
+                  <!-- <td>Song Name</td> -->
+                  <td>USER:</td>
+                  <td>{{msg}}</td>
+                  <!-- <td>Artist</td> -->
+                </tr>
+              </tbody>
+            </table>
+
+      </div>
             <div class="row">
                <form style="margin-top:5px; margin-left:22px">
                 <input ng-model='message' type="text" placeholder="Enter Message" autocomplete="on" style="width:180px"/>

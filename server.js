@@ -14,6 +14,9 @@ var server = app.listen(port);
 
 var io = require('socket.io').listen(server);
 
+//test
+var queue = [];
+
 io.on('connection', function(socket){
   socket.on('message', function(data){
     console.log(data);
@@ -28,6 +31,17 @@ io.on('connection', function(socket){
   })
   socket.on('dequeue', function(data) {
     io.emit('removeVideo', data);
+  })
+  socket.on('stopVideo', function(data) {
+    socket.broadcast.emit('stop', data);
+  })
+  //test
+  socket.on('queuelist', function(data){
+    queue = data;
+  })
+  socket.on('songended', function(){
+    io.emit('nextsong', queue.shift());
+    io.emit('queues', queue);
   })
 });
 
