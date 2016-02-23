@@ -33,7 +33,10 @@ $(function() {
 });
 
 $(".thumbnails").on('click', 'button', function(e) {
-  socket.emit('enqueue', {id: e.target.id, title: e.target.value});
+  console.log('e.target.dataset.thumbnail: ', e.target.dataset.thumbnail);
+  socket.emit('enqueue', {id: e.target.id, 
+                          title: e.target.value, 
+                          thumbnail: e.target.dataset.thumbnail});
 })
 
 function resetVideoHeight() {

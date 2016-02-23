@@ -16,6 +16,7 @@ var io = require('socket.io').listen(server);
 
 //test
 var queue = [];
+var current;
 
 io.on('connection', function(socket){
   socket.on('getQueue', function(){
@@ -40,7 +41,8 @@ io.on('connection', function(socket){
     queue = data;
   })
   socket.on('songended', function(){
-    io.emit('nextsong', queue.shift());
+    current = queue.shift()
+    io.emit('nextsong', current);
     io.emit('queues', queue);
   })
 });

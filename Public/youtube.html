@@ -10,9 +10,9 @@
     </thead>
     <tbody>
       <tr ng-repeat="song in list track by $index">
+        <td><img src={{song.thumbnail}} height="54" width="72"></td>
         <td>{{song.title }}</td>
-        <td>{{ song.id }}</td>
-        <td><form><button type="button" ng-click='dequeue(song.id)' >Remove Song</button></form></td>
+        <td><form><button type="button" ng-click="dequeue(song.id)">Remove Song</button></form></td>
       </tr>
     </tbody>
   </table>
