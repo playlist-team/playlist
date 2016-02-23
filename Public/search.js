@@ -7,7 +7,7 @@ $(function() {
        var request = gapi.client.youtube.search.list({
             part: "snippet",
             type: "video",
-            q: $("#search").val(),
+            q: $("#search-field").val(),
             maxResults: 5,
             order: "viewCount",
             publishedAfter: "2000-01-01T00:00:00Z"
