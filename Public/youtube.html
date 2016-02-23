@@ -1,6 +1,6 @@
 <div class="col-md-12" id="player"></div>
 
-<div class="col-md-12" id="queue" style="margin-left:15px; height:230px; overflow-x:hidden; width:777px; overflow: auto">
+<div class="col-md-12" id="queue" style="margin-left:15px; height:230px; overflow-x:hidden; width:781px; overflow: auto">
 
   <table class="table table-striped">
     <thead>
@@ -10,9 +10,7 @@
     </thead>
     <tbody>
       <tr ng-repeat="song in list track by $index">
-        <!-- <td>Song Name</td> -->
         <td>{{song.title }}</td>
-        <!-- <td>Artist</td> -->
         <td>{{ song.id }}</td>
         <td><form><button type="button" ng-click='dequeue(song.id)' >Remove Song</button></form></td>
       </tr>

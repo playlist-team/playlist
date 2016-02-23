@@ -10,10 +10,7 @@ li{
   list-style-type: none
 }
 
-.odd{
-  color:red;
-}
-
-.even{
-  color:blue;
+.thumbs{
+  width:192;
+  height:110
 }
