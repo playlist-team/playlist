@@ -14,3 +14,10 @@ li{
   width:192;
   height:110
 }
+
+table {
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+	max-width: 100px;
+}
