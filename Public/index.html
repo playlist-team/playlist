@@ -64,8 +64,8 @@
 
       </div>
             <div class="row">
-               <form style="margin-top:5px; margin-left:22px">
-                <input ng-model='message' type="text" placeholder="Enter Message" autocomplete="on" style="width:180px"/>
+               <form name="chatMessage" style="margin-top:5px; margin-left:22px" required>
+                <input ng-model='message' type="text" placeholder="Enter Message" autocomplete="on" style="width:300px" required>
                 <button type="button" ng-click='send(message)' style="margin-top:3px">Send</button>
               </form>
             </div>
