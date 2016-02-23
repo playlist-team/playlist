@@ -18,8 +18,8 @@ var io = require('socket.io').listen(server);
 var queue = [];
 
 io.on('connection', function(socket){
-  socket.on('message', function(data){
-    console.log(data);
+  socket.on('getQueue', function(){
+    io.sockets.connected[socket.id].emit('sendQueue', queue);
   })
   socket.on('send', function(data){
     console.log(data);
