@@ -40,7 +40,7 @@
 
         <div ng-view class="col-md-7"></div>
 
-        <div class="col-md-3" id="chat" ng-controller="chatcontroller">
+        <div class="col-md-3" id="chat" ng-controller="ChatController">
 
 
           <div style="height:600px; overflow-x:hidden; width:330px; overflow: auto">
@@ -52,10 +52,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="msg in messages track by $index">
+                <tr ng-repeat="message in messages track by $index">
                   <!-- <td>Song Name</td> -->
-                  <td>USER:</td>
-                  <td>{{msg}}</td>
+                  <td>{{ username }}</td>
+                  <td>{{ message }}</td>
                   <!-- <td>Artist</td> -->
                 </tr>
               </tbody>
@@ -79,50 +79,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular-route.js"></script>
 
-    <script>
-      var socket = io.connect('http://localhost:3000');
-      socket.on('connect', function(data){
-        socket.emit('message', 'hello world');
-      });
-
-      // $('.messages').on("submit", function(msg){
-      //   event.preventDefault()
-      //   socket.emit('send', $('#message').val());
-      // })
-
-      // socket.on('sent', function(data){
-      //   var message = '<li style="list-style-type: none">'+data+'</li>';
-      //   $('.display').append(message)
-      // })
-
-      angular.module('chat', [])
-
-      .controller('chatcontroller', function($scope){
-
-
-        $scope.messages = [];
-
-        $scope.send = function(msg){
-          console.log(msg);
-          socket.emit('send', msg)
-        }
-
-        socket.on('sent', function(data){
-          $scope.$apply(function() {
-            $scope.messages.push(data);
-          })
-          console.log($scope.messages)
-          //var message = '<li style="list-style-type: none">'+data+'</li>';
-          //$('.display').append(message)
-        })
-      })
-
-    </script>
+    <script src="chat.js"></script>
     <script src="music.js"></script>
-    <!-- <script src="youtube.js"></script> -->
     <script src="search.js"></script>
     <script src="https://apis.google.com/js/client.js?onload=init"></script>
-    <!-- <script src="script.js"></script> -->
   </body>
 </html>
 
