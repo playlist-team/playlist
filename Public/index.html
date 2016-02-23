@@ -27,8 +27,8 @@
 
         <div class="col-md-2" id="queue">
             <div class="row" style="overflow-x:hidden; height:640px; width:210px overflow: auto" >
-              <form action="#" style="margin-top:5px; margin-left:22px">
-                <input type="text" id="search" placeholder="Keywords" autocomplete="on" style="width:180px"/>
+              <form action="#" style="margin-top:5px; margin-left:12px">
+                <input type="text" id="search" placeholder="Keywords" autocomplete="on" style="width:190px"/>
                 <input type="submit" value="Search" style="margin-top:3px">
               </form>
                 <div class="thumbnails">
@@ -40,7 +40,7 @@
 
         <div ng-view class="col-md-7"></div>
 
-        <div class="col-md-3" id="chat" ng-controller="chatController">
+        <div class="col-md-3" id="chat" ng-controller="chatcontroller">
 
 
           <div style="height:600px; overflow-x:hidden; width:330px; overflow: auto">
@@ -79,7 +79,45 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular-route.js"></script>
 
-    <script src="chat.js"></script>
+    <script>
+      var socket = io.connect('http://localhost:3000');
+      socket.on('connect', function(data){
+        socket.emit('message', 'hello world');
+      });
+
+      // $('.messages').on("submit", function(msg){
+      //   event.preventDefault()
+      //   socket.emit('send', $('#message').val());
+      // })
+
+      // socket.on('sent', function(data){
+      //   var message = '<li style="list-style-type: none">'+data+'</li>';
+      //   $('.display').append(message)
+      // })
+
+      angular.module('chat', [])
+
+      .controller('chatcontroller', function($scope){
+
+
+        $scope.messages = [];
+
+        $scope.send = function(msg){
+          console.log(msg);
+          socket.emit('send', msg)
+        }
+
+        socket.on('sent', function(data){
+          $scope.$apply(function() {
+            $scope.messages.push(data);
+          })
+          console.log($scope.messages)
+          //var message = '<li style="list-style-type: none">'+data+'</li>';
+          //$('.display').append(message)
+        })
+      })
+
+    </script>
     <script src="music.js"></script>
     <!-- <script src="youtube.js"></script> -->
     <script src="search.js"></script>

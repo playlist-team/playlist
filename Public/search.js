@@ -19,7 +19,10 @@ $(function() {
           $(".drop").remove();
           $.each(results.items, function(index, item) {
             $.get("item.html", function(data) {
-                $(".thumbnails").append(tplawesome(data, [{"title":item.snippet.title, "videoid":item.id.videoId}]));
+                $(".thumbnails")
+                  .append(tplawesome(data, [{"title":item.snippet.title, 
+                                             "videoid":item.id.videoId, 
+                                             "thumbnail":item.snippet.thumbnails.default.url}]));
             });
           });
           resetVideoHeight();
