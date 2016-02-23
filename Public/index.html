@@ -26,6 +26,7 @@
       <div class="row">
 
         <div class="col-md-2" id="queue">
+          <h4>Search YouTube</h4>
             <div class="row" style="overflow-x:hidden; height:640px; width:210px overflow: auto" >
               <form action="#" style="margin-top:5px; margin-left:12px">
                 <input type="text" id="search" placeholder="Keywords" autocomplete="on" style="width:190px"/>
@@ -48,11 +49,11 @@
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th>Messages</th>
+                  <th><h4>Messages</h4></th>
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="msg in messages track by $index">
+                <tr style="word-wrap: break-word" ng-repeat="msg in messages track by $index">
                   <!-- <td>Song Name</td> -->
                   <td>USER:</td>
                   <td>{{msg}}</td>

@@ -1,9 +1,13 @@
+body {
+  background-color: black;
+}
+
 #queue {
-  background-color: lightblue;
+  background-color: green;
 }
 
 #chat {
-  background-color: lightblue;
+  background-color: white;
 }
 
 li{
@@ -15,9 +19,12 @@ li{
   height:110
 }
 
+
+
 table {
 	table-layout: fixed;
 	border-collapse: collapse;
 	width: 100%;
 	max-width: 100px;
+  background-color: white;
 }
