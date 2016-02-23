@@ -7,6 +7,12 @@ angular.module('musicApp', ['ngRoute','chat'])
 
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+  $window.socket = io.connect('http://localhost:3000');
+  $window.socket.on('connect', function(data) {
+    $window.socket.emit('getQueue');
+  });
+
 })
 
 .config(function($routeProvider, $locationProvider){
@@ -37,21 +43,14 @@ angular.module('musicApp', ['ngRoute','chat'])
     })
   };
 
-  function onPlayerReady (event)  {
+  function onPlayerReady (event) {
     event.target.playVideo();
   };
 
   function onPlayerStateChange(event) {
     if (event.data === YT.PlayerState.ENDED) {
-      //test
+
       socket.emit('songended')
-
-
-      // if (nextVideo) {
-      //   player.loadVideoById({ 'videoId': nextVideo.id });
-      // } else {
-      //   player.loadVideoById({ 'videoId': '4ITLNzPoEqs' });
-      // }
     }
   };
 
@@ -71,13 +70,8 @@ angular.module('musicApp', ['ngRoute','chat'])
   socket.on('addVideo', function(data) {
     context.queue.push(data);
     $rootScope.$emit('queueChange', context.queue);
-    //test
     socket.emit('queuelist', context.queue)
   })
-
-  this.getData = function(){
-    return this.queue;
-  }
 
   socket.on('removeVideo', function(songId){
     context.queue.forEach(function(song, index){
@@ -86,8 +80,8 @@ angular.module('musicApp', ['ngRoute','chat'])
       }
     })
     $rootScope.$emit('queueChange', context.queue);
-    //test
-    socket.emit('queuelist', context.queue)
+
+    socket.emit('queuelist', context.queue);
   })
 
   socket.on('nextsong', function(song){
@@ -96,6 +90,11 @@ angular.module('musicApp', ['ngRoute','chat'])
 
   socket.on('queues', function(queue){
     context.queue = queue;
+    $rootScope.$emit('queueChange', context.queue);
+  })
+
+  socket.on('sendQueue', function(data) {
+    context.queue = data;
     $rootScope.$emit('queueChange', context.queue);
   })
 
