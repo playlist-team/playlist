@@ -1,19 +1,18 @@
 angular.module('chat', [])
 
-.controller('chatController', function($scope){
+.controller('ChatController', function($scope, $window){
 
   $scope.messages = [];
-
-  $scope.send = function(msg){
-    console.log(msg);
-    socket.emit('send', msg)
+  $scope.username = $window.username;
+  
+  $scope.send = function(message){
+    socket.emit('sendMessage', message)
+    $scope.message = null;
   };
 
-  socket.on('sent', function(data){
+  socket.on('messageSent', function(data){
     $scope.$apply(function() {
       $scope.messages.push(data);
-      $scope.message = null;
-    });
-  });
-
-});
+    })
+  })
+})
