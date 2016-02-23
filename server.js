@@ -9,6 +9,7 @@ var server = app.listen(port);
 
 var io = require('socket.io').listen(server);
 
+var users = {};
 var queue = [];
 var current;
 var start;
@@ -16,6 +17,10 @@ var sync;
 var set = false;
 
 io.on('connection', function (socket) {
+
+  socket.on('setUser', function (username) {
+    users[socket.id] = username;
+  });
 
   socket.on('getQueue', function() {
     io.sockets.connected[socket.id].emit('sendQueue', queue);
@@ -37,7 +42,9 @@ io.on('connection', function (socket) {
 
   socket.on('enqueue', function (data) {
     if (current) {
+
       queue.push(data);
+
       io.emit('addVideo', data);
     } else {
       set = false;

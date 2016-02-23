@@ -9,12 +9,13 @@ angular.module('musicApp', ['ngRoute','chat'])
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
   $window.socket = io.connect('http://localhost:3000');
-  $window.socket.on('connect', function(data) {
-    $window.socket.emit('getQueue');
-  });
 
   $window.username = $window.prompt('Username: ');
 
+  $window.socket.on('connect', function() {
+    $window.socket.emit('getQueue');
+    $window.socket.emit('setUser', $window.username);
+  });
 })
 
 .config(function($routeProvider, $locationProvider){
@@ -64,7 +65,7 @@ angular.module('musicApp', ['ngRoute','chat'])
   function onPlayerStateChange(event) {
     if (event.data === YT.PlayerState.ENDED) {
       socket.emit('videoEnded')
-    } 
+    }
   };
 
   socket.on('sendTime', function(duration) {
