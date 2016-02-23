@@ -7,7 +7,12 @@ app.use('/', express.static("./public"));
 
 var server = app.listen(port);
 
-var io = require('socket.io').listen(server);
+// var io = require('socket.io').listen(server);
+
+var io = require('socket.io')({
+  transports: ["xhr-polling"],
+  'polling duration': 10
+}).listen(server);
 
 var users = {};
 var queue = [];
