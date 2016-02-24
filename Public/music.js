@@ -26,6 +26,7 @@ angular.module('musicApp', ['chat', 'search'])
 .service('VideoService', ['$window', '$rootScope', function($window, $rootScope) {
   var context = this;
 
+  this.current = {title: 'HAIM - Forever (Official Music Video)', username: 'Tom'};
   this.player;
   this.queue = [];
 
@@ -86,6 +87,8 @@ angular.module('musicApp', ['chat', 'search'])
   })
 
   socket.on('nextVideo', function(video){
+    context.current.title = video.title;
+    context.current.username = video.username;
     player.loadVideoById(video.id);
     socket.emit('setDuration', player.getDuration());
   })
@@ -101,12 +104,13 @@ angular.module('musicApp', ['chat', 'search'])
   })
 }])
 
-
 .controller('YouTubeController', ['$scope', 'VideoService', '$rootScope', function($scope, VideoService, $rootScope){
 
   $scope.dequeue = function(videoID){
     socket.emit('dequeue', videoID);
   };
+
+  $scope.current = VideoService.current;
 
   $scope.list = VideoService.queue;
   $rootScope.$on('changeQueue', function(){

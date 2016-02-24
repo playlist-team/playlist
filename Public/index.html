@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html ng-app="musicApp">
   <head>
+    <!-- <script src="https://rawgit.com/dwmkerr/angular-modal-service/master/dst/angular-modal-service.js"></script> -->
     <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+<!--
+    <link href='http://getbootstrap.com/dist/css/bootstrap.css' rel='stylesheet' type='text/css'> -->
+
     <link rel="stylesheet" type="text/css" href="style.css">
     <base href="/"></base>
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,900' rel='stylesheet' type='text/css'>
@@ -9,27 +13,30 @@
   </head>
   <body ng-controller="YouTubeController">
 
-    <header>
-      <div id="search">
-        <h1 id="name">Playli.st</h1>
-        <input id="query" type="text" placeholder="Search YouTube Music Videos">
-      </div>
+    <header ng-controller="SearchController">
+        <form id="search" ng-submit="getSearch(field)">
+          <h1 id="name">Playli.st</h1>
+          <input ng-model="field" id="query" type="text" placeholder="Search YouTube Music Videos" autocomplete="on">
+          <input id="submit" type="image" src="search.png">
+        </form>
     </header>
+
 
       <div class="container">
         <div id="yt-queue">
             <div id="player"></div>
 
-          <div id="queue-display">
+          <div id="queue-display" ng-controller="SearchController">
               <table class="queue-table">
                 <thead>
-                  <tr class="queue-header-row">
-                    <th class="queue-col">Playlist</th>
-                    <th class="queue-col">Title</th>
-                    <th class="queue-col">Added By</th>
+                  <tr id="current">
+                    <th class="current-title">{{ current.title }}</th>
+                    <th class="current-title">{{ current.username }}</th>
+
                   </tr>
-                </thead>
+               </thead>
                 <tbody>
+
                   <tr class="queue-song-row" ng-repeat="song in list track by $index">
                     <td ng-cloak class="queue-col"><img src={{song.thumbnail}} height="54" width="72"></td>
                     <td ng-cloak class="queue-col">{{ song.title }}</td>
@@ -45,7 +52,7 @@
             <table class="chat-table">
               <thead>
                 <tr>
-                  <th>Messages</th>
+                  <th>#Chat</th>
                 </tr>
               </thead>
               <tbody class="chat-row" ng-repeat="message in messages track by $index">
@@ -63,6 +70,7 @@
               <!-- <input id="chat-button" type="submit"/> -->
             </form>
         </div>
+
 
 
 
@@ -125,6 +133,7 @@
     </div> -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.2/ui-bootstrap.js"></script> -->
     <script src="chat.js"></script>
     <script src="music.js"></script>
     <script src="search.js"></script>
