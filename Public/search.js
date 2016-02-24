@@ -17,7 +17,28 @@ angular.module('search', [])
                              username: $window.username });
   }
 
+  // $scope.show = function() {
+  //       ModalService.showModal({
+  //           templateUrl: './search.html',
+  //           controller: "ModalController"
+  //       }).then(function(modal) {
+  //           modal.element.modal();
+  //           modal.close.then(function(result) {
+  //               $scope.message = "You said " + result;
+  //           });
+  //       });
+  // };
+
+
 }])
+
+// .controller('ModalController', ['$scope', 'close', function($scope, close) {
+
+//  $scope.close = function(result) {
+//   close(result, 500);
+//  };
+
+// }])
 
 .factory('SearchFactory', ['$http', function($http) {
 
@@ -41,5 +62,22 @@ angular.module('search', [])
     fetchSearch: fetchSearch
   }
 
-
 }])
+
+
+
+
+// .service('ModalService', ['$modal', function($modal) {
+
+//   var modalDefaults = {
+//     backdrop: true,
+//     keyboard: true,
+//     modalFade: true
+//     // templateUrl: ''
+//   };
+
+//   var modalOptions = {
+
+//   };
+
+// }])
