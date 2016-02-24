@@ -4,14 +4,14 @@
 
   <table class="queue-table">
     <thead>
-      <tr class="queue-row">
+      <tr class="queue-header-row">
         <th class="queue-col">Playlist</th>
         <th class="queue-col">Title</th>
         <th class="queue-col">Added By</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="queue-row" ng-repeat="song in list track by $index">
+      <tr class="queue-song-row" ng-repeat="song in list track by $index">
         <td class="queue-col"><img src={{song.thumbnail}} height="54" width="72"></td>
         <td class="queue-col">{{ song.title }}</td>
         <td class="queue-col">{{ song.username }}</td>

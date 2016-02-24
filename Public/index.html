@@ -32,7 +32,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="message in messages">
+                <tr class="chat-row" ng-repeat="message in messages">
                   <td ng-cloak><strong>{{ message.username }}:</strong></td>
                   <td ng-cloak style="word-wrap: break-word">{{ message.message }}</td>
                 </tr>
@@ -41,7 +41,8 @@
           </div>
           <div id="submit-message">
             <form id="chat-submit" ng-submit="send(message)">
-              <input id="input-message" ng-model='message' type="text" placeholder="Enter Message" autocomplete="on"/>
+              <input id="input-message" ng-model="message" type="text" placeholder="Enter Message" autocomplete="on"/>
+              <input id="chat-button" type="submit"></input>
             </form>
            </div>
         </div>

@@ -43,7 +43,6 @@ header {
     width:750px;
     height:600px;
     float: left;
-    /*display: inline-block;*/
 }
 
 #yt-screen {
@@ -64,7 +63,6 @@ header {
     width:310px;
     height: 600px;
     float: right;
-    /*display: inline-block;*/
     background-color: orange;
 }
 
@@ -80,22 +78,12 @@ header {
   background-color: black;
 }
 
-.queue-row {
-  padding-bottom: 15px;
-}
 
 .queue-col {
   padding-right: 175px;
   padding-left: 10px;
 }
 
-#queue {
-  background-color: lightblue;
-}
-
-#chat {
-  background-color: lightblue;
-}
 
 #message-display{
   height:550px;
@@ -106,15 +94,22 @@ header {
 
 #chat-submit{
   float:bottom;
-  width: 200px;
+  width: 305px;
 }
 
 #input-message{
-  width: 250px;
+  width: 200px;
   height: 25px;
   border-radius: 3px;
   margin-top:5px;
-  margin-left:22px
+  margin-left: 20px;
+  padding-left: 5px;
+  display: inline-block;
+}
+
+#chat-button {
+  width: 60px;
+  display: inline-block;
 }
 
 #player {
@@ -123,15 +118,13 @@ header {
 
 }
 
-li{
-  list-style-type: none;
-  margin-left:10px;
-  margin-right:10px;
-}
-
 .thumbs{
   width:192;
   height:110
+}
+
+.chat-row{
+  background-color: white;
 }
 
 
