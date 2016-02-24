@@ -1,4 +1,6 @@
 body {
+  background-image: url("neutral-bg.jpeg");
+
   background-color: white;
   width: 1060px;
   height: 960px;
@@ -7,10 +9,11 @@ body {
 }
 
 header {
-  background-color: black;
+  background-color:blue;
   color: white;
   height: 45px;
 }
+
 
 #search-bar {
   display: inline-block;
@@ -43,11 +46,18 @@ header {
     /*display: inline-block;*/
 }
 
-#youtube-screen {
+#yt-screen {
+  width: 750px;
+  height: 450px;
+  background-color: lightgreen;
+}
+
+#queue-display {
 
 }
+
 #chat-screen {
-    width:305px;
+    width:310px;
     height: 600px;
     float: right;
     /*display: inline-block;*/
@@ -56,8 +66,8 @@ header {
 
 .container {
   width: 1060px;
-  height: 800px;
-  background-color: green;
+  height: 700px;
+  background-color: black;
   margin-top: 50px;
 }
 
@@ -72,6 +82,26 @@ header {
 
 #chat {
   background-color: lightblue;
+}
+
+#message-display{
+  height:550px;
+  overflow-x:hidden;
+  width:305px;
+  overflow: auto
+}
+
+#chat-submit{
+  float:bottom;
+  width: 200px;
+}
+
+#input-message{
+  width: 250px;
+  height: 25px;
+  border-radius: 3px;
+  margin-top:5px;
+  margin-left:22px
 }
 
 li{

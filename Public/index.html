@@ -18,10 +18,32 @@
     </header>
       <div class="container">
         <div id="yt-queue">
-          <div id="yt-screen">YouTube goes here</div>
+          <div id="yt-screen">YouTube Video Display goes here</div>
           <div id="queue-display">Queue goes here</div>
         </div>
-        <div id="chat-screen">Chat goes here</div>
+        <div id="chat-screen" ng-controller="ChatController">
+          <div id="message-display" scroll-directive="messages">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Messages</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="message in messages">
+                  <td ng-cloak><strong>{{ message.username }}:</strong></td>
+                  <td ng-cloak style="word-wrap: break-word">{{ message.message }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="submit-message">
+            <form id="chat-submit" ng-submit="send(message)">
+              <input id="input-message" ng-model='message' type="text" placeholder="Enter Message" autocomplete="on"/>
+<!--               <input type="submit" style="margin-top:3px" ng-model="message"></input> -->
+            </form>
+           </div>
+        </div>
       </div>
 
 
