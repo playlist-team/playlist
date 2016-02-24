@@ -1,4 +1,4 @@
-angular.module('musicApp', ['ngRoute','chat'])
+angular.module('musicApp', ['ngRoute','chat', 'search'])
 
 .run(function($window){
   var tag = document.createElement('script');
@@ -8,7 +8,8 @@ angular.module('musicApp', ['ngRoute','chat'])
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-  $window.socket = io.connect($window.location.hostname || 'http://localhost:3000');
+  $window.socket = io.connect('http://localhost:3000');
+  //$window.socket = io.connect($window.location.hostname || 'http://localhost:3000');
 
   $window.username = $window.prompt('Username: ');
 
