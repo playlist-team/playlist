@@ -1,29 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="musicApp">
   <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" media="screen" title="no title" charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" media="screen" title="no title" charset="utf-8">
+ -->    <link rel="stylesheet" type="text/css" href="style.css">
     <base href="/"></base>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
   </head>
+  <body>
+    <header>
 
-  <body ng-app="musicApp">
-
-    <nav class="navbar navbar-fixed-top navbar-inverse">
-      <div class="container">
-          <ul class="nav navbar-nav">
-            <li><a href="#"></a></li>
-          </ul>
+      <div class="searchbar">
+        <h3 id="search-bar">Search</h3>
+        <input class="youtube-search" placeholder="Search YouTube Music Videos"></input>
+        <h1 id="logo">PlayLst</h1>
       </div>
-    </nav>
 
-    <br>
-    <br>
-    <br>
+    </header>
+      <div class="container" ng-controller="YouTubeController">
+        <div id="yt-queue">
+          <div id="yt-screen">
+            <div id="player"></div>
+          </div>
+          <div id="queue-display" ng-view></div>
+        </div>
+        <div id="chat-screen" ng-controller="ChatController">
+          <div id="message-display" scroll-directive="messages">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Messages</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="chat-row" ng-repeat="message in messages">
+                  <td ng-cloak><strong>{{ message.username }}:</strong></td>
+                  <td ng-cloak style="word-wrap: break-word">{{ message.message }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="submit-message">
+            <form id="chat-submit" ng-submit="send(message)">
+              <input id="input-message" ng-model="message" type="text" placeholder="Enter Message" autocomplete="on"/>
+              <input id="chat-button" type="submit"/>
+            </form>
+           </div>
+        </div>
+      </div>
 
-    <div class="container-fluid">
 
-      <div class="row">
+
+
+     <!--  <div class="row">
 
         <div class="col-md-2" ng-controller="SearchController">
             <div ng-cloak class="row" style="overflow-x:hidden; height:640px; width:210px overflow: auto" >
@@ -77,7 +105,7 @@
 
       </div>
 
-    </div>
+    </div> -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.js"></script>
