@@ -1,4 +1,4 @@
-angular.module('musicApp', ['ngRoute','chat', 'search'])
+angular.module('musicApp', ['chat', 'search'])
 
 .run(function($window){
   var tag = document.createElement('script');
@@ -19,16 +19,8 @@ angular.module('musicApp', ['ngRoute','chat', 'search'])
   });
 })
 
-.config(function($routeProvider, $locationProvider){
-  $routeProvider
-    .when('/', {
-      templateUrl: '/youtube.html',
-      controller: 'YouTubeController'
-    })
-    .otherwise({
-      redirectTo:'/'
-    })
-    $locationProvider.html5Mode(true);
+.config(function($locationProvider){
+  $locationProvider.html5Mode(true);
 })
 
 .service('VideoService', ['$window', '$rootScope', function($window, $rootScope) {
@@ -39,7 +31,7 @@ angular.module('musicApp', ['ngRoute','chat', 'search'])
 
   $window.onYouTubeIframeAPIReady = function() {
     this.player = new YT.Player('player', {
-      height: '400',
+      height: '360',
       width: '640',
       playerVars: {
         'autohide': 1,
