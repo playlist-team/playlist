@@ -31,7 +31,8 @@ header {
 .youtube-search {
   width: 600px;
   height: 25px;
-  color: white;
+  color: black;
+  font-size: 14px;
   display: inline-block;
   margin-top: auto;
   margin-bottom: auto;
