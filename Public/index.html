@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="musicApp">
   <head>
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" media="screen" title="no title" charset="utf-8">
  -->    <link rel="stylesheet" type="text/css" href="style.css">
@@ -16,9 +16,11 @@
       </div>
 
     </header>
-      <div class="container">
+      <div class="container" ng-controller="YouTubeController">
         <div id="yt-queue">
-          <div id="yt-screen">YouTube Video Display goes here</div>
+          <div id="yt-screen">
+            <div id="player"></div>
+          </div>
           <div id="queue-display">Queue goes here</div>
         </div>
         <div id="chat-screen" ng-controller="ChatController">
@@ -40,7 +42,6 @@
           <div id="submit-message">
             <form id="chat-submit" ng-submit="send(message)">
               <input id="input-message" ng-model='message' type="text" placeholder="Enter Message" autocomplete="on"/>
-<!--               <input type="submit" style="margin-top:3px" ng-model="message"></input> -->
             </form>
            </div>
         </div>

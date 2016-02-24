@@ -104,6 +104,12 @@ header {
   margin-left:22px
 }
 
+#player {
+  margin-left: 50px;
+  margin-top: 25px
+
+}
+
 li{
   list-style-type: none;
   margin-left:10px;
