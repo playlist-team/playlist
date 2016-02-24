@@ -1,22 +1,22 @@
-<div id="player"></div>
+<!-- <div id="player"></div> -->
 
-<!-- <div class="col-md-12" id="queue" style="margin-left:15px; height:230px; overflow-x:hidden; width:781px; overflow: auto">
+<div>
 
-  <table class="table table-striped">
+  <table class="queue-table">
     <thead>
-      <tr>
-        <th>Playlist</th>
-        <th>Title</th>
-        <th>Added By</th>
+      <tr class="queue-row">
+        <th class="queue-col">Playlist</th>
+        <th class="queue-col">Title</th>
+        <th class="queue-col">Added By</th>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="song in list track by $index">
-        <td><img src={{song.thumbnail}} height="54" width="72"></td>
-        <td>{{ song.title }}</td>
-        <td>{{ song.username }}</td>
-        <td><form><button type="button" ng-click="dequeue(song.id)">Remove Song</button></form></td>
+      <tr class="queue-row" ng-repeat="song in list track by $index">
+        <td class="queue-col"><img src={{song.thumbnail}} height="54" width="72"></td>
+        <td class="queue-col">{{ song.title }}</td>
+        <td class="queue-col">{{ song.username }}</td>
+        <td class="queue-col"><form><button type="button" ng-click="dequeue(song.id)">Remove Song</button></form></td>
       </tr>
     </tbody>
   </table>
-</div> -->
+</div>

@@ -53,7 +53,11 @@ header {
 }
 
 #queue-display {
-
+  padding-left: 10px;
+  width: 750px;
+  height:150px;
+  overflow-x:hidden;
+  overflow: auto;
 }
 
 #chat-screen {
@@ -74,6 +78,15 @@ header {
 .searchbar {
   /*width: 960px;*/
   background-color: black;
+}
+
+.queue-row {
+  padding-bottom: 15px;
+}
+
+.queue-col {
+  padding-right: 175px;
+  padding-left: 10px;
 }
 
 #queue {
@@ -121,9 +134,4 @@ li{
   height:110
 }
 
-table {
-  table-layout: fixed;
-  border-collapse: collapse;
-  width: 100%;
-  max-width: 100px;
-}
+
