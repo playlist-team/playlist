@@ -3,16 +3,16 @@ var app = express();
 
 var port = process.env.PORT || 3000;
 
-app.use('/', express.static("./Public"));
+app.use('/', express.static('./Public'));
 
 var server = app.listen(port);
 
-// var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server);
 
-var io = require('socket.io')({
-  transports: ["xhr-polling"],
-  'polling duration': 10
-}).listen(server);
+io.configure(function () {
+  io.set("transports", ["xhr-polling"]);
+  io.set("polling duration", 10);
+});
 
 var users = {};
 var queue = [];
@@ -20,6 +20,7 @@ var current;
 var start;
 var sync;
 var set = false;
+var switched = false;
 
 io.on('connection', function (socket) {
 
@@ -49,8 +50,8 @@ io.on('connection', function (socket) {
     if (current) {
 
       queue.push(data);
-
       io.emit('addVideo', data);
+
     } else {
       set = false;
       current = data;
@@ -66,12 +67,20 @@ io.on('connection', function (socket) {
     queue = data;
     socket.broadcast.emit('refreshQueue', queue);
   })
+
   socket.on('videoEnded', function () {
-    set = false;
-    current = queue.shift();
-    io.emit('nextVideo', current);
-    io.emit('refreshQueue', queue);
+    if (!switched) {
+      switched = true;
+      set = false;
+      current = queue.shift();
+      io.emit('nextVideo', current);
+      io.emit('refreshQueue', queue);
+      setTimeout(function() {
+        switched = false;
+      }, 5000);
+    }
   })
+
   socket.on('setDuration', function (data) {
     if (!set) {
       set = true;
