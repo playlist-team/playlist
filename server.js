@@ -29,7 +29,9 @@ io.on('connection', function (socket) {
   });
 
   socket.on('getQueue', function() {
-    io.sockets.connected[socket.id].emit('sendQueue', queue);
+    if (queue.length) {
+      io.sockets.connected[socket.id].emit('sendQueue', queue);
+    }
   })
 
   socket.on('getCurrent', function() {
