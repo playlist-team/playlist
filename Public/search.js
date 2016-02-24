@@ -1,53 +1,45 @@
-function tplawesome(e,t){res=e;for(var n=0;n<t.length;n++){res=res.replace(/\{\{(.*?)\}\}/g,function(e,r){return t[n][r]})}return res}
+angular.module('search', [])
 
-$(function() {
-    $("#search").on("submit", function(e) {
-       e.preventDefault();
-       // prepare the request
-       var request = gapi.client.youtube.search.list({
-            part: "snippet",
-            type: "video",
-            q: $("#search-field").val(),
-            maxResults: 5,
-            order: "viewCount",
-            publishedAfter: "2000-01-01T00:00:00Z"
-       });
-       // execute the request
-       request.execute(function(response) {
-          var results = response.result;
-          console.log(results)
-          $(".drop").remove();
-          $.each(results.items, function(index, item) {
-            $.get("item.html", function(data) {
-                $(".thumbnails")
-                  .append(tplawesome(data, [{"title":item.snippet.title,
-                                             "videoid":item.id.videoId,
-                                             "thumbnail":item.snippet.thumbnails.default.url}]));
-            });
-          });
-          resetVideoHeight();
-       });
+.controller('SearchController', ['$scope', '$window', 'SearchFactory', function($scope, $window, SearchFactory){
+
+  $scope.searchList;
+  $scope.getSearch = function() {
+    SearchFactory.fetchSearch($scope.field, function(results) {
+      console.log(results.data.items)
+      $scope.searchList = results.data.items;
     });
+  }
 
-    $(window).on("resize", resetVideoHeight);
-});
+  $scope.enqueue = function(thumbnail){
+    socket.emit('enqueue', { id: thumbnail.id.videoId,
+                             title: thumbnail.snippet.title,
+                             thumbnail: thumbnail.snippet.thumbnails.default.url,
+                             username: $window.username });
+  }
 
-$(".thumbnails").on('click', 'button', function(e) {
-  console.log('e.target.dataset.thumbnail: ', e.target.dataset.thumbnail);
-  socket.emit('enqueue', {id: e.target.id,
-                          title: e.target.value,
-                          thumbnail: e.target.dataset.thumbnail,
-                          username: window.username });
-})
+}])
 
-function resetVideoHeight() {
-    $(".video").css("height", $("#results").width() * 9/16);
-}
+.factory('SearchFactory', ['$http', function($http) {
+
+  var fetchSearch = function(query, callback) {
+    return $http.get('https://www.googleapis.com/youtube/v3/search', {
+      params: {
+        key: "AIzaSyDxx1rrqR-q7Tcfkz0MqII6sO2GQpONrGg",
+        part: "snippet",
+        type: "video",
+        q: query,
+        maxResults: 5,
+        order: "viewCount",
+        publishedAfter: "2000-01-01T00:00:00Z"
+      }
+    }).then(function(results){
+      callback(results);
+    })
+  };
+
+  return {
+    fetchSearch: fetchSearch
+  }
 
 
-function init(){
-  gapi.client.setApiKey("AIzaSyDxx1rrqR-q7Tcfkz0MqII6sO2GQpONrGg");
-  gapi.client.load("youtube","v3",function(){
-
-  })
-}
+}])

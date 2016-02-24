@@ -25,20 +25,29 @@
 
       <div class="row">
 
-        <div class="col-md-2">
-            <div class="row" style="overflow-x:hidden; height:640px; width:210px overflow: auto" >
-              <form id="search" action="#" style="margin-top:5px; margin-left:12px">
-                <input type="text" id="search-field" placeholder="Keywords" autocomplete="on" style="width:190px"/>
-                <input type="submit" value="Search" style="margin-top:3px">
+        <div class="col-md-2" ng-controller="SearchController">
+            <div ng-cloak class="row" style="overflow-x:hidden; height:640px; width:210px overflow: auto" >
+              <form ng-submit="getSearch(field)" style="margin-top:5px; margin-left:12px">
+                <input ng-model="field" type="text" placeholder="Keywords" autocomplete="on" style="width:190px"/>
+                <input type="submit" style="margin-top:3px; margin-bottom:20px">
               </form>
-                <div class="thumbnails"></div>
+
+                  <li ng-repeat="thumbnail in searchList track by $index">
+                    {{thumbnail.snippet.title}}
+
+                    <div>
+                      <button ng-click="enqueue(thumbnail)" style="margin-left:0px; font-size: 10px">Add to playlist</button>
+                    </div>
+
+                    <img src="{{thumbnail.snippet.thumbnails.default.url}}" height="110" width="192" style="margin-bottom:30px">
+                  </li>
+
             </div>
         </div>
 
         <div ng-view class="col-md-7"></div>
 
         <div class="col-md-3" id="chat" ng-controller="ChatController">
-
 
           <div style="height:600px; overflow-x:hidden; width:330px; overflow: auto" scroll-directive="messages">
 
