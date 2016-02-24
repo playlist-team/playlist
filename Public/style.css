@@ -1,6 +1,6 @@
 body {
   background-color: white;
-  width: 960px;
+  width: 1060px;
   height: 960px;
   margin-right: auto;
   margin-left: auto;
@@ -20,7 +20,7 @@ header {
 
 #logo {
   display: inline-block;
-  padding-left: 50px;
+  padding-left: 100px;
   color: green;
   margin-right: 25px
 }
@@ -35,9 +35,30 @@ header {
   border-radius: 7px;
 }
 
+#yt-queue {
+    background-color:yellow;
+    width:750px;
+    height:600px;
+    float: left;
+    /*display: inline-block;*/
+}
+
+#youtube-screen {
+
+}
+#chat-screen {
+    width:305px;
+    height: 600px;
+    float: right;
+    /*display: inline-block;*/
+    background-color: orange;
+}
+
 .container {
-  /*width: 960px;*/
+  width: 1060px;
+  height: 800px;
   background-color: green;
+  margin-top: 50px;
 }
 
 .searchbar {
