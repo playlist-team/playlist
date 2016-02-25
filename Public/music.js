@@ -34,6 +34,7 @@ angular.module('musicApp', ['chat', 'search'])
     this.player = new YT.Player('player', {
       height: '360',
       width: '640',
+      videoId: '4ITLNzPoEqs',
       playerVars: {
         'autohide': 1,
         'modestbranding': 1,

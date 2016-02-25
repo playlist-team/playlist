@@ -1,5 +1,29 @@
 angular.module('search', [])
 
+.directive('modalDialog', function() {
+  return {
+    restrict: "E",
+    scope: {
+      show: "="
+    },
+    replace: true,
+    link: function(scope, element, attrs) {
+      scope.dialogStyle = {};
+      if (attrs.width) {
+        scope.dialogStyle.width = attrs.width;
+      }
+      if (attrs.height) {
+        scope.dialogStyle.height = attrs.height;
+      }
+      scope.hideModal = function() {
+        scope.show = false;
+      }
+    },
+    transclude: true,
+    template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='hideModal()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-close' ng-click='hideModal()'>X</div><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
+  }
+})
+
 .controller('SearchController', ['$scope', '$window', 'SearchFactory', function($scope, $window, SearchFactory){
 
   $scope.searchList;
@@ -17,28 +41,12 @@ angular.module('search', [])
                              username: $window.username });
   }
 
-  // $scope.show = function() {
-  //       ModalService.showModal({
-  //           templateUrl: './search.html',
-  //           controller: "ModalController"
-  //       }).then(function(modal) {
-  //           modal.element.modal();
-  //           modal.close.then(function(result) {
-  //               $scope.message = "You said " + result;
-  //           });
-  //       });
-  // };
-
+  $scope.modalShown = false;
+  $scope.toggleModal = function() {
+    $scope.modalShown = !$scope.modalShown;
+  };
 
 }])
-
-// .controller('ModalController', ['$scope', 'close', function($scope, close) {
-
-//  $scope.close = function(result) {
-//   close(result, 500);
-//  };
-
-// }])
 
 .factory('SearchFactory', ['$http', function($http) {
 
@@ -63,21 +71,3 @@ angular.module('search', [])
   }
 
 }])
-
-
-
-
-// .service('ModalService', ['$modal', function($modal) {
-
-//   var modalDefaults = {
-//     backdrop: true,
-//     keyboard: true,
-//     modalFade: true
-//     // templateUrl: ''
-//   };
-
-//   var modalOptions = {
-
-//   };
-
-// }])
