@@ -4,7 +4,6 @@ body {
   background-size: 100%;
   background-color: white;
   width: 1060px;
-  height: 960px;
   margin-right: auto;
   margin-left: auto;
 }
@@ -195,6 +194,10 @@ header {
   -webkit-hyphens: auto;
   hyphens: auto;
 }
+
+/*#chat-header {
+  border-bottom: 1px solid black;
+}*/
 
 #chat-submit{
  float:bottom;
