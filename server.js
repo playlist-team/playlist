@@ -7,7 +7,7 @@ app.use('/', express.static('./Public'));
 
 var server = app.listen(port);
 
-/*var io = require('socket.io').listen(server);*/
+// var io = require('socket.io').listen(server);
 
 var io = require('socket.io')({
   transports: ["xhr-polling"],
@@ -16,10 +16,9 @@ var io = require('socket.io')({
 
 var users = {};
 var queue = [];
-var votes = {
-  up: 0,
-  down: 0
-};
+var votes = {};
+var upvotes = 0;
+var downvotes = 0;
 var current;
 var start;
 var sync;
@@ -63,6 +62,8 @@ io.on('connection', function (socket) {
       set = false;
       current = data;
       votes = {};
+      upvotes = 0;
+      downvotes = 0;
       io.emit('clearVotes');
       io.emit('firstVideo', data);
     }
@@ -83,6 +84,8 @@ io.on('connection', function (socket) {
       set = false;
       current = queue.shift();
       votes = {};
+      upvotes = 0;
+      downvotes = 0;
       io.emit('clearVotes');
       io.emit('nextVideo', current);
       io.emit('refreshQueue', queue);
@@ -96,12 +99,16 @@ io.on('connection', function (socket) {
     if (queue.length) {
       current = queue.shift();
       votes = {};
+      upvotes = 0;
+      downvotes = 0;
       io.emit('clearVotes');
       io.emit('nextVideo', current);
       io.emit('refreshQueue', queue);
     } else {
       current = null;
       votes = {};
+      upvotes = 0;
+      downvotes = 0;
       io.emit('clearVotes');
       io.emit('stopVideo');
       io.emit('refreshQueue', queue);
@@ -128,27 +135,27 @@ io.on('connection', function (socket) {
   socket.on('upVote', function(){
     if (votes[socket.id] === 'down'){
       votes[socket.id] = 'up';
-      votes.down--;
-      votes.up++;
+      downvotes--;
+      upvotes++;
     }
     if (votes[socket.id] === undefined) {
       votes[socket.id] = 'up';
-      votes.up++;
+      upvotes++;
     }
-    io.emit('changeVote', votes);
+    io.emit('changeVote', {up: upvotes, down: downvotes});
   })
 
   socket.on('downVote', function(){
     if(votes[socket.id] === 'up'){
       votes[socket.id] = 'down';
-      votes.up--;
-      votes.down++;
+      upvotes--;
+      downvotes++;
     }
     if(votes[socket.id] === undefined){
       votes[socket.id] = 'down';
-      votes.down++;
+      downvotes++;
     }
-    io.emit('changeVote', votes);
+    io.emit('changeVote', {up: upvotes, down: downvotes});
   })
 
 });
