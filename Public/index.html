@@ -18,10 +18,10 @@
         <search-directive show='showResults' width='750px' height='60%'>
           <div id="results">
             <div class="video" ng-cloak ng-repeat="result in searchList track by $index" ng-click="enqueue(result)">
-              <img clas="video-image" src={{result.snippet.thumbnails.default.url}}>
-              <p class="video-title">{{result.snippet.title}}</p>
-              <p class="video-author">{{result.snippet.channelTitle}}</p>
-              <p class="video-description">{{result.snippet.description}}</p>
+              <img clas="video-image" style="float:left" src={{result.snippet.thumbnails.default.url}}>
+              <span style="display: block;" class="video-title">{{result.snippet.title}}</span>
+              <span style="display: block;" class="video-author">{{result.snippet.channelTitle}}</span>
+              <span class="video-description">{{result.snippet.description}}</span>
             </div>
           </div>
         </search-directive>
