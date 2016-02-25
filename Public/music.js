@@ -9,7 +9,7 @@ angular.module('musicApp', ['chat', 'search'])
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
   $window.socket = io.connect('http://localhost:3000');
-  // $window.socket = io.connect($window.location.hostname || 'http://localhost:3000');
+  /*$window.socket = io.connect($window.location.hostname || 'http://localhost:3000');*/
 
   $window.username = $window.prompt('Username: ') || 'anonymous';
   $window.socket.on('connect', function() {
@@ -20,6 +20,7 @@ angular.module('musicApp', ['chat', 'search'])
 
 .config(function($locationProvider){
   $locationProvider.html5Mode(true);
+
 })
 
 .service('VideoService', ['$window', '$rootScope', function($window, $rootScope) {
@@ -49,6 +50,7 @@ angular.module('musicApp', ['chat', 'search'])
     })
     this.player.setVolume(50);
   };
+
 
   function onPlayerReady (event) {
     event.target.playVideo();
@@ -115,7 +117,7 @@ angular.module('musicApp', ['chat', 'search'])
   socket.on('stopVideo', function() {
     player.stopVideo();
   })
-  
+
   $rootScope.$on('skip', function() {
     socket.emit('skip');
   })
@@ -123,8 +125,8 @@ angular.module('musicApp', ['chat', 'search'])
   $rootScope.$on('volumeChange', function(event, volume) {
     player.setVolume(volume);
   })
-
 }])
+
 
 .controller('YouTubeController', ['$scope', 'VideoService', '$rootScope', function($scope, VideoService, $rootScope){
 
@@ -152,5 +154,40 @@ angular.module('musicApp', ['chat', 'search'])
       $scope.list = VideoService.queue;
     });
   });
+
+  $scope.upcount = 0;
+  $scope.downcount = 0;
+
+  $scope.upCount = function(){
+    socket.emit("upVote");
+  }
+
+  $scope.downCount = function(){
+    socket.emit("downVote");
+  }
+
+  socket.on('changeVote', function(vote){
+    $scope.$apply(function() {
+      if(vote === 'minusDown'){
+        $scope.downcount--;
+      }
+      if(vote === 'minusUp'){
+        $scope.upcount--;
+      }
+      if(vote === 'addDown'){
+        $scope.downcount++;
+      }
+      if(vote === 'addUp'){
+        $scope.upcount++;
+      }
+    });
+  })
+
+  socket.on('clearVotes', function(){
+    $scope.$apply(function(){
+      $scope.upcount = 0;
+      $scope.downcount = 0;
+    })
+  })
 
 }])
