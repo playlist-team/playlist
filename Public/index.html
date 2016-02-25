@@ -36,9 +36,9 @@
             <div id="current-song">
               <p ng-cloak ng-show="current.title">{{ current.username }} is playing {{ current.title }}</p>
               <p ng-click="upCount()">UP</p>
-              <p>{{upcount}}</p>
+              <p ng-cloak>{{upcount}}</p>
               <p ng-click="downCount()">DOWN</p>
-              <p>{{downcount}}</p>
+              <p ng-cloak>{{downcount}}</p>
             </div>
 
             <div class="pending-songs" ng-cloak ng-repeat="song in list track by $index">

@@ -166,20 +166,10 @@ angular.module('musicApp', ['chat', 'search'])
     socket.emit("downVote");
   }
 
-  socket.on('changeVote', function(vote){
+  socket.on('changeVote', function(votes){
     $scope.$apply(function() {
-      if(vote === 'minusDown'){
-        $scope.downcount--;
-      }
-      if(vote === 'minusUp'){
-        $scope.upcount--;
-      }
-      if(vote === 'addDown'){
-        $scope.downcount++;
-      }
-      if(vote === 'addUp'){
-        $scope.upcount++;
-      }
+      $scope.upcount = votes.up;
+      $scope.downcount = votes.down;
     });
   })
 

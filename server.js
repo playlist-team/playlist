@@ -16,7 +16,10 @@ var io = require('socket.io').listen(server);
 
 var users = {};
 var queue = [];
-var votes = {};
+var votes = {
+  up: 0,
+  down: 0
+};
 var current;
 var start;
 var sync;
@@ -125,25 +128,27 @@ io.on('connection', function (socket) {
   socket.on('upVote', function(){
     if (votes[socket.id] === 'down'){
       votes[socket.id] = 'up';
-      io.emit('changeVote', 'minusDown');
-      io.emit('changeVote', 'addUp');
+      votes.down--;
+      votes.up++;
     }
     if (votes[socket.id] === undefined) {
       votes[socket.id] = 'up';
-      io.emit('changeVote', 'addUp');
+      votes.up++;
     }
+    io.emit('changeVote', votes);
   })
 
   socket.on('downVote', function(){
     if(votes[socket.id] === 'up'){
       votes[socket.id] = 'down';
-      io.emit('changeVote', 'minusUp');
-      io.emit('changeVote', 'addDown');
+      votes.up--;
+      votes.down++;
     }
     if(votes[socket.id] === undefined){
       votes[socket.id] = 'down';
-      io.emit('changeVote', 'addDown');
+      votes.down++;
     }
+    io.emit('changeVote', votes);
   })
 
 });
