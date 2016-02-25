@@ -83,9 +83,22 @@ io.on('connection', function (socket) {
 
   socket.on('skip', function() {
     if (queue.length) {
+      switched = true;
+      set = false;
       current = queue.shift();
       io.emit('nextVideo', current);
       io.emit('refreshQueue', queue);
+
+      setTimeout(function() {
+        switched = false;
+      }, 5000);
+
+      set = true;
+      clearInterval(sync);
+      start = 0;
+      sync = setInterval(function() {
+        start++;
+      }, 1000);
     } else {
       io.emit('stopVideo');
       io.emit('refreshQueue', queue);
@@ -98,7 +111,6 @@ io.on('connection', function (socket) {
       start = data;
       clearInterval(sync);
       sync = setInterval(function() {
-        console.log(start);
         start++;
       }, 1000);
     }
