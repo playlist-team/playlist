@@ -16,13 +16,14 @@
         <input id="search-input" ng-model="field" type="text" placeholder="Search YouTube Music Videos" autocomplete="off">
         <input id="search-submit" type="image" src="search.png">
         <search-directive show='showResults' width='750px' height='60%'>
-          <li ng-cloak ng-repeat="thumbnail in searchList track by $index">
-            {{thumbnail.snippet.title}}
-            <div>
-              <button ng-click="enqueue(thumbnail)" style="margin-left:0px; font-size: 10px">Add to playlist</button>
+          <div id="results">
+            <div class="video" ng-cloak ng-repeat="result in searchList track by $index" ng-click="enqueue(result)">
+              <img clas="video-image" src={{result.snippet.thumbnails.default.url}}>
+              <p class="video-title">{{result.snippet.title}}</p>
+              <p class="video-author">{{result.snippet.channelTitle}}</p>
+              <p class="video-description">{{result.snippet.description}}</p>
             </div>
-            <img src="{{thumbnail.snippet.thumbnails.default.url}}" height="110" width="192" style="margin-bottom:30px">
-          </li>
+          </div>
         </search-directive>
       </form>
       <h1 id="skip" ng-click="skip()">skip</h1>
