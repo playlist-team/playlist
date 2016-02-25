@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="musicApp">
   <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,900' rel='stylesheet' type='text/css'>
@@ -14,80 +15,35 @@
       <form id="search" ng-submit="getSearch(field)" ng-controller="SearchController">
         <input id="search-input" ng-model="field" type="text" placeholder="Search YouTube Music Videos" autocomplete="on">
         <input id="search-submit" type="image" src="search.png">
+        <button ng-click='toggleModal()'>Open Modal Dialog</button>
+        <modal-dialog show='modalShown' width='750px' height='60%'>
+          <p>
+            <li ng-repeat="thumbnail in searchList track by $index">
+                    {{thumbnail.snippet.title}}
+              <div>
+                <button ng-click="enqueue(thumbnail)" style="margin-left:0px; font-size: 10px">Add to playlist</button>
+              </div>
+              <img src="{{thumbnail.snippet.thumbnails.default.url}}" height="110" width="192" style="margin-bottom:30px">
+            </li>
+          <p>
+        </modal-dialog>
       </form>
     </header>
-
       <div class="container">
         <div id="player-queue">
           <div id="player"></div>
           <div id="queue-display">
 
             <div id="current-song">
-              <p>{{ current.title }}</p>
-              <p>{{ current.username }}</p>
+              <p ng-cloak >{{ current.title }}</p>
+              <p ng-cloak>{{ current.username }}</p>
             </div>
 
-            <div class="pending-songs">
-              <p>Taylor Swift - Blank Space</p>
-              <button class="delete">Delete</button>
-              <img src="">
-              <img src="">
+            <div class="pending-songs" ng-repeat="song in list track by $index">
+              <p ng-cloak>{{ song.title }}</p>
+              <button class="delete" type="button" ng-click="dequeue(song.id)">Delete</button>
             </div>
 
-            <div class="pending-songs">
-              <p>Mark Ronson - Uptown Funk ft. Bruno Mars</p>
-              <button class="delete">Delete</button>
-              <img src="">
-              <img src="">
-            </div>
-
-            <div class="pending-songs">
-              <p>Taylor Swift - Blank Space</p>
-              <button class="delete">Delete</button>
-              <img src="">
-              <img src="">
-            </div>
-
-            <div class="pending-songs">
-              <p>Mark Ronson - Uptown Funk ft. Bruno Mars</p>
-              <button class="delete">Delete</button>
-              <img src="">
-              <img src="">
-            </div>
-
-            <div class="pending-songs">
-              <p>Taylor Swift - Blank Space</p>
-              <button class="delete">Delete</button>
-              <img src="">
-              <img src="">
-            </div>
-
-            <div class="pending-songs">
-              <p>Mark Ronson - Uptown Funk ft. Bruno Mars</p>
-              <button class="delete">Delete</button>
-              <img src="">
-              <img src="">
-            </div>
-
-
-<!--               <table class="queue-table">
-                <thead>
-                  <tr id="current">
-                    <th class="current-title">{{ current.title }}</th>
-                    <th class="current-title">{{ current.username }}</th>
-                  </tr>
-               </thead>
-
-                <tbody>
-                  <tr class="queue-song-row" ng-repeat="song in list track by $index">
-                    <td ng-cloak class="queue-col"><img src={{song.thumbnail}} height="54" width="72"></td>
-                    <td ng-cloak class="queue-col">{{ song.title }}</td>
-                    <td ng-cloak class="queue-col">{{ song.username }}</td>
-                    <td ng-cloak class="queue-col"><form><button type="button" ng-click="dequeue(song.id)">Remove Song</button></form></td>
-                  </tr>
-                </tbody>
-
-              </table> -->
           </div>
         </div>
 
@@ -177,8 +133,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular.min.js"></script>
     <script src="chat.js"></script>
-    <script src="music.js"></script>
     <script src="search.js"></script>
+    <script src="music.js"></script>
   </body>
 </html>
 
