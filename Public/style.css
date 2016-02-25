@@ -47,6 +47,12 @@ header {
   -moz-user-select: none;
 }
 
+.tab{
+  display: inline-block;
+  border: 1px solid black;
+  width:203px;
+}
+
 #skip:hover {
   color: #AC0809;
   cursor: pointer;
