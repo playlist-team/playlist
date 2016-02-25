@@ -1,6 +1,6 @@
 # Project Name #
 
-<!-- 
+<!--
 > This material was originally posted [here](http://www.quora.com/What-is-Amazons-approach-to-product-development-and-product-management). It is reproduced here for posterities sake.
 
 There is an approach called "working backwards" that is widely used at Amazon. They work backwards from the customer, rather than starting with an idea for a product and trying to bolt customers onto it. While working backwards can be applied to any specific product decision, using this approach is especially important when developing new products or features.
@@ -9,36 +9,36 @@ For new initiatives a product manager typically starts by writing an internal pr
 
 If the benefits listed don't sound very interesting or exciting to customers, then perhaps they're not (and shouldn't be built). Instead, the product manager should keep iterating on the press release until they've come up with benefits that actually sound like benefits. Iterating on a press release is a lot less expensive than iterating on the product itself (and quicker!).
 
-If the press release is more than a page and a half, it is probably too long. Keep it simple. 3-4 sentences for most paragraphs. Cut out the fat. Don't make it into a spec. You can accompany the press release with a FAQ that answers all of the other business or execution questions so the press release can stay focused on what the customer gets. My rule of thumb is that if the press release is hard to write, then the product is probably going to suck. Keep working at it until the outline for each paragraph flows. 
+If the press release is more than a page and a half, it is probably too long. Keep it simple. 3-4 sentences for most paragraphs. Cut out the fat. Don't make it into a spec. You can accompany the press release with a FAQ that answers all of the other business or execution questions so the press release can stay focused on what the customer gets. My rule of thumb is that if the press release is hard to write, then the product is probably going to suck. Keep working at it until the outline for each paragraph flows.
 
 Oh, and I also like to write press-releases in what I call "Oprah-speak" for mainstream consumer products. Imagine you're sitting on Oprah's couch and have just explained the product to her, and then you listen as she explains it to her audience. That's "Oprah-speak", not "Geek-speak".
 
 Once the project moves into development, the press release can be used as a touchstone; a guiding light. The product team can ask themselves, "Are we building what is in the press release?" If they find they're spending time building things that aren't in the press release (overbuilding), they need to ask themselves why. This keeps product development focused on achieving the customer benefits and not building extraneous stuff that takes longer to build, takes resources to maintain, and doesn't provide real customer benefit (at least not enough to warrant inclusion in the press release).
  -->
- 
-## EZ Share ##
-  > Name the product in a way the reader (i.e. your target customers) will understand.
+
+## Heading ##
+  > Playlist
 
 ## Sub-Heading ##
-  > Easy real time media sharing and chat.
+  > Chat and create YouTube video playlists that you can watch in sync with your friends.
 
 ## Summary ##
-  > The app is a collaborative YouTube and Soundcloud play list with chat functionality. Users can create play lists and view content with everyone in real time. Everyone can chat while they listen to music and watch videos.
+  > The app is a collaborative YouTube play list with chat functionality. Users can create play lists and view content with everyone in real time. Everyone can chat while they listen to music and watch videos.
 
 ## Problem ##
-  > YouTube and Soundcloud content can not be easily viewed by friends and family at the same time.
+  > YouTube content can not be easily viewed in sync by friends while also being able to chat in a single platform.
 
 ## Solution ##
-  > The app gives the users a place to easily view content in real time and chat with each other while its playing.
+  > The app gives the users a single place to watch YouTube videos in sync with their friends, search for YouTube videos, add them to a unified playlist and chat with one another.
 
 ## Quote from You ##
-  > "Enjoy music with friends."
+  > "Music shouldn't be listened to by just one person. It should be shared"
 
 ## How to Get Started ##
-  > Go to www.EZShare.com. Share your music and start chatting.
+  > Go to www.playlist.com and start adding music to the playlist.
 
 ## Customer Quote ##
-  > "EZ Share is my favorite way to share music with friends!"
+  > "Playlist is my favorite way to share music with friends!"
 
 ## Closing and Call to Action ##
-  > Start sharing music at www.EZShare.com.
+  > Start sharing music at www.playlist.com.
