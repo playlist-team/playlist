@@ -7,12 +7,12 @@ app.use('/', express.static('./Public'));
 
 var server = app.listen(port);
 
-var io = require('socket.io').listen(server);
+// var io = require('socket.io').listen(server);
 
-/*var io = require('socket.io')({
+var io = require('socket.io')({
   transports: ["xhr-polling"],
   'polling duration': 10
-}).listen(server);*/
+}).listen(server);
 
 var users = {};
 var queue = [];
@@ -26,13 +26,10 @@ io.on('connection', function (socket) {
 
   socket.on('setUser', function (username) {
     users[socket.id] = username;
-    io.emit('onlineusers', users)
   });
 
   socket.on('getQueue', function() {
-    if (queue.length) {
-      io.sockets.connected[socket.id].emit('sendQueue', queue);
-    }
+    io.sockets.connected[socket.id].emit('sendQueue', queue);
   })
 
   socket.on('getCurrent', function() {
@@ -90,7 +87,6 @@ io.on('connection', function (socket) {
       io.emit('nextVideo', current);
       io.emit('refreshQueue', queue);
     } else {
-      current - null;
       io.emit('stopVideo');
       io.emit('refreshQueue', queue);
     }
@@ -106,11 +102,6 @@ io.on('connection', function (socket) {
         start++;
       }, 1000);
     }
-  });
-
-  socket.on('disconnect', function () {
-    delete users[socket.id];
-    io.emit('onlineusers', users)
   });
 });
 
