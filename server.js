@@ -34,7 +34,7 @@ io.on('connection', function (socket) {
 
   socket.on('getCurrent', function() {
     if (current) {
-      io.sockets.connected[socket.id].emit('sendCurrent', current.id);
+      io.sockets.connected[socket.id].emit('sendCurrent', current);
     }
   })
 
@@ -55,7 +55,7 @@ io.on('connection', function (socket) {
     } else {
       set = false;
       current = data;
-      io.emit('firstVideo', data.id);
+      io.emit('firstVideo', data);
     }
   })
 
@@ -78,6 +78,17 @@ io.on('connection', function (socket) {
       setTimeout(function() {
         switched = false;
       }, 5000);
+    }
+  })
+
+  socket.on('skip', function() {
+    if (queue.length) {
+      current = queue.shift();
+      io.emit('nextVideo', current);
+      io.emit('refreshQueue', queue);
+    } else {
+      io.emit('stopVideo');
+      io.emit('refreshQueue', queue);
     }
   })
 

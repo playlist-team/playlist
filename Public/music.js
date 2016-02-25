@@ -11,8 +11,7 @@ angular.module('musicApp', ['chat', 'search'])
   $window.socket = io.connect('http://localhost:3000');
   /*$window.socket = io.connect($window.location.hostname || 'http://localhost:3000');*/
 
-  $window.username = $window.prompt('Username: ');
-
+  $window.username = $window.prompt('Username: ') || 'anonymous';
   $window.socket.on('connect', function() {
     $window.socket.emit('getQueue');
     $window.socket.emit('setUser', $window.username);
@@ -26,7 +25,7 @@ angular.module('musicApp', ['chat', 'search'])
 .service('VideoService', ['$window', '$rootScope', function($window, $rootScope) {
   var context = this;
 
-  this.current = {title: 'HAIM - Forever (Official Music Video)', username: 'Tom'};
+  this.current = null;
   this.player;
   this.queue = [];
 
@@ -34,11 +33,14 @@ angular.module('musicApp', ['chat', 'search'])
     this.player = new YT.Player('player', {
       height: '360',
       width: '640',
-      videoId: '4ITLNzPoEqs',
       playerVars: {
         'autohide': 1,
         'modestbranding': 1,
-        'controls': 1
+        'controls': 0,
+        'iv_load_policy': 3,
+        'showinfo': 0,
+        'rel': 0,
+        'color': 'white'
       },
       events: {
         'onReady': onPlayerReady,
@@ -51,15 +53,18 @@ angular.module('musicApp', ['chat', 'search'])
     event.target.playVideo();
     socket.emit('getCurrent');
 
-    socket.on('sendCurrent', function(videoID) {
-      player.loadVideoById(videoID);
+    socket.on('sendCurrent', function(video) {
+      context.current = video;
+      player.loadVideoById(video.id);
+      $rootScope.$emit('changeQueue');
       socket.emit('getTime');
     })
   };
 
   function onPlayerStateChange(event) {
     if (event.data === YT.PlayerState.ENDED) {
-      socket.emit('videoEnded')
+      context.current = null;
+      socket.emit('videoEnded');
     }
   };
 
@@ -67,8 +72,10 @@ angular.module('musicApp', ['chat', 'search'])
     player.seekTo(duration, false);
   })
 
-  socket.on('firstVideo', function(videoID) {
-    player.loadVideoById(videoID);
+  socket.on('firstVideo', function(video) {
+    context.current = video;
+    player.loadVideoById(video.id);
+    $rootScope.$emit('changeQueue');
     socket.emit('setDuration', player.getDuration());
   })
 
@@ -88,9 +95,9 @@ angular.module('musicApp', ['chat', 'search'])
   })
 
   socket.on('nextVideo', function(video){
-    context.current.title = video.title;
-    context.current.username = video.username;
+    context.current = video;
     player.loadVideoById(video.id);
+    $rootScope.$emit('changeQueue');
     socket.emit('setDuration', player.getDuration());
   })
 
@@ -103,6 +110,15 @@ angular.module('musicApp', ['chat', 'search'])
     context.queue = data;
     $rootScope.$emit('changeQueue');
   })
+
+  socket.on('stopVideo', function() {
+    player.stopVideo();
+  })
+  
+  $rootScope.$on('skip', function() {
+    socket.emit('skip');
+  })
+
 }])
 
 .controller('YouTubeController', ['$scope', 'VideoService', '$rootScope', function($scope, VideoService, $rootScope){
@@ -111,11 +127,17 @@ angular.module('musicApp', ['chat', 'search'])
     socket.emit('dequeue', videoID);
   };
 
+  $scope.skip = function() {
+    $rootScope.$emit('skip');
+  }
+
   $scope.current = VideoService.current;
 
   $scope.list = VideoService.queue;
+
   $rootScope.$on('changeQueue', function(){
     $scope.$apply(function() {
+      $scope.current = VideoService.current;
       $scope.list = VideoService.queue;
     });
   });
