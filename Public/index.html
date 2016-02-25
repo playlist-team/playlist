@@ -1,42 +1,35 @@
 <!DOCTYPE html>
 <html ng-app="musicApp">
   <head>
-    <!-- <script src="https://rawgit.com/dwmkerr/angular-modal-service/master/dst/angular-modal-service.js"></script> -->
     <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-<!--
-    <link href='http://getbootstrap.com/dist/css/bootstrap.css' rel='stylesheet' type='text/css'> -->
-
     <link rel="stylesheet" type="text/css" href="style.css">
-    <base href="/"></base>
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,900' rel='stylesheet' type='text/css'>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <base href="/"></base>
   </head>
   <body ng-controller="YouTubeController">
 
-    <header ng-controller="SearchController">
-        <form id="search" ng-submit="getSearch(field)">
-          <h1 id="name">Playli.st</h1>
-          <input ng-model="field" id="query" type="text" placeholder="Search YouTube Music Videos" autocomplete="on">
-          <input id="submit" type="image" src="search.png">
-        </form>
+    <header>
+      <h1 id="logo">Playlist</h1>
+      <form id="search" ng-submit="getSearch(field)" ng-controller="SearchController">
+        <input id="search-input" ng-model="field" type="text" placeholder="Search YouTube Music Videos" autocomplete="on">
+        <input id="search-submit" type="image" src="search.png">
+      </form>
     </header>
 
-
       <div class="container">
-        <div id="yt-queue">
-            <div id="player"></div>
-
-          <div id="queue-display" ng-controller="SearchController">
+        <div id="player-queue">
+          <div id="player"></div>
+          <div id="queue-display">
               <table class="queue-table">
                 <thead>
                   <tr id="current">
                     <th class="current-title">{{ current.title }}</th>
                     <th class="current-title">{{ current.username }}</th>
-
                   </tr>
                </thead>
-                <tbody>
 
+                <tbody>
                   <tr class="queue-song-row" ng-repeat="song in list track by $index">
                     <td ng-cloak class="queue-col"><img src={{song.thumbnail}} height="54" width="72"></td>
                     <td ng-cloak class="queue-col">{{ song.title }}</td>
@@ -44,18 +37,20 @@
                     <td ng-cloak class="queue-col"><form><button type="button" ng-click="dequeue(song.id)">Remove Song</button></form></td>
                   </tr>
                 </tbody>
+
               </table>
           </div>
         </div>
-        <div id="chat-screen" ng-controller="ChatController">
-          <div id="message-display" scroll-directive="messages">
+
+        <div id="chat" ng-controller="ChatController">
+          <div id="chat-container" scroll-directive="messages">
             <table class="chat-table">
               <thead>
                 <tr>
                   <th>#Chat</th>
                 </tr>
               </thead>
-              <tbody class="chat-row" ng-repeat="message in messages track by $index">
+              <tbody id="messages" ng-repeat="message in messages track by $index">
                 <tr class="user-name">
                   <td ng-cloak ng-show="messages[{{$index-1}}].username !== message.username"><strong>{{ message.username }}:</strong></td>
                 </tr>
@@ -66,8 +61,7 @@
             </table>
           </div>
             <form id="chat-submit" ng-submit="send(message)">
-              <input id="input-message" ng-model="message" type="text" placeholder="Enter Message" autocomplete="on" required/>
-              <!-- <input id="chat-button" type="submit"/> -->
+              <input id="chat-input" ng-model="message" type="text" placeholder="Enter Message" required/>
             </form>
         </div>
 
@@ -133,7 +127,6 @@
     </div> -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular.min.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.2/ui-bootstrap.js"></script> -->
     <script src="chat.js"></script>
     <script src="music.js"></script>
     <script src="search.js"></script>
