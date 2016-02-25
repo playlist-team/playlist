@@ -44,6 +44,10 @@ io.on('connection', function (socket) {
     }
   })
 
+  socket.on('getVotes', function() {
+    io.sockets.connected[socket.id].emit('sendVotes', {up: upvotes, down: downvotes});
+  })
+
   socket.on('getTime', function() {
     io.sockets.connected[socket.id].emit('sendTime', start);
   })
