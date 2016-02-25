@@ -10,6 +10,7 @@ body {
   width: 1060px;
   margin-right: auto;
   margin-left: auto;
+  overflow: auto;
 }
 
 ::-webkit-scrollbar {
@@ -77,13 +78,17 @@ header {
   top: 3.75px;
 }
 
+#search-submit:focus {
+  outline: none;
+}
+
 #submit:focus {
   outline: none;
 }
 
 .container {
   width: 1060px;
-  height: 700px;
+  height: 600px;
 }
 
 #player-queue {
@@ -178,6 +183,7 @@ header {
 
 .chat-table{
   width:420px;
+  padding-bottom: 25px;
 }
 
 .user-name{
@@ -290,3 +296,11 @@ header {
 input:focus::-webkit-input-placeholder { color:transparent; }
 input:focus:-moz-placeholder { color:transparent; }
 }
+
+
+.tabs-menu {
+    height: 30px;
+    float: left;
+    clear: both;
+}
+
