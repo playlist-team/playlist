@@ -47,11 +47,11 @@
         <div id="chat" ng-controller="ChatController">
           <div id="chat-container" scroll-directive="messages">
             <table class="chat-table">
-              <thead>
-                <tr>
-                  <th>#Chat</th>
+<!--               <thead>
+                <tr id="chat-header">
+                  <th>Chat</th>
                 </tr>
-              </thead>
+              </thead> -->
               <tbody id="messages" ng-repeat="message in messages track by $index">
                 <tr class="user-name">
                   <td ng-cloak ng-show="messages[{{$index-1}}].username !== message.username"><strong>{{ message.username }}:</strong></td>

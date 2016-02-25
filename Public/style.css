@@ -4,7 +4,6 @@ body {
   background-size: 100%;
   background-color: white;
   width: 1060px;
-  height: 960px;
   margin-right: auto;
   margin-left: auto;
 }
@@ -43,7 +42,7 @@ header {
   padding-left: 20px;
   padding-right: 15px;
   -webkit-user-select: none;
-  -moz-user-select: none;  
+  -moz-user-select: none;
 }
 
 #skip:hover {
@@ -196,6 +195,10 @@ header {
   hyphens: auto;
 }
 
+/*#chat-header {
+  border-bottom: 1px solid black;
+}*/
+
 #chat-submit{
  float:bottom;
  width: 305px;
@@ -263,6 +266,7 @@ header {
   color: black;
   background-color: #fff;
   box-shadow: 4px 4px 80px #000;
+  overflow-y:auto;
 }
 .ng-modal-dialog-content {
   padding:10px;
