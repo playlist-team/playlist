@@ -9,13 +9,14 @@ var server = app.listen(port);
 
 var io = require('socket.io').listen(server);
 
-// var io = require('socket.io')({
-//   transports: ["xhr-polling"],
-//   'polling duration': 10
-// }).listen(server);
+/*var io = require('socket.io')({
+  transports: ["xhr-polling"],
+  'polling duration': 10
+}).listen(server);*/
 
 var users = {};
 var queue = [];
+var votes = {};
 var current;
 var start;
 var sync;
@@ -26,10 +27,13 @@ io.on('connection', function (socket) {
 
   socket.on('setUser', function (username) {
     users[socket.id] = username;
+    io.emit('onlineusers', users)
   });
 
   socket.on('getQueue', function() {
-    io.sockets.connected[socket.id].emit('sendQueue', queue);
+    if (queue.length) {
+      io.sockets.connected[socket.id].emit('sendQueue', queue);
+    }
   })
 
   socket.on('getCurrent', function() {
@@ -55,15 +59,14 @@ io.on('connection', function (socket) {
     } else {
       set = false;
       current = data;
+      votes = {};
+      io.emit('clearVotes');
       io.emit('firstVideo', data);
     }
   })
 
   socket.on('dequeue', function (data) {
-    var id = socket.id;
-    if (id.slice(2) === data.socket) {
-      io.emit('removeVideo', data.id);
-    }
+    io.emit('removeVideo', data);
   })
 
   socket.on('updateQueue', function (data) {
@@ -76,6 +79,8 @@ io.on('connection', function (socket) {
       switched = true;
       set = false;
       current = queue.shift();
+      votes = {};
+      io.emit('clearVotes');
       io.emit('nextVideo', current);
       io.emit('refreshQueue', queue);
       setTimeout(function() {
@@ -85,30 +90,18 @@ io.on('connection', function (socket) {
   })
 
   socket.on('skip', function() {
-    var id = socket.id;
-    if (id.slice(2) === current.socket) {
-      if (queue.length) {
-        switched = true;
-        set = false;
-        current = queue.shift();
-        io.emit('nextVideo', current);
-        io.emit('refreshQueue', queue);
-
-        setTimeout(function() {
-          switched = false;
-        }, 5000);
-
-        set = true;
-        clearInterval(sync);
-        start = 0;
-        sync = setInterval(function() {
-          start++;
-        }, 1000);
-      } else {
-        current = null;
-        io.emit('stopVideo');
-        io.emit('refreshQueue', queue);
-      }
+    if (queue.length) {
+      current = queue.shift();
+      votes = {};
+      io.emit('clearVotes');
+      io.emit('nextVideo', current);
+      io.emit('refreshQueue', queue);
+    } else {
+      current = null;
+      votes = {};
+      io.emit('clearVotes');
+      io.emit('stopVideo');
+      io.emit('refreshQueue', queue);
     }
   })
 
@@ -118,10 +111,41 @@ io.on('connection', function (socket) {
       start = data;
       clearInterval(sync);
       sync = setInterval(function() {
+        console.log(start);
         start++;
       }, 1000);
     }
   });
+
+  socket.on('disconnect', function () {
+    delete users[socket.id];
+    io.emit('onlineusers', users)
+  });
+
+  socket.on('upVote', function(){
+    if (votes[socket.id] === 'down'){
+      votes[socket.id] = 'up';
+      io.emit('changeVote', 'minusDown');
+      io.emit('changeVote', 'addUp');
+    }
+    if (votes[socket.id] === undefined) {
+      votes[socket.id] = 'up';
+      io.emit('changeVote', 'addUp');
+    }
+  })
+
+  socket.on('downVote', function(){
+    if(votes[socket.id] === 'up'){
+      votes[socket.id] = 'down';
+      io.emit('changeVote', 'minusUp');
+      io.emit('changeVote', 'addDown');
+    }
+    if(votes[socket.id] === undefined){
+      votes[socket.id] = 'down';
+      io.emit('changeVote', 'addDown');
+    }
+  })
+
 });
 
 
