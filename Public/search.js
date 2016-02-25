@@ -1,6 +1,6 @@
 angular.module('search', [])
 
-.directive('modalDialog', function() {
+.directive('searchDirective', function() {
   return {
     restrict: "E",
     scope: {
@@ -15,12 +15,12 @@ angular.module('search', [])
       if (attrs.height) {
         scope.dialogStyle.height = attrs.height;
       }
-      scope.hideModal = function() {
+      scope.hideResults = function() {
         scope.show = false;
       }
     },
     transclude: true,
-    template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='hideModal()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-close' ng-click='hideModal()'>X</div><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
+    template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='hideResults()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-close' ng-click='hideResults()'>X</div><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
   }
 })
 
@@ -41,9 +41,9 @@ angular.module('search', [])
                              username: $window.username });
   }
 
-  $scope.modalShown = false;
-  $scope.toggleModal = function() {
-    $scope.modalShown = !$scope.modalShown;
+  $scope.showResults = false;
+  $scope.toggleResults = function() {
+    $scope.showResults = !$scope.showResults;
   };
 
 }])

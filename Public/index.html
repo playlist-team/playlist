@@ -12,36 +12,33 @@
 
     <header>
       <h1 id="logo">Playlist</h1>
-      <form id="search" ng-submit="getSearch(field)" ng-controller="SearchController">
-        <input id="search-input" ng-model="field" type="text" placeholder="Search YouTube Music Videos" autocomplete="on">
+      <form id="search" ng-submit="getSearch(field); toggleResults()" ng-controller="SearchController">
+        <input id="search-input" ng-model="field" type="text" placeholder="Search YouTube Music Videos" autocomplete="off">
         <input id="search-submit" type="image" src="search.png">
-        <button ng-click='toggleModal()'>Open Modal Dialog</button>
-        <modal-dialog show='modalShown' width='750px' height='60%'>
-          <p>
-            <li ng-repeat="thumbnail in searchList track by $index">
-                    {{thumbnail.snippet.title}}
-              <div>
-                <button ng-click="enqueue(thumbnail)" style="margin-left:0px; font-size: 10px">Add to playlist</button>
-              </div>
-              <img src="{{thumbnail.snippet.thumbnails.default.url}}" height="110" width="192" style="margin-bottom:30px">
-            </li>
-          <p>
-        </modal-dialog>
+        <search-directive show='showResults' width='750px' height='60%'>
+          <li ng-cloak ng-repeat="thumbnail in searchList track by $index">
+            {{thumbnail.snippet.title}}
+            <div>
+              <button ng-click="enqueue(thumbnail)" style="margin-left:0px; font-size: 10px">Add to playlist</button>
+            </div>
+            <img src="{{thumbnail.snippet.thumbnails.default.url}}" height="110" width="192" style="margin-bottom:30px">
+          </li>
+        </search-directive>
       </form>
+      <h1 id="skip" ng-click="skip()">skip</h1>
     </header>
       <div class="container">
         <div id="player-queue">
           <div id="player"></div>
-          <div id="queue-display">
+          <div id="queue">
 
             <div id="current-song">
-              <p ng-cloak >{{ current.title }}</p>
-              <p ng-cloak>{{ current.username }}</p>
+              <p ng-cloak ng-show="current.title">{{ current.username }} is playing {{ current.title }}</p>
             </div>
 
-            <div class="pending-songs" ng-repeat="song in list track by $index">
-              <p ng-cloak>{{ song.title }}</p>
-              <button class="delete" type="button" ng-click="dequeue(song.id)">Delete</button>
+            <div class="pending-songs" ng-cloak ng-repeat="song in list track by $index">
+              <p id="queue-title" ng-cloak>{{ song.title }}</p>
+              <p id="queue-remove" ng-cloak type="button" ng-click="dequeue(song.id)">Remove</p>
             </div>
 
           </div>
@@ -66,70 +63,9 @@
             </table>
           </div>
             <form id="chat-submit" ng-submit="send(message)">
-              <input id="chat-input" ng-model="message" type="text" placeholder="Enter Message" required/>
+              <input id="chat-input" ng-model="message" type="text" placeholder="Enter Message" autocomplete="off" required/>
             </form>
         </div>
-
-
-
-
-
-
-     <!--  <div class="row">
-
-        <div class="col-md-2" ng-controller="SearchController">
-            <div ng-cloak class="row" style="overflow-x:hidden; height:640px; width:210px overflow: auto" >
-              <form ng-submit="getSearch(field)" style="margin-top:5px; margin-left:12px">
-                <input ng-model="field" type="text" placeholder="Keywords" autocomplete="on" style="width:190px"/>
-                <input type="submit" style="margin-top:3px; margin-bottom:20px">
-              </form>
-
-                  <li ng-repeat="thumbnail in searchList track by $index">
-                    {{thumbnail.snippet.title}}
-
-                    <div>
-                      <button ng-click="enqueue(thumbnail)" style="margin-left:0px; font-size: 10px">Add to playlist</button>
-                    </div>
-
-                    <img src="{{thumbnail.snippet.thumbnails.default.url}}" height="110" width="192" style="margin-bottom:30px">
-                  </li>
-
-            </div>
-        </div>
-
-        <div ng-view class="col-md-7"></div>
-
-        <div class="col-md-3" id="chat" ng-controller="ChatController">
-
-          <div style="height:600px; overflow-x:hidden; width:330px; overflow: auto" scroll-directive="messages">
-
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Messages</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="message in messages">
-                  <td ng-cloak><strong>{{ message.username }}:</strong></td>
-                  <td ng-cloak style="word-wrap: break-word">{{ message.message }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="row">
-            <form ng-submit="send(message)" style="margin-top:5px; margin-left:22px">
-              <input ng-model='message' type="text" placeholder="Enter Message" autocomplete="on" style="width:180px"/>
-              <input type="submit" style="margin-top:3px" ng-model="message"></input>
-            </form>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div> -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular.min.js"></script>
     <script src="chat.js"></script>

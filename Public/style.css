@@ -10,11 +10,11 @@ body {
 }
 
 ::-webkit-scrollbar {
-      width: 5px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
-      background-color: #22242A;
+  background-color: #22242A;
 }
 
 header {
@@ -35,6 +35,22 @@ header {
   padding-right: 15px;
 }
 
+#skip {
+  font-size: 14px;
+  float: right;
+  position: relative;
+  display: inline-block;
+  padding-left: 20px;
+  padding-right: 15px;
+  -webkit-user-select: none;
+  -moz-user-select: none;  
+}
+
+#skip:hover {
+  color: #AC0809;
+  cursor: pointer;
+  outline: none;
+}
 #search-input {
   position: relative;
   bottom: 7.5px;
@@ -96,7 +112,7 @@ header {
   padding-left: 10px;
 }
 
-#queue-display {
+#queue {
   margin-top: -10px;
   width: 640px;
   height:245px;
@@ -104,9 +120,8 @@ header {
   overflow-y:auto;
 }
 
-#queue-display p {
+#queue p {
   display: inline-block;
-  padding-right: 100px;
 }
 
 #current-song {
@@ -114,13 +129,8 @@ header {
   height: 35px;
   font-size: 18px;
   background-color: #22242A;
-  color: #dbdbdc;
+  color: white;
   padding-left: 10px;
-}
-
-#current-song:hover {
-  color: black;
-  background-color: #d8ecff;
 }
 
 .pending-songs {
@@ -130,24 +140,25 @@ header {
   background-color: #22242A;
   color: #dbdbdc;
   padding-left: 10px;
-  border-top: 1px solid white;
+  border-top: 1px solid #616573;
 }
 
 .pending-songs:hover {
-  color: black;
-  background-color: #d8ecff;
+  background-color: #1171A2;
 }
 
-.delete {
+#queue-remove {
+  cursor: pointer;
+  color: #AC0809;
   float: right;
   margin-top: 12px;
   margin-right: 25px;
   border-radius: 3px;
 }
 
-.delete:hover {
-  background-color: black;
-  color: white;
+#queue-remove:hover {
+  cursor: pointer;
+  color: black;
 }
 
 #chat {
@@ -212,7 +223,6 @@ header {
   margin-top: 0px
 }
 
-
 .thumbs{
   width:192;
   height:110
@@ -222,23 +232,29 @@ header {
   font-weight: 450;
 }
 
+.ng-modal {
+  overflow-y:auto;
+  max-height:90%;
+  margin-top:-45%
+}
+
 .ng-modal-overlay {
-  position:absolute;
+  position: absolute;
   z-index:9999;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background-color:#000000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  background-size: 100%;
   opacity: 0.8;
 }
+
 .ng-modal-dialog {
-  /* A centered div above the overlay with a box shadow. */
   z-index:10000;
   position: absolute;
-  width: 50%; /* Default */
+  width: 100%;
 
-  /* Center the dialog */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -252,6 +268,7 @@ header {
   padding:10px;
   text-align: left;
 }
+
 .ng-modal-close {
   color: black;
   position: absolute;
@@ -262,7 +279,6 @@ header {
   font-size: 120%;
   display: inline-block;
   font-weight: bold;
-  font-family: 'arial', 'sans-serif';
 }
 
 input:focus::-webkit-input-placeholder { color:transparent; }
