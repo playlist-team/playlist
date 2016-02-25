@@ -8,8 +8,8 @@ angular.module('musicApp', ['chat', 'search'])
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-  $window.socket = io.connect('http://localhost:3000');
-  /*$window.socket = io.connect($window.location.hostname || 'http://localhost:3000');*/
+  // $window.socket = io.connect('http://localhost:3000');
+  $window.socket = io.connect($window.location.hostname || 'http://localhost:3000');
 
   $window.username = $window.prompt('Username: ') || 'anonymous';
   $window.socket.on('connect', function() {
