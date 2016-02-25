@@ -8,8 +8,8 @@ angular.module('musicApp', ['chat', 'search'])
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-  // $window.socket = io.connect('http://localhost:3000');
-  $window.socket = io.connect($window.location.hostname || 'http://localhost:3000');
+  $window.socket = io.connect('http://localhost:3000');
+  /*$window.socket = io.connect($window.location.hostname || 'http://localhost:3000');*/
 
   $window.username = $window.prompt('Username: ') || 'anonymous';
   $window.socket.on('connect', function() {
@@ -20,6 +20,7 @@ angular.module('musicApp', ['chat', 'search'])
 
 .config(function($locationProvider){
   $locationProvider.html5Mode(true);
+
 })
 
 .service('VideoService', ['$window', '$rootScope', function($window, $rootScope) {
@@ -47,7 +48,9 @@ angular.module('musicApp', ['chat', 'search'])
         'onStateChange': onPlayerStateChange
       }
     })
+    this.player.setVolume(50);
   };
+
 
   function onPlayerReady (event) {
     event.target.playVideo();
@@ -114,14 +117,23 @@ angular.module('musicApp', ['chat', 'search'])
   socket.on('stopVideo', function() {
     player.stopVideo();
   })
-  
+
   $rootScope.$on('skip', function() {
     socket.emit('skip');
   })
 
+  $rootScope.$on('volumeChange', function(event, volume) {
+    player.setVolume(volume);
+  })
 }])
 
 .controller('YouTubeController', ['$scope', 'VideoService', '$rootScope', function($scope, VideoService, $rootScope){
+
+  $scope.volume = 50;
+
+  $scope.$watch('volume', function(newValue, oldValue) {
+    $rootScope.$emit('volumeChange', $scope.volume);
+  })
 
   $scope.dequeue = function(videoID){
     socket.emit('dequeue', videoID);

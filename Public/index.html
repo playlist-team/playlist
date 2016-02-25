@@ -8,6 +8,7 @@
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <base href="/"></base>
   </head>
+
   <body ng-controller="YouTubeController">
 
     <header>
@@ -25,12 +26,17 @@
           </li>
         </search-directive>
       </form>
+      <input id="volume" min ="0" max="100" step="1" type="range" ng-model="volume"</input>
       <h1 id="skip" ng-click="skip()">skip</h1>
     </header>
+
+
       <div class="container">
         <div id="player-queue">
           <div id="player"></div>
           <div id="queue">
+
+
 
             <div id="current-song">
               <p ng-cloak ng-show="current.title">{{ current.username }} is playing {{ current.title }}</p>
@@ -44,34 +50,71 @@
           </div>
         </div>
 
-        <div id="chat" ng-controller="ChatController">
+
+
+      <div id="chat" ng-controller="ChatController">
           <div id="chat-container" scroll-directive="messages">
+          <div id="tabs-container">
+            <ul class="tabs-menu">
+                    <li class="current"><a href="#tab-1">Tab 1</a></li>
+                    <li><a href="#tab-2">Tab 2</a></li>
+            </ul>
             <table class="chat-table">
 <!--               <thead>
                 <tr id="chat-header">
                   <th>Chat</th>
                 </tr>
               </thead> -->
-              <tbody id="messages" ng-repeat="message in messages track by $index">
-                <tr class="user-name">
-                  <td ng-cloak ng-show="messages[{{$index-1}}].username !== message.username"><strong>{{ message.username }}:</strong></td>
-                </tr>
-                <tr class="user-message">
-                  <td ng-cloak >{{ message.message }}</td>
-                </tr>
-              </tbody>
+              <div class="tab">
+                 <div id="tab-1" class="tab-content">
+                    <tbody id="messages" ng-repeat="message in messages track by $index">
+                      <tr class="user-name">
+                        <td ng-cloak ng-show="messages[{{$index-1}}].username !== message.username"><strong>{{ message.username }}:</strong></td>
+                      </tr>
+                      <tr class="user-message">
+                        <td ng-cloak >{{ message.message }}</td>
+                      </tr>
+                    </tbody>
+                 </div>
+                 <div id="tab-2" class="tab-content">
+                    <tbody id="messages">
+                      <tr class="user-name" ng-repeat="user in useronline">
+                        <td ng-cloak ><strong>{{user}}</strong></td>
+                      </tr>
+                    </tbody>
+                </div>
+              </div>
+
             </table>
+            </div>
           </div>
+
             <form id="chat-submit" ng-submit="send(message)">
               <input id="chat-input" ng-model="message" type="text" placeholder="Enter Message" autocomplete="off" required/>
             </form>
         </div>
 
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular.min.js"></script>
     <script src="chat.js"></script>
     <script src="search.js"></script>
     <script src="music.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+          $(".tabs-menu a").click(function(event) {
+              event.preventDefault();
+              $(this).parent().addClass("current");
+              $(this).parent().siblings().removeClass("current");
+              var tab = $(this).attr("href");
+              $(".tab-content").not(tab).css("display", "none");
+              $(tab).fadeIn();
+          });
+      });
+    </script>
+
   </body>
+
 </html>
 
 
