@@ -74,7 +74,10 @@ io.on('connection', function (socket) {
   })
 
   socket.on('dequeue', function (data) {
-    io.emit('removeVideo', data);
+    var id = socket.id;
+    if (id.slice(2) === data.socket) {
+      io.emit('removeVideo', data.id);
+    }
   })
 
   socket.on('updateQueue', function (data) {
@@ -100,22 +103,25 @@ io.on('connection', function (socket) {
   })
 
   socket.on('skip', function() {
-    if (queue.length) {
-      current = queue.shift();
-      votes = {};
-      upvotes = 0;
-      downvotes = 0;
-      io.emit('clearVotes');
-      io.emit('nextVideo', current);
-      io.emit('refreshQueue', queue);
-    } else {
-      current = null;
-      votes = {};
-      upvotes = 0;
-      downvotes = 0;
-      io.emit('clearVotes');
-      io.emit('stopVideo');
-      io.emit('refreshQueue', queue);
+    var id = socket.id;
+    if (id.slice(2) === current.socket) {
+      if (queue.length) {
+        current = queue.shift();
+        votes = {};
+        upvotes = 0;
+        downvotes = 0;
+        io.emit('clearVotes');
+        io.emit('nextVideo', current);
+        io.emit('refreshQueue', queue);
+      } else {
+        current = null;
+        votes = {};
+        upvotes = 0;
+        downvotes = 0;
+        io.emit('clearVotes');
+        io.emit('stopVideo');
+        io.emit('refreshQueue', queue);
+      }
     }
   })
 
