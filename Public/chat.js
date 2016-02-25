@@ -1,4 +1,4 @@
-angular.module('chat', [])
+angular.module('chat', ['ngSanitize'])
 
 .directive('scrollDirective', function() {
   return {
