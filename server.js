@@ -7,12 +7,12 @@ app.use('/', express.static('./Public'));
 
 var server = app.listen(port);
 
-var io = require('socket.io').listen(server);
+// var io = require('socket.io').listen(server);
 
-// var io = require('socket.io')({
-//   transports: ["xhr-polling"],
-//   'polling duration': 10
-// }).listen(server);
+var io = require('socket.io')({
+  transports: ["xhr-polling"],
+  'polling duration': 10
+}).listen(server);
 
 var users = {};
 var queue = [];
@@ -82,27 +82,30 @@ io.on('connection', function (socket) {
   })
 
   socket.on('skip', function() {
-    if (queue.length) {
-      switched = true;
-      set = false;
-      current = queue.shift();
-      io.emit('nextVideo', current);
-      io.emit('refreshQueue', queue);
+    var id = socket.id;
+    if (id.slice(2) === current.socket) {
+      if (queue.length) {
+        switched = true;
+        set = false;
+        current = queue.shift();
+        io.emit('nextVideo', current);
+        io.emit('refreshQueue', queue);
 
-      setTimeout(function() {
-        switched = false;
-      }, 5000);
+        setTimeout(function() {
+          switched = false;
+        }, 5000);
 
-      set = true;
-      clearInterval(sync);
-      start = 0;
-      sync = setInterval(function() {
-        start++;
-      }, 1000);
-    } else {
-      current = null;
-      io.emit('stopVideo');
-      io.emit('refreshQueue', queue);
+        set = true;
+        clearInterval(sync);
+        start = 0;
+        sync = setInterval(function() {
+          start++;
+        }, 1000);
+      } else {
+        current = null;
+        io.emit('stopVideo');
+        io.emit('refreshQueue', queue);
+      }
     }
   })
 

@@ -38,7 +38,8 @@ angular.module('search', [])
     socket.emit('enqueue', { id: thumbnail.id.videoId,
                              title: thumbnail.snippet.title,
                              thumbnail: thumbnail.snippet.thumbnails.default.url,
-                             username: $window.username });
+                             username: $window.username,
+                             socket: socket.id });
   }
 
   $scope.showResults = false;
