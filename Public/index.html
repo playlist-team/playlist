@@ -50,28 +50,36 @@
           </div>
         </div>
 
-        <div id="chat" ng-controller="ChatController">
-          <div id="chat-container" scroll-directive="messages" ng-model="messages">
-            <table class="chat-table">
-<!--               <thead>
-                <tr id="chat-header">
-                  <th>Chat</th>
-                </tr>
-              </thead> -->
-              <tbody id="messages" ng-repeat="message in messages track by $index">
-                <tr class="user-name">
-                  <td ng-cloak ng-show="messages[{{$index-1}}].username !== message.username"><strong>{{ message.username }}:</strong></td>
-                </tr>
-                <tr class="user-message">
-                  <td ng-bind-html="message.message | linky:'_blank'"></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-            <form id="chat-submit" ng-submit="send(message)">
-              <input id="chat-input" ng-model="message" type="text" placeholder="Enter Message" autocomplete="off" required/>
-            </form>
-        </div>
+                <div id="chat" ng-controller="ChatController">
+                  <div id="chat-container" scroll-directive="messages" ng-model="messages">
+                    <table class="chat-table">
+                      <thead>
+                        <tr id="chat-header">
+                          <th>
+                            <span ng-style="chatstyle" class="tab" ng-click="changetab('chat')">Chat</span>
+                            <span ng-style="userstyle" class="tab" ng-click="changetab('users')">Users</span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody ng-show="tab=='chat'" id="messages" ng-repeat="message in messages track by $index">
+                        <tr class="user-name">
+                          <td ng-cloak ng-show="messages[{{$index-1}}].username !== message.username"><strong>{{ message.username }}:</strong></td>
+                        </tr>
+                        <tr class="user-message">
+                          <td ng-cloak ng-bind-html="message.message | linky:'_blank'">{{ message.message }}</td>
+                        </tr>
+                      </tbody>
+                      <tbody id="messages" ng-show="tab=='users'">
+                        <tr class="user-name" ng-repeat="user in useronline">
+                          <td ng-cloak ><strong>{{user}}</strong></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                    <form id="chat-submit" ng-submit="send(message)">
+                      <input id="chat-input" ng-model="message" type="text" placeholder="Enter Message" autocomplete="off" required/>
+                    </form>
+                </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
