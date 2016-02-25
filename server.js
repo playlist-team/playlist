@@ -100,6 +100,7 @@ io.on('connection', function (socket) {
         start++;
       }, 1000);
     } else {
+      current = null;
       io.emit('stopVideo');
       io.emit('refreshQueue', queue);
     }
