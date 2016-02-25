@@ -47,6 +47,7 @@ angular.module('musicApp', ['chat', 'search'])
         'onStateChange': onPlayerStateChange
       }
     })
+    this.player.setVolume(50);
   };
 
   function onPlayerReady (event) {
@@ -119,9 +120,19 @@ angular.module('musicApp', ['chat', 'search'])
     socket.emit('skip');
   })
 
+  $rootScope.$on('volumeChange', function(event, volume) {
+    player.setVolume(volume);
+  })
+
 }])
 
 .controller('YouTubeController', ['$scope', 'VideoService', '$rootScope', function($scope, VideoService, $rootScope){
+
+  $scope.volume = 50;
+
+  $scope.$watch('volume', function(newValue, oldValue) {
+    $rootScope.$emit('volumeChange', $scope.volume);
+  })
 
   $scope.dequeue = function(videoID){
     socket.emit('dequeue', videoID);
