@@ -14,6 +14,7 @@ angular.module('musicApp', ['chat', 'search'])
   $window.username = $window.prompt('Username: ') || 'anonymous';
   $window.socket.on('connect', function() {
     $window.socket.emit('getQueue');
+    $window.socket.emit('getVotes');
     $window.socket.emit('setUser', $window.username);
   });
 })
@@ -167,7 +168,6 @@ angular.module('musicApp', ['chat', 'search'])
   }
 
   socket.on('changeVote', function(votes){
-    console.log(votes);
     $scope.$apply(function() {
       $scope.upcount = votes.up;
       $scope.downcount = votes.down;
@@ -179,6 +179,13 @@ angular.module('musicApp', ['chat', 'search'])
       $scope.upcount = 0;
       $scope.downcount = 0;
     })
+  })
+
+  socket.on('sendVotes', function(data) {
+    $scope.$apply(function() {
+      $scope.upcount = votes.up;
+      $scope.downcount = votes.down;
+    });
   })
 
 }])
