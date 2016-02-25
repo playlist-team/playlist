@@ -21,7 +21,7 @@
               <img clas="video-image" style="float:left" src={{result.snippet.thumbnails.default.url}}>
               <span style="display: block;" class="video-title">{{result.snippet.title}}</span>
               <span style="display: block;" class="video-author">{{result.snippet.channelTitle}}</span>
-              <span class="video-description">{{result.snippet.description}}</span>
+              <span class="video-description">{{result.snippet.description | limitTo: 160 }}{{result.snippet.description.length > 120 ? '...' : ''}}</span>
             </div>
           </div>
         </search-directive>
