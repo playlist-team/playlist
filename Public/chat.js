@@ -106,7 +106,9 @@ angular.module('chat', [])
   };
 
   socket.on('messageSent', function (data){
+    $scope.getCurrentTime();
     $scope.$apply(function() {
+      data.time = $scope.time
       $scope.messages.push(data);
     })
   });
