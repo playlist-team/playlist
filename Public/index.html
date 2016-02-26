@@ -19,10 +19,13 @@
         <search-directive show='showResults' width='750px' height='62%'>
           <div id="results">
             <div class="video" ng-cloak ng-repeat="result in searchList track by $index" ng-click="enqueue(result)">
-              <img clas="video-image" style="float:left" src={{result.snippet.thumbnails.default.url}}>
+
+              <img class="video-thumb" src={{result.snippet.thumbnails.default.url}}>
+
               <span style="display: block;" class="video-title">{{result.snippet.title| limitTo: 75 }}{{result.snippet.description.length > 75 ? '...' : ''}}</span>
               <span style="display: block;" class="video-author">{{result.snippet.channelTitle}}</span>
               <span class="video-description">{{result.snippet.description | limitTo: 160 }}{{result.snippet.description.length > 160 ? '...' : ''}}</span>
+
             </div>
           </div>
         </search-directive>
@@ -38,13 +41,13 @@
 
         <div id="current-song">
 
-            <span style="padding-top:5px; float:left;" ng-cloak ng-show="!current.title">Add a video to the queue</span>
+            <span id="default-playlist-message" ng-cloak ng-show="!current.title">Add a video to the playlist</span>
             <span ng-cloak ng-show="current.title"><!-- {{ current.username }} is playing  -->{{ current.title | limitTo: 50 }}{{current.title.length > 50 ? '...' : ''}}</span>
         </div>
 
         <div class="votes" ng-show="current.title">
 
-          <p id="added-by" ng-cloak ng-show="current.title"> — song added by {{ current.username }}</p>
+          <p id="added-by" ng-cloak ng-show="current.title"> — added by {{ current.username }}</p>
 
           <p id="arrows">
             <img src="upvote.svg" onmouseover="this.src='uphover.svg';" onmouseout="this.src='upvote.svg';" class="up-arrow" ng-click="upCount()"></img>
@@ -99,7 +102,7 @@
         var min = e.target.min,
             max = e.target.max,
             val = e.target.value;
-        
+
         $(e.target).css({
           'backgroundSize': (val - min) * 100 / (max - min) + '% 100%'
         });
