@@ -1,4 +1,4 @@
-html {
+html{
   overflow: hidden;
 }
 
@@ -71,8 +71,8 @@ header {
 .tab{
   list-style-type: none;
   display: inline-block;
-  border: 1px solid black;
-  width:208px;
+  border-bottom: 1px solid black;
+  width:210px;
   text-align:center;
 }
 
@@ -226,6 +226,8 @@ header {
 /*#chat-header {
   border-bottom: 1px solid black;
 }*/
+
+
 
 #chat-submit{
  float:bottom;
