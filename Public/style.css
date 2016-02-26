@@ -1,4 +1,4 @@
-html{
+html {
   overflow: hidden;
 }
 
@@ -23,6 +23,26 @@ header {
   height: 80px;
 }
 
+.votes {
+  padding-right: 3px;
+  margin-top:25px;
+  display: inline-block;
+  margin-left:10px;
+}
+
+.down-arrow {
+/*  position: relative;
+  height: 2.82%;
+  width: 2.82%;
+  top: 1.4px;*/
+}
+
+.vote-count {
+  margin: 0px;
+  padding-right: 3px;
+}
+
+
 #search {
   display: inline-block;
   background-color: #22242A;
@@ -46,6 +66,8 @@ header {
   -moz-user-select: none;
 }
 
+.up-arrow {
+}
 .tab{
   list-style-type: none;
   display: inline-block;
@@ -114,16 +136,10 @@ header {
   margin-left: 30px;
 }
 
-.current-title {
-  color: white;
-  padding-right: 175px;
-  padding-left: 10px;
-}
-
 #queue {
-  margin-top: -10px;
+/*  margin-top: -10px;*/
   width: 640px;
-  height:245px;
+  height:180px;
   display: block;
   overflow-y:auto;
 }
@@ -139,11 +155,13 @@ header {
   background-color: #22242A;
   color: white;
   padding-left: 10px;
+  position:fixed;
+  display: inline-block;
 }
 
 .pending-songs {
   width: 100%
-  height: 25px;
+  height: 35px;
   font-size: 14px;
   background-color: #22242A;
   color: #dbdbdc;
@@ -178,9 +196,11 @@ header {
 }
 
 #chat-container {
-  height:575px;
+  height:560px;
   overflow-x:hidden;
   width:430px;
+  padding-bottom: 15px;
+
 }
 
 .chat-table{
@@ -302,8 +322,6 @@ header {
 .video-author { color: #616573; font-size: 14px; font-weight: 900; padding: 5px 0; }
 .video-description { font-size: 12px; line-height: 1; height:38px; display:block;}
 .video:hover { background: #1fa0df; color: white; }
-
-.time { font-size: 12px; color: #dbdbdc; }
 
 input:focus::-webkit-input-placeholder { color:transparent; }
 input:focus:-moz-placeholder { color:transparent; }
