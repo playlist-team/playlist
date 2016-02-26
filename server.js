@@ -25,15 +25,6 @@ var sync;
 var set = false;
 var switched = false;
 
-var ended = function () {
-  votes = {};
-  upvotes = 0;
-  downvotes = 0;
-  io.emit('clearVotes');
-  io.emit('nextVideo', current);
-  io.emit('refreshQueue', queue);
-};
-
 io.on('connection', function (socket) {
 
   socket.on('setUser', function (username) {
@@ -175,6 +166,15 @@ io.on('connection', function (socket) {
   socket.on('getSync', function() {
     io.sockets.connected[socket.id].emit('sendSync', start);
   })
+
+  var ended = function () {
+  votes = {};
+  upvotes = 0;
+  downvotes = 0;
+  io.emit('clearVotes');
+  io.emit('nextVideo', current);
+  io.emit('refreshQueue', queue);
+};
 
 });
 
