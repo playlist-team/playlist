@@ -195,7 +195,7 @@ angular.module('musicApp', ['chat', 'search'])
   }
 
   $scope.downCount = function(){
-    socket.emit(downVote);
+    socket.emit('downVote');
   }
 
   //e.g, if user initially upvotes, then downvotes, this
