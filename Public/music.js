@@ -1,25 +1,30 @@
 angular.module('musicApp', ['chat', 'search'])
 
+//to load the YouTube video player when the doc loads
 .run(function($window){
   var tag = document.createElement('script');
 
-  tag.src = "https://www.youtube.com/iframe_api";
+  tag.src = 'https://www.youtube.com/iframe_api';
 
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
+  // the io.connect below has to be switched depending on whether you
+  // are running app locally or on heroku
+
   // $window.socket = io.connect('http://localhost:3000');
   $window.socket = io.connect($window.location.hostname || 'http://localhost:3000');
 
-
+  // once a socket is first connected, all code below becomes functional
   $window.socket.on('connect', function() {
      $window.socket.emit('getQueue');
   });
 
+  // sweetalert code for nicer looking alert box
   swal({
-    title: "Please enter your name?", 
-    type: "input",
-    inputType: "text",
+    title: 'Please enter your name?',
+    type: 'input',
+    inputType: 'text',
     showCancelButton: true,
     closeOnConfirm: true
   }, function(typedPassword) {
@@ -28,11 +33,13 @@ angular.module('musicApp', ['chat', 'search'])
   });
 })
 
+// to remove the # from the URL
 .config(function($locationProvider){
   $locationProvider.html5Mode(true);
 
 })
 
+// this service handles YouTube player functions
 .service('VideoService', ['$window', '$rootScope', function($window, $rootScope) {
   var context = this;
 
@@ -40,6 +47,7 @@ angular.module('musicApp', ['chat', 'search'])
   this.player;
   this.queue = [];
 
+  // to instantiate a new YouTube player and set its attributes
   $window.onYouTubeIframeAPIReady = function() {
     this.player = new YT.Player('player', {
       height: '360',
@@ -82,7 +90,7 @@ angular.module('musicApp', ['chat', 'search'])
       socket.emit('videoEnded');
     }
   };
-
+  // route everything to and from server with socket listeners
   socket.on('sendTime', function(time) {
     player.seekTo(time, false);
   })
@@ -141,22 +149,27 @@ angular.module('musicApp', ['chat', 'search'])
   })
 }])
 
+// YouTube controller to handle the view
 .controller('YouTubeController', ['$scope', 'VideoService', '$rootScope', function($scope, VideoService, $rootScope){
-
+  // to let user control YouTube volume with slider
   $scope.volume;
 
   $scope.$watch('volume', function(newValue, oldValue) {
     $rootScope.$emit('volumeChange', $scope.volume);
   })
 
+  // when user clicks remove video from playlist
+  // we emit this to server and on that end video removed from list
   $scope.dequeue = function(videoId){
     socket.emit('dequeue', videoId);
   };
 
+  // to instantly load next available video in playlist queue
   $scope.skip = function() {
     socket.emit('skip');
   }
-
+  // if user pauses video, sync allows user to jump to actual video frame
+  // that had continued to run for all other users
   $scope.sync = function() {
     socket.emit('getSync');
   }
@@ -171,32 +184,35 @@ angular.module('musicApp', ['chat', 'search'])
       $scope.list = VideoService.queue;
     });
   });
-
+  // to handle up and down votes; one vote per user
   $scope.upcount = 0;
   $scope.downcount = 0;
 
   $scope.upCount = function(){
-    socket.emit("upVote");
+    socket.emit('upVote');
   }
 
   $scope.downCount = function(){
-    socket.emit("downVote");
+    socket.emit('downVote');
   }
 
+  //e.g, if user initially upvotes, then downvotes, this
+  //function reflects change, incrementing downvote and decrementing
+  //upvote
   socket.on('changeVote', function(votes){
     $scope.$apply(function() {
       $scope.upcount = votes.up;
       $scope.downcount = votes.down;
     });
   })
-
+  //when new video starts, votes reset to 0 and 0
   socket.on('clearVotes', function(){
     $scope.$apply(function(){
       $scope.upcount = 0;
       $scope.downcount = 0;
     })
   })
-
+  //to emit to the server when a user make a vote
   socket.on('sendVotes', function(votes) {
     $scope.$apply(function() {
       $scope.upcount = votes.up;
