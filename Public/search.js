@@ -1,10 +1,10 @@
 angular.module('search', [])
-
+// to load YouTube search modal
 .directive('searchDirective', function() {
   return {
-    restrict: "E",
+    restrict: 'E',
     scope: {
-      show: "="
+      show: '='
     },
     replace: true,
     link: function(scope, element, attrs) {
@@ -24,6 +24,8 @@ angular.module('search', [])
   }
 })
 
+// to handle YouTube search view and functionality to add videos
+// to playlist queue
 .controller('SearchController', ['$scope', '$window', 'SearchFactory', function($scope, $window, SearchFactory){
 
   $scope.searchList;
@@ -49,6 +51,7 @@ angular.module('search', [])
 
 }])
 
+// to grab search query from YouTube API
 .factory('SearchFactory', ['$http', function($http) {
 
   var fetchSearch = function(query, callback) {
