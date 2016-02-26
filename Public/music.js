@@ -12,8 +12,8 @@ angular.module('musicApp', ['chat', 'search'])
   // the io.connect below has to be switched depending on whether you
   // are running app locally or on heroku
 
-  // $window.socket = io.connect('http://localhost:3000');
-  $window.socket = io.connect($window.location.hostname || 'http://localhost:3000');
+  $window.socket = io.connect('http://localhost:3000');
+  // $window.socket = io.connect($window.location.hostname || 'http://localhost:3000');
 
   // once a socket is first connected, all code below becomes functional
   $window.socket.on('connect', function() {
@@ -22,13 +22,15 @@ angular.module('musicApp', ['chat', 'search'])
 
   // sweetalert code for nicer looking alert box
   swal({
-    title: 'Please enter your name?',
+    title: 'Welcome to Playlist',
+    text: 'Enter your username',
     type: 'input',
     inputType: 'text',
     showCancelButton: true,
-    closeOnConfirm: true
-  }, function(typedPassword) {
-    $window.username = typedPassword || 'anonymous';
+    closeOnConfirm: true,
+    confirmButtonColor: '#1171A2'
+  }, function(username) {
+    $window.username = username || 'anonymous';
     socket.emit('setUser', $window.username);
   });
 })

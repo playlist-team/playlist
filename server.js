@@ -125,6 +125,7 @@ io.on('connection', function (socket) {
         set= false;
         current = null;
         reset();
+        io.emit('stopVideo');
       }
     }
   })
