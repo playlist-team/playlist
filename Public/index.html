@@ -129,12 +129,12 @@
 
         <div style="position:fixed;">
               <!-- tabs to display messages or users online -->
-              <li ng-style="chatstyle" class="tab" ng-click="changetab('chat')">
-                chat
+              <li ng-style="chatstyle" class="tab" ng-click="changeTab('chat')">
+                <strong>chat</strong>
               </li>
 
-              <li ng-style="userstyle" class="tab" ng-click="changetab('users')">
-                users
+              <li ng-style="userstyle" class="tab" ng-click="changeTab('users')">
+                <strong>users </strong><div id="users-connected">({{usersConnected}})</div>
               </li>
 
         </div>
@@ -143,7 +143,7 @@
 
           <table class="chat-table" style="margin-top:20px">
 
-            <tbody ng-show="tab=='chat'" id="messages" ng-repeat="message in messages track by $index">
+            <tbody ng-show="tab =='chat'" id="messages" ng-repeat="message in messages track by $index">
 
               <tr class="user-name">
                 <!-- to display user name and time stamp of message -->
@@ -167,9 +167,9 @@
 
             </tbody>
             <!-- functionality to display chat messages or online users -->
-            <tbody id="messages" ng-show="tab=='users'">
+            <tbody id="messages" ng-show="tab == 'users'">
 
-              <tr class="user-name" ng-repeat="user in useronline">
+              <tr class="user-name" ng-repeat="user in usernameList">
 
                 <td ng-cloak >
 
