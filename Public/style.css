@@ -25,13 +25,13 @@ header {
 
 #current-song {
   width: 100%
-  height: 35px;
+  height: 25px;
   font-size: 20px;
   background-color: #22242A;
   color: white;
   padding-left: 10px;
   padding-right: 5px;
-  padding-top: 15px;
+  padding-top: 10px;
   /*padding-bottom: 15px;*/
   /*position:fixed;*/
   /*display: inline-block;*/
@@ -47,7 +47,7 @@ header {
   float: left;
   /*padding-left: 3px;*/
   display: block;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
 }
 
 .votes {
@@ -55,10 +55,10 @@ header {
   display: inline-block;
   padding-left: 10px;
   /*margin-top: 3px;*/
-  margin-bottom: 15px
+  /*margin-bottom: 15px*/
   float: left;
   padding-top: 6px;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
   /*margin-left:10px;*/
 }
 
@@ -205,7 +205,7 @@ header {
 #queue {
 /*  margin-top: -10px;*/
   width: 640px;
-  height:180px;
+  height:164px;
   display: block;
   overflow-y:auto;
 }
