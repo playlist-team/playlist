@@ -51,6 +51,8 @@ io.on('connection', function (socket) {
   socket.on('getCurrent', function() {
     if (current) {
       io.sockets.connected[socket.id].emit('sendCurrent', current);
+    } else {
+      io.sockets.connected[socket.id].emit('setVolume');
     }
   })
 
@@ -127,7 +129,7 @@ io.on('connection', function (socket) {
     }
   })
 
-  socket.on('setDuration', function (data) {
+  socket.on('setDuration', function () {
     if (!set) {
       set = true;
       start = 0;
