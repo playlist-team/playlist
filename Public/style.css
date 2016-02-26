@@ -48,9 +48,11 @@ header {
 }
 
 .tab{
+  list-style-type: none;
   display: inline-block;
   border: 1px solid black;
-  width:203px;
+  width:208px;
+  text-align:center;
 }
 
 #skip:hover {
@@ -299,9 +301,10 @@ header {
 .video-image { float: left; left: 10px; position: absolute; top: 10px; }
 .video-title { padding-top: 5px; font-size: 18px; }
 .video-author { color: #616573; font-size: 14px; font-weight: 900; padding: 5px 0; }
-.video-description { font-size: 12px; line-height: 1.5; }
+.video-description { font-size: 12px; line-height: 1; height:38px; display:block;}
 .video:hover { background: #1fa0df; color: white; }
 
 input:focus::-webkit-input-placeholder { color:transparent; }
 input:focus:-moz-placeholder { color:transparent; }
+
 
