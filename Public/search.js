@@ -58,7 +58,7 @@ angular.module('search', [])
         part: "snippet",
         type: "video",
         q: query,
-        maxResults: 5,
+        maxResults: 25,
         order: "viewCount",
         publishedAfter: "2000-01-01T00:00:00Z"
       }
