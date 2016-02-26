@@ -27,7 +27,7 @@
       <!-- YouTube search box -->
       <form id="search" ng-submit="getSearch(field); toggleResults()" ng-controller="SearchController">
 
-        <input id="search-input" ng-model="field" type="text" placeholder="Search YouTube Music Videos" autocomplete="off">
+        <input id="search-input" ng-model="field" type="text" placeholder="Search for and add YouTube videos to the playlist" autocomplete="off">
 
         <input id="search-submit" type="image" src="search.png">
         <!-- Angular directive to load search results modal on submit -->
@@ -75,7 +75,7 @@
         <div id="current-song">
 
             <span id="default-playlist-message" ng-cloak ng-show="!current.title">
-              Add a video to the playlist
+              Playlist is currently empty
             </span>
             <!-- we set a limit on title character length -->
             <span ng-cloak ng-show="current.title">
