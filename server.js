@@ -25,6 +25,15 @@ var sync;
 var set = false;
 var switched = false;
 
+var reset = function () {
+  votes = {};
+  upvotes = 0;
+  downvotes = 0;
+  io.emit('clearVotes');
+  io.emit('nextVideo', current);
+  io.emit('refreshQueue', queue);
+}
+
 io.on('connection', function (socket) {
 
   socket.on('setUser', function (username) {
@@ -66,11 +75,7 @@ io.on('connection', function (socket) {
     } else {
       set = false;
       current = data;
-      votes = {};
-      upvotes = 0;
-      downvotes = 0;
-      io.emit('clearVotes');
-      io.emit('firstVideo', data);
+      reset();
     }
   })
 
@@ -92,12 +97,7 @@ io.on('connection', function (socket) {
                     username: 'Meow Mode', 
                     socket: current.socket });
     current = queue.shift();
-    votes = {};
-    upvotes = 0;
-    downvotes = 0;
-    io.emit('clearVotes');
-    io.emit('nextVideo', current);
-    io.emit('refreshQueue', queue);
+    reset();
   })
 
   socket.on('videoEnded', function () {
@@ -105,12 +105,7 @@ io.on('connection', function (socket) {
       switched = true;
       set = false;
       current = queue.shift();
-      votes = {};
-      upvotes = 0;
-      downvotes = 0;
-      io.emit('clearVotes');
-      io.emit('nextVideo', current);
-      io.emit('refreshQueue', queue);
+      reset();
       setTimeout(function() {
         switched = false;
       }, 5000);
@@ -119,23 +114,15 @@ io.on('connection', function (socket) {
 
   socket.on('skip', function(easterEgg) {
     var id = socket.id;
-    if (id.slice(2) === current.socket || easterEgg) {
+    if (current && id.slice(2) === current.socket || easterEgg) {
       if (queue.length) {
+        set = false;
         current = queue.shift();
-        votes = {};
-        upvotes = 0;
-        downvotes = 0;
-        io.emit('clearVotes');
-        io.emit('nextVideo', current);
-        io.emit('refreshQueue', queue);
+        reset();
       } else {
+        set= false;
         current = null;
-        votes = {};
-        upvotes = 0;
-        downvotes = 0;
-        io.emit('clearVotes');
-        io.emit('nextVideo', current);
-        io.emit('refreshQueue', queue);
+        reset();
       }
     }
   })
@@ -143,7 +130,7 @@ io.on('connection', function (socket) {
   socket.on('setDuration', function (data) {
     if (!set) {
       set = true;
-      start = data;
+      start = 0;
       clearInterval(sync);
       sync = setInterval(function() {
         console.log(start);
