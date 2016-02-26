@@ -23,11 +23,52 @@ header {
   height: 80px;
 }
 
-.votes {
-  padding-right: 3px;
-  margin-top:25px;
+#current-song {
+  width: 100%
+  height: 35px;
+  font-size: 20px;
+  background-color: #22242A;
+  color: white;
+  padding-left: 10px;
+  padding-right: 5px;
+  padding-top: 15px;
+  /*padding-bottom: 15px;*/
+  /*position:fixed;*/
+  /*display: inline-block;*/
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+#current-misc{
   display: inline-block;
-  margin-left:10px;
+}
+
+#title-playing {
+  float: left;
+  /*padding-left: 3px;*/
+  display: block;
+  padding-bottom: 10px;
+}
+
+.votes {
+  color: white;
+  display: inline-block;
+  padding-left: 10px;
+  /*margin-top: 3px;*/
+  margin-bottom: 15px
+  float: left;
+  padding-top: 6px;
+  padding-bottom: 10px;
+  /*margin-left:10px;*/
+}
+
+#added-by {
+  font-size: 12px;
+  font-style: italic;
+}
+
+#arrows {
+  padding-left: 412px;
 }
 
 .down-arrow {
@@ -151,11 +192,11 @@ header {
   border: 1px solid black;
 }
 
-.current-title {
+/*.current-title {
   color: white;
   padding-right: 175px;
   padding-left: 10px;
-}
+}*/
 
 .queue-table {
   margin-left: 30px;
@@ -170,17 +211,6 @@ header {
 }
 
 #queue p {
-  display: inline-block;
-}
-
-#current-song {
-  width: 100%
-  height: 35px;
-  font-size: 18px;
-  background-color: #22242A;
-  color: white;
-  padding-left: 10px;
-  position:fixed;
   display: inline-block;
 }
 
