@@ -15,7 +15,7 @@
       <form id="search" ng-submit="getSearch(field); toggleResults()" ng-controller="SearchController">
         <input id="search-input" ng-model="field" type="text" placeholder="Search YouTube Music Videos" autocomplete="off">
         <input id="search-submit" type="image" src="search.png">
-        <search-directive show='showResults' width='750px' height='60%'>
+        <search-directive show='showResults' width='750px' height='62%'>
           <div id="results">
             <div class="video" ng-cloak ng-repeat="result in searchList track by $index" ng-click="enqueue(result)">
               <img clas="video-image" style="float:left" src={{result.snippet.thumbnails.default.url}}>
@@ -60,7 +60,7 @@
 
               <tbody ng-show="tab=='chat'" id="messages" ng-repeat="message in messages track by $index">
                 <tr class="user-name">
-                  <td ng-cloak ng-show="messages[{{$index-1}}].username !== message.username"><strong>{{ message.username }}:</strong></td>
+                  <td ng-cloak ng-show="messages[{{$index-1}}].username !== message.username"><strong>{{ message.username }} </strong><span class="time">{{message. time}}</td>
                 </tr>
                 <tr class="user-message">
                   <td ng-cloak ng-bind-html="message.message | linky:'_blank'">{{ message.message }}</td>

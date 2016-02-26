@@ -17,7 +17,6 @@ body {
   display: none;
 }
 
-
 header {
   color: white;
   background-color: #22242A;
@@ -303,6 +302,8 @@ header {
 .video-author { color: #616573; font-size: 14px; font-weight: 900; padding: 5px 0; }
 .video-description { font-size: 12px; line-height: 1; height:38px; display:block;}
 .video:hover { background: #1fa0df; color: white; }
+
+.time { font-size: 12px; color: #dbdbdc; }
 
 input:focus::-webkit-input-placeholder { color:transparent; }
 input:focus:-moz-placeholder { color:transparent; }
