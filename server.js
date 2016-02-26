@@ -25,14 +25,14 @@ var sync;
 var set = false;
 var switched = false;
 
-var ended = function () {
+var reset = function () {
   votes = {};
   upvotes = 0;
   downvotes = 0;
   io.emit('clearVotes');
   io.emit('nextVideo', current);
   io.emit('refreshQueue', queue);
-};
+}
 
 io.on('connection', function (socket) {
 
@@ -51,6 +51,8 @@ io.on('connection', function (socket) {
   socket.on('getCurrent', function() {
     if (current) {
       io.sockets.connected[socket.id].emit('sendCurrent', current);
+    } else {
+      io.sockets.connected[socket.id].emit('setVolume');
     }
   })
 
@@ -75,11 +77,7 @@ io.on('connection', function (socket) {
     } else {
       set = false;
       current = data;
-      votes = {};
-      upvotes = 0;
-      downvotes = 0;
-      io.emit('clearVotes');
-      io.emit('firstVideo', data);
+      reset();
     }
   })
 
@@ -101,7 +99,7 @@ io.on('connection', function (socket) {
                     username: 'Meow Mode', 
                     socket: current.socket });
     current = queue.shift();
-    ended();
+    reset();
   })
 
   socket.on('videoEnded', function () {
@@ -109,7 +107,7 @@ io.on('connection', function (socket) {
       switched = true;
       set = false;
       current = queue.shift();
-      ended();
+      reset();
       setTimeout(function() {
         switched = false;
       }, 5000);
@@ -118,23 +116,26 @@ io.on('connection', function (socket) {
 
   socket.on('skip', function(easterEgg) {
     var id = socket.id;
-    if (id.slice(2) === current.socket || easterEgg) {
+    if (current && id.slice(2) === current.socket || easterEgg) {
       if (queue.length) {
+        set = false;
         current = queue.shift();
-        ended();
+        reset();
       } else {
+        set= false;
         current = null;
-        ended();
+        reset();
       }
     }
   })
 
-  socket.on('setDuration', function (data) {
+  socket.on('setDuration', function () {
     if (!set) {
       set = true;
-      start = data;
+      start = 0;
       clearInterval(sync);
       sync = setInterval(function() {
+        console.log(start);
         start++;
       }, 1000);
     }

@@ -71,6 +71,9 @@ angular.module('musicApp', ['chat', 'search'])
       $rootScope.$emit('changeQueue');
       socket.emit('getTime');
     })
+    socket.on('setVolume', function() {
+      player.setVolume(50);
+    })
   };
 
   function onPlayerStateChange(event) {
@@ -80,8 +83,8 @@ angular.module('musicApp', ['chat', 'search'])
     }
   };
 
-  socket.on('sendTime', function(duration) {
-    player.seekTo(duration, false);
+  socket.on('sendTime', function(time) {
+    player.seekTo(time, false);
   })
 
   socket.on('firstVideo', function(video) {
@@ -91,14 +94,14 @@ angular.module('musicApp', ['chat', 'search'])
     socket.emit('setDuration', player.getDuration());
   })
 
-  socket.on('addVideo', function(data) {
-    context.queue.push(data);
+  socket.on('addVideo', function(video) {
+    context.queue.push(video);
     $rootScope.$emit('changeQueue');
   })
 
-  socket.on('removeVideo', function(videoID){
+  socket.on('removeVideo', function(videoId){
     context.queue.forEach(function(video, index){
-      if(video.id === videoID){
+      if(video.id === videoId){
         context.queue.splice(index, 1);
       }
     })
@@ -110,7 +113,7 @@ angular.module('musicApp', ['chat', 'search'])
     context.current = video;
     player.loadVideoById(video.id);
     $rootScope.$emit('changeQueue');
-    socket.emit('setDuration', player.getDuration());
+    socket.emit('setDuration');
   })
 
   socket.on('refreshQueue', function(queue){
@@ -118,17 +121,13 @@ angular.module('musicApp', ['chat', 'search'])
     $rootScope.$emit('changeQueue');
   })
 
-  socket.on('sendQueue', function(data) {
-    context.queue = data;
+  socket.on('sendQueue', function(queue) {
+    context.queue = queue;
     $rootScope.$emit('changeQueue');
   })
 
   socket.on('stopVideo', function() {
     player.stopVideo();
-  })
-
-  $rootScope.$on('skip', function() {
-    socket.emit('skip');
   })
 
   $rootScope.$on('volumeChange', function(event, volume) {
@@ -150,12 +149,12 @@ angular.module('musicApp', ['chat', 'search'])
     $rootScope.$emit('volumeChange', $scope.volume);
   })
 
-  $scope.dequeue = function(videoID){
-    socket.emit('dequeue', videoID);
+  $scope.dequeue = function(videoId){
+    socket.emit('dequeue', videoId);
   };
 
   $scope.skip = function() {
-    $rootScope.$emit('skip');
+    socket.emit('skip');
   }
 
   $scope.sync = function() {
