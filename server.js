@@ -38,6 +38,7 @@ io.on('connection', function (socket) {
 
   socket.on('setUser', function (username) {
     users[socket.id] = username;
+    io.sockets.connected[socket.id].emit('usernamewindow', username)
     io.emit('onlineusers', users)
   });
 

@@ -21,6 +21,9 @@ angular.module('chat', [])
 })
 
 .controller('ChatController', function ($scope, $window, $rootScope){
+  socket.on('usernamewindow',function(username){
+    $scope.username = username;
+  })
 
   // $scope.messages = [ '','','','','','','','','','','','','','','','','',
   //                     '','','','','','','','','','','','','','','','','',
@@ -29,7 +32,7 @@ angular.module('chat', [])
   //                     '','','','','','','','','','','','','','','','','',
   //                     '','','','','','','','' ];
   $scope.messages = []
-  $scope.username = $window.username;
+  // $scope.username = $window.username;
   $scope.useronline;
   $scope.tab='chat';
   $scope.chatstyle = {'background-color': 'white'};
