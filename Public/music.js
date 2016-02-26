@@ -23,7 +23,6 @@ angular.module('musicApp', ['chat', 'search'])
     showCancelButton: true,
     closeOnConfirm: true
   }, function(typedPassword) {
-    console.log(typedPassword)
     $window.username = typedPassword || 'anonymous';
     socket.emit('setUser', $window.username);
   });
