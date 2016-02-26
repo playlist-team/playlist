@@ -55,6 +55,13 @@ header {
   padding-right: 15px;
 }
 
+#volume {
+  position: fixed;
+  bottom: 722.5px;
+  float: right;
+  margin-left: 15px;
+}
+
 #skip {
   font-size: 14px;
   float: right;
@@ -66,20 +73,36 @@ header {
   -moz-user-select: none;
 }
 
+#skip:hover {
+  color: #AC0809;
+  cursor: pointer;
+  outline: none;
+}
+
+#sync {
+  position: relative;
+  float: right;
+  font-size: 14px;
+  display: inline-block;
+  top: 45px;
+  left: 48.50px;
+}
+
+#sync:hover {
+  color: #1171A2;
+  cursor: pointer;
+  outline: none;
+}
+
 .up-arrow {
 }
+
 .tab{
   list-style-type: none;
   display: inline-block;
   border-bottom: 1px solid black;
   width:210px;
   text-align:center;
-}
-
-#skip:hover {
-  color: #AC0809;
-  cursor: pointer;
-  outline: none;
 }
 #search-input {
   position: relative;

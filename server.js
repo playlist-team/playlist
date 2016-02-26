@@ -135,7 +135,6 @@ io.on('connection', function (socket) {
       start = data;
       clearInterval(sync);
       sync = setInterval(function() {
-        console.log(start);
         start++;
       }, 1000);
     }
@@ -170,6 +169,10 @@ io.on('connection', function (socket) {
       downvotes++;
     }
     io.emit('changeVote', {up: upvotes, down: downvotes});
+  })
+
+  socket.on('getSync', function() {
+    io.sockets.connected[socket.id].emit('sendSync', start);
   })
 
 });

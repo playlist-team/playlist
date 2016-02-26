@@ -8,8 +8,8 @@ angular.module('musicApp', ['chat', 'search'])
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-  // $window.socket = io.connect('http://localhost:3000');
-  $window.socket = io.connect($window.location.hostname || 'http://localhost:3000');
+  $window.socket = io.connect('http://localhost:3000');
+  // $window.socket = io.connect($window.location.hostname || 'http://localhost:3000');
 
 
   $window.socket.on('connect', function() {
@@ -58,15 +58,14 @@ angular.module('musicApp', ['chat', 'search'])
         'onStateChange': onPlayerStateChange
       }
     })
-    this.player.setVolume(50);
   };
 
 
   function onPlayerReady (event) {
     event.target.playVideo();
     socket.emit('getCurrent');
-
     socket.on('sendCurrent', function(video) {
+      player.setVolume(50);
       context.current = video;
       player.loadVideoById(video.id);
       $rootScope.$emit('changeQueue');
@@ -135,12 +134,17 @@ angular.module('musicApp', ['chat', 'search'])
   $rootScope.$on('volumeChange', function(event, volume) {
     player.setVolume(volume);
   })
-}])
 
+  socket.on('sendSync', function(time) {
+    player.stopVideo();
+    player.seekTo(time, false);
+    player.playVideo();
+  })
+}])
 
 .controller('YouTubeController', ['$scope', 'VideoService', '$rootScope', function($scope, VideoService, $rootScope){
 
-  $scope.volume = 50;
+  $scope.volume;
 
   $scope.$watch('volume', function(newValue, oldValue) {
     $rootScope.$emit('volumeChange', $scope.volume);
@@ -152,6 +156,10 @@ angular.module('musicApp', ['chat', 'search'])
 
   $scope.skip = function() {
     $rootScope.$emit('skip');
+  }
+
+  $scope.sync = function() {
+    socket.emit('getSync');
   }
 
   $scope.current = VideoService.current;
@@ -190,7 +198,7 @@ angular.module('musicApp', ['chat', 'search'])
     })
   })
 
-  socket.on('sendVotes', function(data) {
+  socket.on('sendVotes', function(votes) {
     $scope.$apply(function() {
       $scope.upcount = votes.up;
       $scope.downcount = votes.down;

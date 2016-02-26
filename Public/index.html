@@ -11,7 +11,6 @@
     <base href="/"></base>
   </head>
   <body ng-controller="YouTubeController">
-
     <header>
       <h1 id="logo">Playlist</h1>
       <form id="search" ng-submit="getSearch(field); toggleResults()" ng-controller="SearchController">
@@ -29,7 +28,8 @@
         </search-directive>
       </form>
       <h1 id="skip" ng-click="skip()">skip</h1>
-      <input id="volume" min ="0" max="100" step="1" type="range" ng-model="volume"</input>
+      <h1 id="sync" ng-click="sync()">sync</h1>
+      <input id="volume" min ="0" max="100" step="1" type="range" ng-model="volume" value="50"></input>
     </header>
       <div class="container">
       <div id="player-queue">
