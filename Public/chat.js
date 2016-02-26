@@ -25,23 +25,22 @@ angular.module('chat', [])
     $scope.username = username;
   })
 
-  $scope.messages = []
-  // $scope.username = $window.username;
-  $scope.useronline;
-  $scope.tab='chat';
+  $scope.messages = [];
+  $scope.usernameList;
+  $scope.tab = 'chat';
   $scope.chatstyle = {'background-color': 'inherit'};
   $scope.userstyle;
 
-  $scope.changetab = function (tab){
+  $scope.changeTab = function (tab){
     $scope.tab = tab;
     $rootScope.$emit('scrollDown');
 
     if($scope.tab=='chat'){
-        $scope.chatstyle = {'background-color': 'inherit'};
-        $scope.userstyle = {}
+      $scope.chatstyle = {'background-color': 'inherit'};
+      $scope.userstyle = {};
     }else if ($scope.tab=='users'){
-        $scope.userstyle = {'background-color': 'inherit'};
-        $scope.chatstyle = {}
+      $scope.userstyle = {'background-color': 'inherit'};
+      $scope.chatstyle = {};
     }
   }
 
@@ -49,12 +48,12 @@ angular.module('chat', [])
     var date = new Date();
     var hours = date.getHours();
     var min = date.getMinutes();
-    var ampm;
+    var meridian;
 
     if (hours < 12) {
-      ampm = 'am';
+      meridian = 'am';
     } else {
-      ampm = 'pm';
+      meridian = 'pm';
     }
 
     if (hours > 12) {
@@ -67,7 +66,7 @@ angular.module('chat', [])
       min = '0' + min;
     }
 
-    $scope.time = hours + ':' + min + ampm;
+    $scope.time = hours + ':' + min + meridian;
   };
 
   $scope.easterEgg = function () {
@@ -105,14 +104,15 @@ angular.module('chat', [])
   socket.on('messageSent', function (data){
     $scope.getCurrentTime();
     $scope.$apply(function() {
-      data.time = $scope.time
+      data.time = $scope.time;
       $scope.messages.push(data);
     })
   });
 
   socket.on('onlineusers', function (users){
     $scope.$apply(function(){
-      $scope.useronline = users
+      $scope.usernameList = users;
+      $scope.usersConnected = Object.keys(users).length;
     })
   });
 
