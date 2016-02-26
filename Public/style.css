@@ -370,8 +370,20 @@ header {
 
 .video:nth-child(2n-1) { background-color: #f5f5f9; }
 /*.video-image { float: left; left: 10px; position: absolute; top: 10px; }*/
-.video-title { padding-top: 5px; font-size: 18px; }
-.video-author { color: #616573; font-size: 14px; font-weight: 900; padding: 5px 0; }
+.video-title {
+  padding-top: 5px;
+  font-size: 18px;
+  display: block;
+}
+
+.video-author {
+  color: #616573;
+  font-size: 14px;
+  font-weight: 900;
+  padding: 5px 0;
+  display: block;
+}
+
 .video-description { font-size: 12px; line-height: 1; height:38px; display:block;}
 .video:hover { background: #1fa0df; color: white; }
 .time { color: #dbdbdc; font-size: 12px; }
