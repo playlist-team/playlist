@@ -11,11 +11,20 @@ angular.module('musicApp', ['chat', 'search'])
   // $window.socket = io.connect('http://localhost:3000');
   $window.socket = io.connect($window.location.hostname || 'http://localhost:3000');
 
-  $window.username = $window.prompt('Username: ') || 'anonymous';
+
   $window.socket.on('connect', function() {
-    $window.socket.emit('getQueue');
-    $window.socket.emit('getVotes');
-    $window.socket.emit('setUser', $window.username);
+     $window.socket.emit('getQueue');
+  });
+
+  swal({
+    title: "Please enter your name?", 
+    type: "input",
+    inputType: "text",
+    showCancelButton: true,
+    closeOnConfirm: true
+  }, function(typedPassword) {
+    $window.username = typedPassword || 'anonymous';
+    socket.emit('setUser', $window.username);
   });
 })
 
