@@ -23,23 +23,46 @@ header {
   height: 80px;
 }
 
-.votes {
-  padding-right: 3px;
-  margin-top:25px;
-  display: inline-block;
-  margin-left:10px;
+#current-song {
+  width: 100%
+  height: 20px;
+  font-size: 20px;
+  background-color: #22242A;
+  color: white;
+  padding-left: 10px;
+  padding-right: 5px;
+  padding-top: 10px;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
-.down-arrow {
-/*  position: relative;
-  height: 2.82%;
-  width: 2.82%;
-  top: 1.4px;*/
+#title-playing {
+  float: left;
+  display: block;
+  padding-bottom: 5px;
+}
+
+.votes {
+  color: white;
+  padding-top: 5px;
+}
+
+#added-by {
+  font-size: 12px;
+  font-style: italic;
+  float: left;
+  padding-left: 25px;
+}
+
+#arrows {
+  float: right;
+  padding-right: 20px;
 }
 
 .vote-count {
   margin: 0px;
   padding-right: 3px;
+  color: white;
 }
 
 
@@ -152,12 +175,6 @@ header {
   border: 1px solid black;
 }
 
-.current-title {
-  color: white;
-  padding-right: 175px;
-  padding-left: 10px;
-}
-
 .queue-table {
   margin-left: 30px;
 }
@@ -165,23 +182,12 @@ header {
 #queue {
 /*  margin-top: -10px;*/
   width: 640px;
-  height:180px;
+  height:136px;
   display: block;
   overflow-y:auto;
 }
 
 #queue p {
-  display: inline-block;
-}
-
-#current-song {
-  width: 100%
-  height: 35px;
-  font-size: 18px;
-  background-color: #22242A;
-  color: white;
-  padding-left: 10px;
-  position:fixed;
   display: inline-block;
 }
 

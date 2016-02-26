@@ -37,20 +37,29 @@
 
 
         <div id="current-song">
-          <span style="padding-top:5px; float:left;" ng-cloak ng-show="!current.title">Add a video to the queue</span>
-          <span ng-cloak ng-show="current.title">{{ current.username }} is playing {{ current.title | limitTo: 50 }}{{current.title.length > 50 ? '...' : ''}}</span>
 
+            <span style="padding-top:5px; float:left;" ng-cloak ng-show="!current.title">Add a video to the queue</span>
+            <span ng-cloak ng-show="current.title"><!-- {{ current.username }} is playing  -->{{ current.title | limitTo: 50 }}{{current.title.length > 50 ? '...' : ''}}</span>
         </div>
-        <div class="votes">
-            <img src="upvote.svg" style="display: inline-block;" onmouseover="this.src='uphover.svg';" onmouseout="this.src='upvote.svg';" class="up-arrow" ng-click="upCount()"></img>
-            <p style="display: inline-block; color: white" class="vote-count" ng-cloak>{{upcount}}</p>
-            <img style="display: inline-block;" src="downvote.svg" onmouseover="this.src='downhover.svg';" onmouseout="this.src='downvote.svg';" class="down-arrow" ng-click="downCount()"></img>
-            <p style="display: inline-block; color: white" class="vote-count" ng-cloak>{{downcount}}</p>
+
+        <div class="votes" ng-show="current.title">
+
+          <p id="added-by" ng-cloak ng-show="current.title"> — song added by {{ current.username }}</p>
+
+          <p id="arrows">
+            <img src="upvote.svg" onmouseover="this.src='uphover.svg';" onmouseout="this.src='upvote.svg';" class="up-arrow" ng-click="upCount()"></img>
+
+            <span class="vote-count" ng-cloak>{{upcount}}</span>
+
+            <img src="downvote.svg" onmouseover="this.src='downhover.svg';" onmouseout="this.src='downvote.svg';" class="down-arrow" ng-click="downCount()"></img>
+
+            <span class="vote-count" ng-cloak>{{downcount}}</span>
+          </p>
         </div>
 
         <div id="queue">
           <div class="pending-songs" ng-cloak ng-repeat="song in list track by $index">
-            <p id="queue-title" ng-cloak>{{ song.title | limitTo: 80 }}{{song.title.length > 79 ? '...' : ''}}</p>
+            <p id="queue-title" ng-cloak>{{ song.title | limitTo: 80 }}{{song.title.length > 80 ? '...' : ''}}</p>
             <p id="queue-remove" ng-cloak type="button" ng-click="dequeue(song)">Remove</p>
           </div>
         </div>
