@@ -22,17 +22,11 @@ angular.module('chat', [])
 
 .controller('ChatController', function ($scope, $window, $rootScope){
 
-  // $scope.messages = [ '','','','','','','','','','','','','','','','','',
-  //                     '','','','','','','','','','','','','','','','','',
-  //                     '','','','','','','','','','','','','','','','','',
-  //                     '','','','','','','','','','','','','','','','','',
-  //                     '','','','','','','','','','','','','','','','','',
-  //                     '','','','','','','','' ];
   $scope.messages = []
   $scope.username = $window.username;
   $scope.useronline;
   $scope.tab='chat';
-  $scope.chatstyle = {'background-color': 'white'};
+  $scope.chatstyle = {'background-color': 'inherit'};
   $scope.userstyle;
 
   $scope.changetab = function (tab){
@@ -40,10 +34,10 @@ angular.module('chat', [])
     $rootScope.$emit('scrollDown');
 
     if($scope.tab=='chat'){
-        $scope.chatstyle = {'background-color': 'white'};
+        $scope.chatstyle = {'background-color': 'inherit'};
         $scope.userstyle = {}
     }else if ($scope.tab=='users'){
-        $scope.userstyle = {'background-color': 'white'};
+        $scope.userstyle = {'background-color': 'inherit'};
         $scope.chatstyle = {}
     }
   }
