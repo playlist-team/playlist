@@ -17,7 +17,12 @@ angular.module('chat', [])
 
 .controller('ChatController', function($scope, $window){
 
-  $scope.messages = [];
+  $scope.messages = [ '','','','','','','','','','','','','','','','','',
+                      '','','','','','','','','','','','','','','','','',
+                      '','','','','','','','','','','','','','','','','',
+                      '','','','','','','','','','','','','','','','','',
+                      '','','','','','','','','','','','','','','','','',
+                      '','','','','','','',''];
   $scope.username = $window.username;
   $scope.useronline;
   $scope.tab='chat';
@@ -36,8 +41,38 @@ angular.module('chat', [])
     }
   }
 
+  $scope.getCurrentTime = function () {
+    var date = new Date();
+    var hours = date.getHours();
+    var min = date.getMinutes();
+    var ampm;
+    var time;
+
+    if (hours < 12) {
+      ampm = 'am';
+    } else {
+      ampm = 'pm';
+    }
+
+    if (hours > 12) {
+      hours -= 12;
+    } else if (hours === 0) {
+      hours = 12;
+    }
+
+    if (min < 10) {
+      min = '0' + min;
+    }
+
+    time = hours + ':' + min + ampm;
+    $scope.time = hours + ':' + min + ampm;
+  };
+
   $scope.send = function(message){
-    socket.emit('sendMessage', { message: message, username: $scope.username });
+    $scope.getCurrentTime();
+    socket.emit('sendMessage', { message: message, 
+                                 username: $scope.username, 
+                                 time: $scope.time });
     $scope.message = null;
   };
 
