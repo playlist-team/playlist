@@ -85,7 +85,17 @@
               <input id="chat-input" ng-model="message" type="text" placeholder="Enter Message" autocomplete="off" required/>
             </form>
         </div>
-
+    <script>
+      $('input[type=range]').on('input', function(e){
+        var min = e.target.min,
+            max = e.target.max,
+            val = e.target.value;
+        
+        $(e.target).css({
+          'backgroundSize': (val - min) * 100 / (max - min) + '% 100%'
+        });
+      }).trigger('input');
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
     <script src="chat.js"></script>
