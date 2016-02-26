@@ -92,7 +92,12 @@ io.on('connection', function (socket) {
                     username: 'Meow Mode', 
                     socket: current.socket });
     current = queue.shift();
-    ended();
+    votes = {};
+    upvotes = 0;
+    downvotes = 0;
+    io.emit('clearVotes');
+    io.emit('nextVideo', current);
+    io.emit('refreshQueue', queue);
   })
 
   socket.on('videoEnded', function () {
@@ -100,7 +105,12 @@ io.on('connection', function (socket) {
       switched = true;
       set = false;
       current = queue.shift();
-      ended();
+      votes = {};
+      upvotes = 0;
+      downvotes = 0;
+      io.emit('clearVotes');
+      io.emit('nextVideo', current);
+      io.emit('refreshQueue', queue);
       setTimeout(function() {
         switched = false;
       }, 5000);
@@ -112,10 +122,20 @@ io.on('connection', function (socket) {
     if (id.slice(2) === current.socket || easterEgg) {
       if (queue.length) {
         current = queue.shift();
-        ended();
+        votes = {};
+        upvotes = 0;
+        downvotes = 0;
+        io.emit('clearVotes');
+        io.emit('nextVideo', current);
+        io.emit('refreshQueue', queue);
       } else {
         current = null;
-        ended();
+        votes = {};
+        upvotes = 0;
+        downvotes = 0;
+        io.emit('clearVotes');
+        io.emit('nextVideo', current);
+        io.emit('refreshQueue', queue);
       }
     }
   })
@@ -166,15 +186,6 @@ io.on('connection', function (socket) {
   socket.on('getSync', function() {
     io.sockets.connected[socket.id].emit('sendSync', start);
   })
-
-  var ended = function () {
-  votes = {};
-  upvotes = 0;
-  downvotes = 0;
-  io.emit('clearVotes');
-  io.emit('nextVideo', current);
-  io.emit('refreshQueue', queue);
-};
 
 });
 
