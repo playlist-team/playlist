@@ -98,9 +98,11 @@ header {
 }
 
 .tab{
+  color: black;
+  background-color: rgba(249, 249, 249, .30);
+  opacity: 0.85;
   list-style-type: none;
   display: inline-block;
-  border-bottom: 1px solid black;
   width:210px;
   text-align:center;
 }
@@ -215,6 +217,8 @@ header {
   height: 600px;
   float: right;
   color: #080808;
+  background-color: #616573;
+  opacity: 50%;
   background-image: url("chat-background.png");
 }
 
@@ -223,7 +227,6 @@ header {
   overflow-x:hidden;
   width:430px;
   padding-bottom: 15px;
-
 }
 
 .chat-table{
@@ -259,11 +262,11 @@ header {
 
 #chat-input{
   width: 413px;
+  opacity: 0.85;
   height: 27px;
-  opacity: 0.75;
-  color: black;
+  color: white;
   font-size: 14px;
-  background-color: #616573;
+  background-color: rgba(42, 45, 58, .40);
   border: none;
   margin-top:-12px;
   margin-left: 0px;
@@ -347,7 +350,6 @@ header {
 .video-author { color: #616573; font-size: 14px; font-weight: 900; padding: 5px 0; }
 .video-description { font-size: 12px; line-height: 1; height:38px; display:block;}
 .video:hover { background: #1fa0df; color: white; }
-
 .time { color: #dbdbdc; font-size: 12px; }
 
 input:focus::-webkit-input-placeholder { color:transparent; }
