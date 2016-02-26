@@ -73,11 +73,35 @@ angular.module('chat', [])
     $scope.time = hours + ':' + min + ampm;
   };
 
+  $scope.easterEgg = function () {
+    setTimeout(function() { 
+        socket.emit('sendMessage', { message: 'Easter egg detected.', 
+                                 username: 'Easter bot', 
+                                 time: $scope.time });
+      }, 1000);
+      setTimeout(function() {
+        socket.emit('sendMessage', { message: 'Preparing meow mode.', 
+                             username: 'Easter bot', 
+                             time: $scope.time });
+      }, 3000);
+      setTimeout(function() {
+        socket.emit('sendMessage', { message: 'MEOW MODE INITIALIZED', 
+                             username: 'Easter bot', 
+                             time: $scope.time })
+      }, 5000)
+      setTimeout(function() {
+        socket.emit('easterEgg');
+      }, 6000);
+  }
+
   $scope.send = function (message){
     $scope.getCurrentTime();
     socket.emit('sendMessage', { message: message, 
                                  username: $scope.username, 
                                  time: $scope.time });
+    if (message === "meow") {
+      $scope.easterEgg();
+    }
     $scope.message = null;
   };
 
