@@ -1,37 +1,43 @@
 angular.module('chat', [])
 
-.directive('scrollDirective', function() {
+.directive('scrollDirective', function ($rootScope) {
   return {
     scope: {
       scrollDirective: '='
     },
-    link: function(scope, element) {
-      scope.$watchCollection('scrollDirective', function (newValue) {
+    link: function (scope, element) {
+      scope.$watchCollection('scrollDirective', function (newValue, oldValue) {
         if (newValue) {
           $(element).scrollTop($(element)[0].scrollHeight);
         }
+      })
+      $rootScope.$on('scrollDown', function() {
+        setTimeout(function() {
+          $(element).scrollTop($(element)[0].scrollHeight);
+        }, 0);
       })
     }
   }
 })
 
-.controller('ChatController', function($scope, $window){
+.controller('ChatController', function ($scope, $window, $rootScope){
 
   $scope.messages = [ '','','','','','','','','','','','','','','','','',
                       '','','','','','','','','','','','','','','','','',
                       '','','','','','','','','','','','','','','','','',
                       '','','','','','','','','','','','','','','','','',
                       '','','','','','','','','','','','','','','','','',
-                      '','','','','','','',''];
+                      '','','','','','','','' ];
   $scope.username = $window.username;
   $scope.useronline;
   $scope.tab='chat';
   $scope.chatstyle = {'background-color': 'white'};
   $scope.userstyle;
 
-
-  $scope.changetab = function(tab){
+  $scope.changetab = function (tab){
     $scope.tab = tab;
+    $rootScope.$emit('scrollDown');
+
     if($scope.tab=='chat'){
         $scope.chatstyle = {'background-color': 'white'};
         $scope.userstyle = {}
@@ -46,7 +52,6 @@ angular.module('chat', [])
     var hours = date.getHours();
     var min = date.getMinutes();
     var ampm;
-    var time;
 
     if (hours < 12) {
       ampm = 'am';
@@ -64,11 +69,10 @@ angular.module('chat', [])
       min = '0' + min;
     }
 
-    time = hours + ':' + min + ampm;
     $scope.time = hours + ':' + min + ampm;
   };
 
-  $scope.send = function(message){
+  $scope.send = function (message){
     $scope.getCurrentTime();
     socket.emit('sendMessage', { message: message, 
                                  username: $scope.username, 
@@ -76,17 +80,16 @@ angular.module('chat', [])
     $scope.message = null;
   };
 
-  socket.on('messageSent', function(data){
+  socket.on('messageSent', function (data){
     $scope.$apply(function() {
       $scope.messages.push(data);
     })
-  })
+  });
 
-  socket.on('onlineusers', function(users){
+  socket.on('onlineusers', function (users){
     $scope.$apply(function(){
       $scope.useronline = users
     })
-  })
+  });
 
 })
-
