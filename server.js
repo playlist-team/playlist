@@ -26,7 +26,6 @@ var set = false;
 var switched = false;
 
 var ended = function () {
-  current = queue.shift();
   votes = {};
   upvotes = 0;
   downvotes = 0;
@@ -96,11 +95,11 @@ io.on('connection', function (socket) {
   })
 
   socket.on('easterEgg', function() {
-    console.log('Queue before: ', queue);
     queue.unshift({ id: 'Gzkkm_m3mVE', 
                     title: 'Meow the Jewels', 
                     username: 'Meow Mode', 
                     socket: current.socket });
+    current = queue.shift();
     ended();
   })
 
@@ -108,33 +107,23 @@ io.on('connection', function (socket) {
     if (!switched) {
       switched = true;
       set = false;
+      current = queue.shift();
       ended();
       setTimeout(function() {
         switched = false;
       }, 5000);
     }
   })
-    // current = queue.shift();
-    // votes = {};
-    // upvotes = 0;
-    // downvotes = 0;
-    // io.emit('clearVotes');
-    // io.emit('nextVideo', current);
-    // io.emit('refreshQueue', queue);
+
   socket.on('skip', function(easterEgg) {
     var id = socket.id;
-    console.log('inside skip')
     if (id.slice(2) === current.socket || easterEgg) {
       if (queue.length) {
+        current = queue.shift();
         ended();
       } else {
         current = null;
-        votes = {};
-        upvotes = 0;
-        downvotes = 0;
-        io.emit('clearVotes');
-        io.emit('stopVideo');
-        io.emit('refreshQueue', queue);
+        ended();
       }
     }
   })
