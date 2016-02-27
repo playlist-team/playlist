@@ -136,7 +136,6 @@ io.on('connection', function (socket) {
       start = 0;
       clearInterval(sync);
       sync = setInterval(function() {
-        console.log(start);
         start++;
       }, 1000);
     }

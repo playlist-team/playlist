@@ -394,6 +394,10 @@ header {
 .video-description { font-size: 12px; line-height: 1; height:38px; display:block;}
 .video:hover { background: #1fa0df; color: white; }
 .time { color: #dbdbdc; font-size: 12px; }
+#duration {
+  float: right;
+  padding-right: 16px;
+}
 
 input:focus::-webkit-input-placeholder { color:transparent; }
 input:focus:-moz-placeholder { color:transparent; }
