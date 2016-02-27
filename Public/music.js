@@ -12,7 +12,7 @@ angular.module('musicApp', ['chat', 'search'])
   // the io.connect below has to be switched depending on whether you
   // are running app locally or on heroku
 
-  /*$window.socket = io.connect('http://localhost:3000');*/
+  // $window.socket = io.connect('http://localhost:3000');
   $window.socket = io.connect($window.location.hostname || 'http://localhost:3000');
 
   // once a socket is first connected, all code below becomes functional
