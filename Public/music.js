@@ -102,6 +102,12 @@ angular.module('musicApp', ['chat', 'search'])
       var timeLeft = total - current;
       $rootScope.$emit('setTimer', timeLeft);
     }
+    if (event.data === YT.PlayerState.PAUSED) {
+      var total = player.getDuration();
+      var current = player.getCurrentTime();
+      var timeLeft = total - current;
+      $rootScope.$emit('paused', timeLeft);
+    }
   };
   // route everything to and from server with socket listeners
   socket.on('sendTime', function(time) {
@@ -177,7 +183,11 @@ angular.module('musicApp', ['chat', 'search'])
 
   $rootScope.$on('hide', function() {
       $scope.started = false;
-      console.log($scope.started);
+  })
+
+  $rootScope.$on('paused', function(event, time) {
+      clearInterval($scope.timer);
+      $scope.time = time;
   })
 
   $rootScope.$on('setTimer', function(event, time) {
