@@ -94,6 +94,7 @@ angular.module('musicApp', ['chat', 'search'])
     if (event.data === YT.PlayerState.ENDED) {
       context.current = null;
       socket.emit('videoEnded');
+      $rootScope.$emit('hide');
     }
     if (event.data === YT.PlayerState.PLAYING) {
       var total = player.getDuration();
@@ -148,6 +149,7 @@ angular.module('musicApp', ['chat', 'search'])
 
   socket.on('stopVideo', function() {
     player.stopVideo();
+    socket.emit('skip');
   })
 
   $rootScope.$on('volumeChange', function(event, volume) {
@@ -173,10 +175,14 @@ angular.module('musicApp', ['chat', 'search'])
   $scope.started;
   $scope.time;
 
+  $rootScope.$on('hide', function() {
+      $scope.started = false;
+      console.log($scope.started);
+  })
+
   $rootScope.$on('setTimer', function(event, time) {
     $scope.started = true;
     $scope.duration = Math.round(time);
-    console.log($scope.duration);
     clearInterval($scope.timer);
     $scope.timer = setInterval(function() {
       $scope.duration--;
@@ -187,6 +193,9 @@ angular.module('musicApp', ['chat', 'search'])
         }
         $scope.minutes = Math.floor($scope.duration / 60);
         $scope.time = $scope.minutes + ":" + $scope.seconds;
+        if ($scope.duration < 0) {
+          $scope.time = '0:00';
+        }
       })
     }, 1000);
   })
@@ -204,6 +213,7 @@ angular.module('musicApp', ['chat', 'search'])
   // to instantly load next available video in playlist queue
   $scope.skip = function() {
     socket.emit('skip');
+    $rootScope.$emit('hide');
   }
   // if user pauses video, sync allows user to jump to actual video frame
   // that had continued to run for all other users
