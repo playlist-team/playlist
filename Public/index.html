@@ -81,7 +81,7 @@
             <span ng-cloak ng-show="current.title">
               {{ current.title | limitTo: 50 }}{{current.title.length > 50 ? '...' : ''}}
             </span>
-            <span id="duration" ng-cloak ng-show="started">
+            <span id="duration" ng-cloak ng-show="current.title">
               {{time}}
             </span>
 
