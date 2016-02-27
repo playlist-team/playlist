@@ -238,7 +238,7 @@ angular.module('musicApp', ['chat', 'search'])
 
   $rootScope.$on('changeQueue', function(){
     $scope.$apply(function() {
-      $scope.current = VideoService.current;
+      // $scope.current = VideoService.current;
       $scope.list = VideoService.queue;
     });
   });
