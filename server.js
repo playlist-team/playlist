@@ -143,8 +143,15 @@ io.on('connection', function (socket) {
   });
 
   socket.on('disconnect', function () {
+    if (votes[socket.id] === 'up') {
+      upvotes--;
+    }
+    if (votes[socket.id] === 'down') {
+      downvotes--;
+    }
     delete users[socket.id];
     io.emit('onlineusers', users)
+    io.emit('changeVote', {up: upvotes, down: downvotes});
   });
 
   socket.on('upVote', function(){
