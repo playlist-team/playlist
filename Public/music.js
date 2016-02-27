@@ -73,7 +73,9 @@ angular.module('musicApp', ['chat', 'search'])
 
   function onPlayerReady (event) {
     event.target.playVideo();
+
     socket.emit('getCurrent');
+
     socket.on('sendCurrent', function(video) {
       player.setVolume(50);
       context.current = video;
@@ -81,15 +83,23 @@ angular.module('musicApp', ['chat', 'search'])
       $rootScope.$emit('changeQueue');
       socket.emit('getTime');
     })
+
     socket.on('setVolume', function() {
       player.setVolume(50);
     })
+
   };
 
   function onPlayerStateChange(event) {
     if (event.data === YT.PlayerState.ENDED) {
       context.current = null;
       socket.emit('videoEnded');
+    }
+    if (event.data === YT.PlayerState.PLAYING) {
+      var total = player.getDuration();
+      var current = player.getCurrentTime();
+      var timeLeft = total - current;
+      $rootScope.$emit('setTimer', timeLeft);
     }
   };
   // route everything to and from server with socket listeners
@@ -149,12 +159,37 @@ angular.module('musicApp', ['chat', 'search'])
     player.seekTo(time, false);
     player.playVideo();
   })
+
 }])
 
 // YouTube controller to handle the view
 .controller('YouTubeController', ['$scope', 'VideoService', '$rootScope', function($scope, VideoService, $rootScope){
   // to let user control YouTube volume with slider
   $scope.volume;
+  $scope.timer;
+  $scope.duration;
+  $scope.seconds;
+  $scope.minutes;
+  $scope.started;
+  $scope.time;
+
+  $rootScope.$on('setTimer', function(event, time) {
+    $scope.started = true;
+    $scope.duration = Math.round(time);
+    console.log($scope.duration);
+    clearInterval($scope.timer);
+    $scope.timer = setInterval(function() {
+      $scope.duration--;
+      $scope.$apply(function() {
+        $scope.seconds = $scope.duration % 60;
+        if($scope.seconds < 10) {
+          $scope.seconds = '0' + $scope.seconds;
+        }
+        $scope.minutes = Math.floor($scope.duration / 60);
+        $scope.time = $scope.minutes + ":" + $scope.seconds;
+      })
+    }, 1000);
+  })
 
   $scope.$watch('volume', function(newValue, oldValue) {
     $rootScope.$emit('volumeChange', $scope.volume);
