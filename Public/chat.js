@@ -1,5 +1,5 @@
 angular.module('chat', [])
-
+//auto scroll chat content to bototm when there's new message
 .directive('scrollDirective', function ($rootScope) {
   return {
     scope: {
@@ -21,6 +21,7 @@ angular.module('chat', [])
 })
 
 .controller('ChatController', function ($scope, $window, $rootScope){
+  //set username at the userlevel from the prompt
   socket.on('usernamewindow',function(username){
     $scope.username = username;
   })
@@ -31,6 +32,7 @@ angular.module('chat', [])
   $scope.chatstyle = {'background-color': 'inherit'};
   $scope.userstyle;
 
+  //change tabs on click (chat & user online)
   $scope.changeTab = function (tab){
     $scope.tab = tab;
     $rootScope.$emit('scrollDown');
@@ -44,6 +46,7 @@ angular.module('chat', [])
     }
   }
 
+  //get current time of user for chat
   $scope.getCurrentTime = function () {
     var date = new Date();
     var hours = date.getHours();
@@ -68,7 +71,7 @@ angular.module('chat', [])
 
     $scope.time = hours + ':' + min + meridian;
   };
-
+  //key word is meow for easter effect =D
   $scope.easterEgg = function () {
     setTimeout(function() { 
         socket.emit('sendMessage', { message: 'Easter egg detected.', 
@@ -90,6 +93,7 @@ angular.module('chat', [])
       }, 6000);
   }
 
+  //send message from each user
   $scope.send = function (message){
     $scope.getCurrentTime();
     socket.emit('sendMessage', { message: message, 
@@ -101,7 +105,9 @@ angular.module('chat', [])
     $scope.message = null;
   };
 
+  //recieve new message from socker when new message comes in
   socket.on('messageSent', function (data){
+    //get local time for each user
     $scope.getCurrentTime();
     $scope.$apply(function() {
       data.time = $scope.time;
@@ -109,6 +115,7 @@ angular.module('chat', [])
     })
   });
 
+  //get new updates on newest users from socket
   socket.on('onlineusers', function (users){
     $scope.$apply(function(){
       $scope.usernameList = users;
