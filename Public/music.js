@@ -103,10 +103,7 @@ angular.module('musicApp', ['chat', 'search'])
       $rootScope.$emit('setTimer', timeLeft);
     }
     if (event.data === YT.PlayerState.PAUSED) {
-      var total = player.getDuration();
-      var current = player.getCurrentTime();
-      var timeLeft = total - current;
-      $rootScope.$emit('paused', timeLeft);
+      $rootScope.$emit('paused');
     }
   };
   // route everything to and from server with socket listeners
@@ -155,7 +152,7 @@ angular.module('musicApp', ['chat', 'search'])
 
   socket.on('stopVideo', function() {
     player.stopVideo();
-    socket.emit('skip');
+    $rootScope.$emit('hide');
   })
 
   $rootScope.$on('volumeChange', function(event, volume) {
@@ -187,7 +184,6 @@ angular.module('musicApp', ['chat', 'search'])
 
   $rootScope.$on('paused', function(event, time) {
       clearInterval($scope.timer);
-      $scope.time = time;
   })
 
   $rootScope.$on('setTimer', function(event, time) {
@@ -223,7 +219,6 @@ angular.module('musicApp', ['chat', 'search'])
   // to instantly load next available video in playlist queue
   $scope.skip = function() {
     socket.emit('skip');
-    $rootScope.$emit('hide');
   }
   // if user pauses video, sync allows user to jump to actual video frame
   // that had continued to run for all other users
