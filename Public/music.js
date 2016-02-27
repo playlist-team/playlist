@@ -229,6 +229,7 @@ angular.module('musicApp', ['chat', 'search'])
   // that had continued to run for all other users
   $scope.sync = function() {
     socket.emit('getSync');
+    $rootScope.$emit('hide');
   }
 
   $scope.current = VideoService.current;
