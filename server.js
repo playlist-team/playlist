@@ -165,6 +165,18 @@ io.on('connection', function (socket) {
       votes[socket.id] = 'down';
       upvotes--;
       downvotes++;
+      if(downvotes/Object.keys(users).length > 0.5) {
+        if (queue.length) {
+          set = false;
+          current = queue.shift();
+          reset();
+        } else {
+          set= false;
+          current = null;
+          reset();
+          io.emit('stopVideo');
+        }
+      }
     }
     if(votes[socket.id] === undefined){
       votes[socket.id] = 'down';
