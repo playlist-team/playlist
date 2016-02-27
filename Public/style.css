@@ -158,6 +158,10 @@ header {
   top: 3.75px;
 }
 
+#search-submit:focus {
+  outline: none;
+}
+
 #submit:focus {
   outline: none;
 }
@@ -183,7 +187,6 @@ header {
 }
 
 #queue {
-/*  margin-top: -10px;*/
   width: 640px;
   height:136px;
   display: block;
@@ -258,10 +261,6 @@ header {
   -webkit-hyphens: auto;
   hyphens: auto;
 }
-
-/*#chat-header {
-  border-bottom: 1px solid black;
-}*/
 
 #users-connected {
   display: inline-block;
@@ -342,11 +341,6 @@ header {
   overflow-y:auto;
 }
 
-.ng-modal-dialog-content {
-  /*padding:10px;
-  text-align: left;*/
-}
-
 .ng-modal-close {
   color: black;
   position: absolute;
@@ -358,8 +352,6 @@ header {
   display: inline-block;
   font-weight: bold;
 }
-
-#results {  }
 
 .video {
   position: relative;
@@ -375,8 +367,10 @@ header {
   padding-right: 10px;
 }
 
-.video:nth-child(2n-1) { background-color: #f5f5f9; }
-/*.video-image { float: left; left: 10px; position: absolute; top: 10px; }*/
+.video:nth-child(2n-1) {
+  background-color: #f5f5f9;
+}
+
 .video-title {
   padding-top: 5px;
   font-size: 18px;
@@ -391,16 +385,35 @@ header {
   display: block;
 }
 
-.video-description { font-size: 12px; line-height: 1; height:38px; display:block;}
-.video:hover { background: #1fa0df; color: white; }
-.time { color: #dbdbdc; font-size: 12px; }
+.video-description {
+  font-size: 12px;
+  line-height: 1;
+  height:38px;
+  display:block;
+}
+
+.video:hover {
+  background: #1fa0df;
+  color: white;
+}
+
+.time {
+  color: #dbdbdc;
+  font-size: 12px;
+}
+
 #duration {
   float: right;
   padding-right: 16px;
 }
 
-input:focus::-webkit-input-placeholder { color:transparent; }
-input:focus:-moz-placeholder { color:transparent; }
+input:focus::-webkit-input-placeholder {
+  color:transparent;
+}
+
+input:focus:-moz-placeholder {
+  color:transparent;
+}
 
 input[type=range] {
   outline: none;
