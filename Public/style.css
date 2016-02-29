@@ -378,6 +378,16 @@ header {
 .video-thumb {
   float: left;
   padding-right: 10px;
+  position: relative;
+}
+
+.video-thumb-check {
+  position: absolute;
+  left: 6%;
+  top: 20%;/*
+  float: left;
+  left: 40%;
+  top: 35%;*/
 }
 
 .video:nth-child(2n-1) {
