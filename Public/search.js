@@ -24,6 +24,37 @@ angular.module('search', [])
   }
 })
 
+.directive('aboutDirective', function(){
+  return {
+    restrict: 'E',
+    scope: {
+      show: '='
+    },
+    replace: true,
+    link: function(scope, element, attrs){
+      scope.dialogStyle ={};
+      if (attrs.width){
+        scope.dialogStyle.width = attrs.width;
+      }
+      if (attrs.height){
+        scope.dialogStyle.height = attrs.height;
+      }
+      scope.hideAbout = function() {
+        scope.show = false;
+      }
+    },
+    transclude: true,
+    template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='hideAbout()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
+  }
+})
+
+.controller('AboutController', ['$scope', function($scope){
+  $scope.showAbout = false;
+  $scope.toggleAbout = function(){
+    $scope.showAbout = !$scope.showAbout;
+  }
+}])
+
 // to handle YouTube search view and functionality to add videos
 // to playlist queue
 .controller('SearchController', ['$scope', '$window', 'SearchFactory', function($scope, $window, SearchFactory){
