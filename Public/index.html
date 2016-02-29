@@ -79,7 +79,7 @@
             </span>
             <!-- we set a limit on title character length -->
             <span ng-cloak ng-show="current.title">
-              {{ current.title | limitTo: 50 }}{{current.title.length > 50 ? '...' : ''}}
+              {{ current.title | limitTo: 58 }}{{current.title.length > 60 ? '...' : ''}}
             </span>
             <span id="duration" ng-cloak ng-show="current.title">
               {{time}}
@@ -144,13 +144,13 @@
 
         <div id="chat-container" scroll-directive="messages" ng-model="messages">
 
-          <table class="chat-table" style="margin-top:20px">
+          <table class="chat-table">
 
             <tbody ng-show="tab =='chat'" id="messages" ng-repeat="message in messages track by $index">
 
               <tr class="user-name">
                 <!-- to display user name and time stamp of message -->
-                <td ng-cloak ng-show="messages[{{$index-1}}].username !== message.username">
+                <td ng-cloak id="user-name" ng-show="messages[{{$index-1}}].username !== message.username">
 
                   <strong>{{ message.username }}</strong>
 
@@ -162,7 +162,7 @@
 
               <tr class="user-message">
                 <!-- to display all messages -->
-                <td ng-cloak ng-bind-html="message.message | linky:'_blank'">
+                <td id="user-message" ng-cloak ng-bind-html="message.message | linky:'_blank'">
                   {{ message.message }}
                 </td>
 
@@ -172,9 +172,9 @@
             <!-- functionality to display chat messages or online users -->
             <tbody id="messages" ng-show="tab == 'users'">
 
-              <tr class="user-name" ng-repeat="user in usernameList">
+              <tr ng-repeat="user in usernameList">
 
-                <td ng-cloak >
+                <td ng-cloak id="user-list">
 
                   <strong>{{user}}</strong>
 
