@@ -20,7 +20,6 @@ body {
 header {
   color: white;
   background-color: #22242A;
-  height: 80px;
 }
 
 #default-playlist-message {
@@ -72,21 +71,22 @@ header {
 }
 
 #search {
+  height: auto;
+  bottom: 17.25px;
   display: inline-block;
   background-color: #22242A;
 }
 
-#logo {
-  position: relative;
-  display: inline-block;
-  padding-left: 20px;
+#logo-image {
+  padding-left: 25px;
   padding-right: 15px;
+  padding-top: 10px;
 }
 
 #volume {
   position: relative;
-  left: 852.5px;
-  bottom: 52.5px;
+  left: 15px;
+  bottom: 27.25px;
 }
 
 #skip {
@@ -112,7 +112,7 @@ header {
   font-size: 14px;
   display: inline-block;
   top: 45px;
-  left: 48.50px;
+  left: 49px;
 }
 
 #sync:hover {
@@ -135,7 +135,7 @@ header {
 }
 #search-input {
   position: relative;
-  bottom: 7.5px;
+  bottom: 25.5px;
   left: 10px;
   background: #616573;
   width: 640px;
@@ -154,8 +154,8 @@ header {
 
 #search-submit{
   position: relative;
-  right: 40px;
-  top: 3.75px;
+  right: 30.5px;
+  bottom: 14.5px;
 }
 
 #search-submit:focus {
@@ -418,7 +418,7 @@ input:focus:-moz-placeholder {
 input[type=range] {
   outline: none;
   padding: 0;
-  width: 120px;
+  width: 140px;
   height: 6px;
   background-color: #616573;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #473e4f), color-stop(100%, #51475a));
