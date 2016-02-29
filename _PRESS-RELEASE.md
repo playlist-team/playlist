@@ -20,25 +20,25 @@ Once the project moves into development, the press release can be used as a touc
   > Playlist
 
 ## Sub-Heading ##
-  > Chat and create YouTube video playlists that you can watch in sync with your friends.
+  > Chat and create playlists of YouTube vidoes that you can watch in sync with your friends.
 
 ## Summary ##
-  > The app is a collaborative YouTube play list with chat functionality. Users can create play lists and view content with everyone in real time. Everyone can chat while they listen to music and watch videos.
+  > The app is a collaborative YouTube playlist with chat functionality. Users can create play lists and view content with everyone in real time. Everyone can chat while they listen to music and watch videos.
 
 ## Problem ##
-  > YouTube content can not be easily viewed in sync by friends while also being able to chat in a single platform.
+  > YouTube content can not be easily searched for and viewed in sync by friends while also being able to chat in a single platform.
 
 ## Solution ##
-  > The app gives the users a single place to watch YouTube videos in sync with their friends, search for YouTube videos, add them to a unified playlist and chat with one another.
+  > The app gives users a single place to search for, add to a unified playlist and watch YouTube videos in sync with their friends, and chat with one another.
 
 ## Quote from You ##
-  > "Music shouldn't be listened to by just one person. It should be shared"
+  > "Music shouldn't be listened to by just one person. It should be shared."
 
 ## How to Get Started ##
-  > Go to www.playlist.com and start adding music to the playlist.
+  > Go to www.playlist.com and start adding vidoes to the playlist.
 
 ## Customer Quote ##
-  > "Playlist is my favorite way to share music with friends!"
+  > "Just when instant messaging was starting to become not so cool, Playlist comes along and changes everything."
 
 ## Closing and Call to Action ##
   > Start sharing music at www.playlist.com.
