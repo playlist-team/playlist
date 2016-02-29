@@ -126,17 +126,35 @@ header {
   height: auto;
 }
 
-.tab {
+#chat-tab {
   color: black;
-  background-color: rgba(249, 249, 249, .30);
+  background-color: rgba(249, 249, 249, 1);
   opacity: 0.85;
+  background-image: url("chat-background.png");
   list-style-type: none;
-  display: inline-block;
   width: 210px;
   text-align: center;
   cursor: pointer;
+  height: 25px; 
+  line-height: 25px; 
+  position: absolute;
 }
 
+#users-tab {
+  color: black;
+  background-color: rgba(249, 249, 249, .90);
+  opacity: 0.85;
+  background-image: url("chat-background.png");
+  background-position-y: -833px;
+  list-style-type: none;
+  width: 210px;
+  text-align: center;
+  cursor: pointer;
+  height: 25px; 
+  line-height: 25px; 
+  position: absolute;
+  left: 76.8%;
+}
 #search-input {
   position: relative;
   bottom: 25.5px;
@@ -423,7 +441,6 @@ header {
 .time {
   color: #DBDBDC;
   font-size: 11px;
-  position: relative;
   bottom: 1.55px;
 }
 

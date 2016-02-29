@@ -41,7 +41,7 @@ angular.module('chat', ['ngSanitize'])
       $scope.chatstyle = {'background-color': 'inherit'};
       $scope.userstyle = {};
     }else if ($scope.tab=='users'){
-      $scope.userstyle = {'background-color': 'inherit'};
+      $scope.userstyle = {'background-color': 'hsl(227, 8%, 52%'};
       $scope.chatstyle = {};
     }
   }

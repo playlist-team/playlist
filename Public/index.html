@@ -129,17 +129,13 @@
       </div>
       <!-- to display chat window -->
       <div id="chat" ng-controller="ChatController">
+        <!-- tabs to display messages or users online -->
+        <div ng-style="chatstyle" id="chat-tab" ng-click="changeTab('chat')">
+          <strong>chat</strong>
+        </div>
 
-        <div style="position:fixed;">
-              <!-- tabs to display messages or users online -->
-              <li ng-style="chatstyle" class="tab" ng-click="changeTab('chat')">
-                <strong>chat</strong>
-              </li>
-
-              <li ng-style="userstyle" class="tab" ng-click="changeTab('users')">
-                <strong>users </strong><div id="users-connected">({{usersConnected}})</div>
-              </li>
-
+        <div ng-style="userstyle" id="users-tab" ng-click="changeTab('users')">
+          <strong>users </strong><div id="users-connected">({{usersConnected}})</div>
         </div>
 
         <div id="chat-container" scroll-directive="messages" ng-model="messages">
@@ -152,9 +148,7 @@
                 <!-- to display user name and time stamp of message -->
                 <td ng-cloak id="user-name" ng-show="messages[{{$index-1}}].username !== message.username">
 
-                  <strong>{{ message.username }}</strong>
-
-                  <span class="time">{{message.time}}</span>
+                  <strong>{{ message.username }}</strong> <span class="time">{{message.time}}</span>
 
                 </td>
 
