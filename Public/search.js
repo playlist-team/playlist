@@ -31,12 +31,11 @@ angular.module('search', [])
   $scope.searchList;
   $scope.getSearch = function() {
     SearchFactory.fetchSearch($scope.field, function(results) {
-      console.log(results.data);
       $scope.searchList = results.data.items;
     });
   }
 
-  $scope.enqueue = function(thumbnail){
+  $scope.enqueue = function(thumbnail) {
     socket.emit('enqueue', { id: thumbnail.id.videoId,
                              title: thumbnail.snippet.title,
                              thumbnail: thumbnail.snippet.thumbnails.default.url,
