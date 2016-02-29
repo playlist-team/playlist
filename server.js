@@ -157,10 +157,10 @@ io.on('connection', function (socket) {
     if (votes[socket.id] === 'down') {
       downvotes--;
     }
-    io.emit('onlineusers', users)
     io.emit('changeVote', {up: upvotes, down: downvotes});
     io.emit('messageSent', {username: "", message: users[socket.id] + " has left"});
     delete users[socket.id];
+    io.emit('onlineusers', users);
   });
 
   socket.on('upVote', function(){
