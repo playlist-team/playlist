@@ -48,6 +48,7 @@ angular.module('search', [])
     $scope.showResults = !$scope.showResults;
   };
 
+
 }])
 
 // to grab search query from YouTube API

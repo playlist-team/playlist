@@ -32,11 +32,12 @@
         <!-- Angular directive to load search results modal on submit -->
         <search-directive show='showResults' width='750px' height='62%'>
 
-          <div id="results">
+          <div id="results" ng-if="showResults">
 
-            <div class="video" ng-cloak ng-repeat="result in searchList track by $index" ng-click="enqueue(result)">
+            <div class="video" ng-cloak ng-repeat="result in searchList track by $index" ng-click="item.clicked || enqueue(result); item.clicked = true">
 
-              <img class="video-thumb" src={{result.snippet.thumbnails.default.url}}>
+              <img class="video-thumb" id="thumb-{{result.snippet.title}}" src={{result.snippet.thumbnails.default.url}}>
+              <img class="video-thumb-check" id="check-{{res.snippet.title}}" src="check-mark.png" ng-show="item.clicked">
 
               <span class="video-title">
                 {{result.snippet.title| limitTo: 75 }}{{result.snippet.description.length > 75 ? '...' : ''}}
@@ -114,7 +115,7 @@
           <div class="pending-songs" ng-cloak ng-repeat="song in list track by $index">
 
             <p id="queue-title" ng-cloak>
-              {{ song.title | limitTo: 80 }}{{song.title.length > 80 ? '...' : ''}}
+              {{ song.title | limitTo: 74 }}{{song.title.length > 74 ? '...' : ''}}
             </p>
             <!-- to remove a video from playlist -->
             <p id="queue-remove" ng-cloak type="button" ng-click="dequeue(song)">
