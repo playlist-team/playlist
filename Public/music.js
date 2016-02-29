@@ -156,7 +156,9 @@ angular.module('musicApp', ['chat', 'search'])
   })
 
   $rootScope.$on('volumeChange', function(event, volume) {
-    player.setVolume(volume);
+    if (player) {
+      player.setVolume(volume);
+    }
   })
 
   socket.on('sendSync', function(time) {
