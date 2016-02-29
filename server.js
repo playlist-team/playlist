@@ -106,7 +106,7 @@ io.on('connection', function (socket) {
       current = { id: 'Gzkkm_m3mVE', 
                   title: 'Meow the Jewels', 
                   username: 'Meow Mode', 
-                  socket: socket.id };
+                  socket: socket.id.slice(2) };
       reset();
     }
   })
