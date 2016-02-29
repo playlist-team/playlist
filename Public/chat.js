@@ -1,4 +1,4 @@
-angular.module('chat', [])
+angular.module('chat', ['ngSanitize'])
 //auto scroll chat content to bototm when there's new message
 .directive('scrollDirective', function ($rootScope) {
   return {
