@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,900' rel='stylesheet' type='text/css'>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
@@ -23,9 +22,9 @@
 
     <header>
 
-      <h1 id="logo">Playlist</h1>
+      <img src="logo.png" id="logo-image">
       <!-- YouTube search box -->
-      <form id="search" ng-submit="getSearch(field); toggleResults()" ng-controller="SearchController">
+      <form id="search" ng-submit="getSearch(); toggleResults()" ng-controller="SearchController">
 
         <input id="search-input" ng-model="field" type="text" placeholder="Search for and add YouTube videos to the playlist" autocomplete="off">
 
@@ -79,7 +78,7 @@
             </span>
             <!-- we set a limit on title character length -->
             <span ng-cloak ng-show="current.title">
-              {{ current.title | limitTo: 50 }}{{current.title.length > 50 ? '...' : ''}}
+              {{ current.title | limitTo: 58 }}{{current.title.length > 60 ? '...' : ''}}
             </span>
             <span id="duration" ng-cloak ng-show="current.title">
               {{time}}
@@ -144,13 +143,13 @@
 
         <div id="chat-container" scroll-directive="messages" ng-model="messages">
 
-          <table class="chat-table" style="margin-top:20px">
+          <table class="chat-table">
 
             <tbody ng-show="tab =='chat'" id="messages" ng-repeat="message in messages track by $index">
 
               <tr class="user-name">
                 <!-- to display user name and time stamp of message -->
-                <td ng-cloak ng-show="messages[{{$index-1}}].username !== message.username">
+                <td ng-cloak id="user-name" ng-show="messages[{{$index-1}}].username !== message.username">
 
                   <strong>{{ message.username }}</strong>
 
@@ -162,7 +161,7 @@
 
               <tr class="user-message">
                 <!-- to display all messages -->
-                <td ng-cloak ng-bind-html="message.message | linky:'_blank'">
+                <td id="user-message" ng-cloak ng-bind-html="message.message | linky:'_blank'">
                   {{ message.message }}
                 </td>
 
@@ -172,9 +171,9 @@
             <!-- functionality to display chat messages or online users -->
             <tbody id="messages" ng-show="tab == 'users'">
 
-              <tr class="user-name" ng-repeat="user in usernameList">
+              <tr ng-repeat="user in usernameList">
 
-                <td ng-cloak >
+                <td ng-cloak id="user-list">
 
                   <strong>{{user}}</strong>
 

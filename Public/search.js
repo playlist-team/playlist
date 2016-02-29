@@ -20,7 +20,7 @@ angular.module('search', [])
       }
     },
     transclude: true,
-    template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='hideResults()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-close' ng-click='hideResults()'>X</div><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
+    template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='hideResults()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
   }
 })
 
@@ -31,12 +31,11 @@ angular.module('search', [])
   $scope.searchList;
   $scope.getSearch = function() {
     SearchFactory.fetchSearch($scope.field, function(results) {
-      console.log(results.data.items)
       $scope.searchList = results.data.items;
     });
   }
 
-  $scope.enqueue = function(thumbnail){
+  $scope.enqueue = function(thumbnail) {
     socket.emit('enqueue', { id: thumbnail.id.videoId,
                              title: thumbnail.snippet.title,
                              thumbnail: thumbnail.snippet.thumbnails.default.url,
@@ -60,10 +59,10 @@ angular.module('search', [])
         key: "AIzaSyDxx1rrqR-q7Tcfkz0MqII6sO2GQpONrGg",
         part: "snippet",
         type: "video",
+        videoType: "any",
         q: query,
         maxResults: 25,
-        order: "viewCount",
-        publishedAfter: "2000-01-01T00:00:00Z"
+        safeSearch: "none"
       }
     }).then(function(results){
       callback(results);

@@ -88,6 +88,10 @@ angular.module('musicApp', ['chat', 'search'])
       player.setVolume(50);
     })
 
+    $rootScope.$on('volumeChange', function(event, volume) {
+      player.setVolume(volume);
+    })
+
   };
 
   function onPlayerStateChange(event) {
@@ -153,10 +157,6 @@ angular.module('musicApp', ['chat', 'search'])
   socket.on('stopVideo', function() {
     player.stopVideo();
     $rootScope.$emit('hide');
-  })
-
-  $rootScope.$on('volumeChange', function(event, volume) {
-    player.setVolume(volume);
   })
 
   socket.on('sendSync', function(time) {

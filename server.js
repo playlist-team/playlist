@@ -94,12 +94,20 @@ io.on('connection', function (socket) {
   })
 
   socket.on('easterEgg', function() {
-    queue.unshift({ id: 'Gzkkm_m3mVE', 
-                    title: 'Meow the Jewels', 
-                    username: 'Meow Mode', 
-                    socket: current.socket });
-    current = queue.shift();
-    reset();
+    if (queue.length) {
+      queue.unshift({ id: 'Gzkkm_m3mVE', 
+                      title: 'Meow the Jewels', 
+                      username: 'Meow Mode', 
+                      socket: current.socket });
+      current = queue.shift();
+      reset();
+    } else {
+      current = { id: 'Gzkkm_m3mVE', 
+                  title: 'Meow the Jewels', 
+                  username: 'Meow Mode', 
+                  socket: socket.id };
+      reset();
+    }
   })
 
   socket.on('videoEnded', function () {
