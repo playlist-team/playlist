@@ -70,13 +70,6 @@ header {
   color: white;
 }
 
-#search {
-  height: auto;
-  bottom: 17.25px;
-  display: inline-block;
-  background-color: #22242A;
-}
-
 #logo-image {
   padding-left: 25px;
   padding-right: 15px;
@@ -146,6 +139,13 @@ header {
   font-size: 14px;
   border-radius: 20px;
   border: none;
+}
+
+#search {
+  height: auto;
+  bottom: 17.25px;
+  display: inline-block;
+  background-color: #22242A;
 }
 
 #search-input:focus {
@@ -308,9 +308,7 @@ header {
 }
 
 .ng-modal {
-  overflow-y:auto;
   max-height:90%;
-  margin-top:-45%
 }
 
 .ng-modal-overlay {
@@ -339,18 +337,6 @@ header {
   background-color: #fff;
   box-shadow: 4px 4px 80px #000;
   overflow-y:auto;
-}
-
-.ng-modal-close {
-  color: black;
-  position: absolute;
-  top: 3px;
-  right: 5px;
-  padding: 5px;
-  cursor: pointer;
-  font-size: 120%;
-  display: inline-block;
-  font-weight: bold;
 }
 
 .video {
@@ -393,7 +379,7 @@ header {
 }
 
 .video:hover {
-  background: #1fa0df;
+  background: #22242A;
   color: white;
 }
 
