@@ -37,7 +37,7 @@
             <div class="video" ng-cloak ng-repeat="result in searchList track by $index" ng-click="item.clicked || enqueue(result); item.clicked = true">
 
               <img class="video-thumb" id="thumb-{{result.snippet.title}}" src={{result.snippet.thumbnails.default.url}}>
-              <img class="video-thumb-check" id="check-{{res.snippet.title}}" src="check.png" ng-show="item.clicked">
+              <img class="video-thumb-check" id="check-{{res.snippet.title}}" src="check-mark.png" ng-show="item.clicked">
 
               <span class="video-title">
                 {{result.snippet.title| limitTo: 75 }}{{result.snippet.description.length > 75 ? '...' : ''}}
