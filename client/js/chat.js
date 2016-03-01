@@ -6,51 +6,52 @@ angular.module('chat', ['ngSanitize'])
       scrollDirective: '='
     },
     link: function (scope, element) {
-      scope.$watchCollection('scrollDirective', function (newValue, oldValue) {
+      scope.$watchCollection('scrollDirective', function (newValue) {
         if (newValue) {
           $(element).scrollTop($(element)[0].scrollHeight);
         }
-      })
+      });
+
       $rootScope.$on('scrollDown', function() {
         setTimeout(function() {
           $(element).scrollTop($(element)[0].scrollHeight);
         }, 0);
-      })
+      });
     }
   }
 })
 
 .controller('ChatController', function ($scope, $window, $rootScope){
-  //set username at the userlevel from the prompt
-  socket.on('usernamewindow',function(username){
+
+  socket.on('setUser',function(username){
     $scope.username = username;
-  })
+  });
 
   $scope.messages = [];
   $scope.usernameList;
   $scope.tab = 'chat';
-  $scope.chatstyle = {'background-color': 'inherit'};
-  $scope.userstyle;
+  $scope.chatStyle = {'background-color': 'inherit'};
+  $scope.userStyle;
 
   //change tabs on click (chat & user online)
-  $scope.changeTab = function (tab){
+  $scope.changeTab = function(tab) {
     $scope.tab = tab;
     $rootScope.$emit('scrollDown');
 
-    if($scope.tab=='chat'){
-      $scope.chatstyle = {'background-color': 'inherit'};
-      $scope.userstyle = {};
-    }else if ($scope.tab=='users'){
-      $scope.userstyle = {'background-color': 'hsl(227, 8%, 52%'};
-      $scope.chatstyle = {};
+    if($scope.tab=='chat') {
+      $scope.chatStyle = {'background-color': 'inherit'};
+      $scope.userStyle = {};
+    } else if ($scope.tab=='users') {
+      $scope.userStyle = {'background-color': 'hsl(227, 8%, 52%'};
+      $scope.chatStyle = {};
     }
   }
 
   //get current time of user for chat
-  $scope.getCurrentTime = function () {
+  $scope.getCurrentTime = function() {
     var date = new Date();
     var hours = date.getHours();
-    var min = date.getMinutes();
+    var minutes = date.getMinutes();
     var meridian;
 
     if (hours < 12) {
@@ -65,48 +66,54 @@ angular.module('chat', ['ngSanitize'])
       hours = 12;
     }
 
-    if (min < 10) {
-      min = '0' + min;
+    if (minutes < 10) {
+      minutes = '0' + minutes;
     }
 
-    $scope.time = hours + ':' + min + meridian;
+    $scope.time = hours + ':' + minutes + meridian;
   };
   //key word is meow for easter effect =D
   $scope.easterEgg = function () {
+
     setTimeout(function() { 
-        socket.emit('sendMessage', { message: 'Easter egg detected.', 
-                                 username: 'Easter bot', 
-                                 time: $scope.time });
-      }, 1000);
-      setTimeout(function() {
-        socket.emit('sendMessage', { message: 'Preparing meow mode.', 
-                             username: 'Easter bot', 
-                             time: $scope.time });
-      }, 3000);
-      setTimeout(function() {
-        socket.emit('sendMessage', { message: 'MEOW MODE INITIALIZED', 
-                             username: 'Easter bot', 
-                             time: $scope.time })
-      }, 5000)
-      setTimeout(function() {
-        socket.emit('easterEgg');
-      }, 6000);
+      socket.emit('sendMessage', { message: 'Easter egg detected.', 
+                                   username: 'Easter bot', 
+                                   time: $scope.time });
+    }, 1000);
+
+    setTimeout(function() {
+      socket.emit('sendMessage', { message: 'Preparing meow mode.', 
+                                   username: 'Easter bot', 
+                                   time: $scope.time });
+    }, 3000);
+
+    setTimeout(function() {
+      socket.emit('sendMessage', { message: 'MEOW MODE INITIALIZED', 
+                                   username: 'Easter bot', 
+                                   time: $scope.time })
+    }, 5000)
+
+    setTimeout(function() {
+      socket.emit('easterEgg');
+    }, 6000);
   }
 
   //send message from each user
-  $scope.send = function (message){
+  $scope.send = function(message) {
     $scope.getCurrentTime();
     socket.emit('sendMessage', { message: message, 
                                  username: $scope.username, 
                                  time: $scope.time });
+
     if (message === "meow") {
       $scope.easterEgg();
     }
+    
     $scope.message = null;
-  };
+  }
 
   //recieve new message from socker when new message comes in
-  socket.on('messageSent', function (data){
+  socket.on('chatMessage', function(data) {
     //get local time for each user
     $scope.getCurrentTime();
     $scope.$apply(function() {
@@ -116,11 +123,11 @@ angular.module('chat', ['ngSanitize'])
   });
 
   //get new updates on newest users from socket
-  socket.on('onlineusers', function (users){
+  socket.on('usersOnline', function(users) {
     $scope.$apply(function(){
       $scope.usernameList = users;
       $scope.usersConnected = Object.keys(users).length;
-    })
+    });
   });
 
-})
+});

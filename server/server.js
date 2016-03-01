@@ -1,13 +1,12 @@
 var express = require('express');
+
 var app = express();
 
 var port = process.env.PORT || 3000;
 
-app.use('/', express.static('./Public'));
+app.use('/', express.static('../client'));
 
 var server = app.listen(port);
-
-// var io = require('socket.io').listen(server);
 
 var io = require('socket.io')({
   transports: ["xhr-polling"],
@@ -21,11 +20,12 @@ var upvotes = 0;
 var downvotes = 0;
 var current;
 var start;
+var end;
 var sync;
-var set = false;
-var switched = false;
+var set;
+var switched;
 
-var reset = function () {
+var reset = function() {
   votes = {};
   upvotes = 0;
   downvotes = 0;
@@ -34,42 +34,43 @@ var reset = function () {
   io.emit('refreshQueue', queue);
 }
 
-io.on('connection', function (socket) {
+io.on('connection', function(socket) {
 
-  socket.on('setUser', function (username) {
+  socket.on('username', function(username) {
     users[socket.id] = username;
-    io.sockets.connected[socket.id].emit('usernamewindow', username);
-    io.emit('messageSent', {username: "", message: users[socket.id] + " has joined"});
-    io.emit('onlineusers', users)
+    io.sockets.connected[socket.id].emit('setUser', username);
+    io.sockets.connected[socket.id].emit('setId', socket.id);
+    io.emit('chatMessage', {username: "", message: users[socket.id] + " has joined"});
+    io.emit('usersOnline', users);
   });
 
   socket.on('getQueue', function() {
     if (queue.length) {
-      io.sockets.connected[socket.id].emit('sendQueue', queue);
+      io.sockets.connected[socket.id].emit('setQueue', queue);
     }
-  })
+  });
 
   socket.on('getCurrent', function() {
     if (current) {
-      io.sockets.connected[socket.id].emit('sendCurrent', current);
+      io.sockets.connected[socket.id].emit('setCurrent', current);
     } else {
       io.sockets.connected[socket.id].emit('setVolume');
     }
-  })
+  });
 
   socket.on('getVotes', function() {
-    io.sockets.connected[socket.id].emit('sendVotes', {up: upvotes, down: downvotes});
-  })
+    io.sockets.connected[socket.id].emit('changeVotes', {up: upvotes, down: downvotes});
+  });
 
   socket.on('getTime', function() {
-    io.sockets.connected[socket.id].emit('sendTime', start);
-  })
+    io.sockets.connected[socket.id].emit('setTime', start);
+  });
 
-  socket.on('sendMessage', function (data) {
-    io.emit('messageSent', data);
-  })
+  socket.on('sendMessage', function(data) {
+    io.emit('chatMessage', data);
+  });
 
-  socket.on('enqueue', function (data) {
+  socket.on('enqueue', function(data) {
     if (current) {
 
       queue.push(data);
@@ -80,19 +81,20 @@ io.on('connection', function (socket) {
       current = data;
       reset();
     }
-  })
+  });
 
-  socket.on('dequeue', function (data) {
+  socket.on('dequeue', function(data) {
     var id = socket.id;
+
     if (id.slice(2) === data.socket) {
       io.emit('removeVideo', data.id);
     }
-  })
+  });
 
-  socket.on('updateQueue', function (data) {
+  socket.on('updateQueue', function(data) {
     queue = data;
     socket.broadcast.emit('refreshQueue', queue);
-  })
+  });
 
   socket.on('easterEgg', function() {
     if (queue.length) {
@@ -102,6 +104,7 @@ io.on('connection', function (socket) {
                       socket: current.socket });
       current = queue.shift();
       reset();
+
     } else {
       current = { id: 'SbyZDq76T74', 
                   title: 'Meow Mix song', 
@@ -109,9 +112,9 @@ io.on('connection', function (socket) {
                   socket: socket.id.slice(2) };
       reset();
     }
-  })
+  });
 
-  socket.on('videoEnded', function () {
+  socket.on('ended', function() {
     if (!switched) {
       switched = true;
       set = false;
@@ -121,11 +124,12 @@ io.on('connection', function (socket) {
         switched = false;
       }, 5000);
     }
-  })
+  });
 
   socket.on('skip', function(easterEgg) {
     var id = socket.id;
     if (current && id.slice(2) === current.socket || easterEgg) {
+
       if (queue.length) {
         set = false;
         current = queue.shift();
@@ -137,9 +141,9 @@ io.on('connection', function (socket) {
         io.emit('stopVideo');
       }
     }
-  })
+  });
 
-  socket.on('setDuration', function () {
+  socket.on('setDuration', function() {
     if (!set) {
       set = true;
       start = 0;
@@ -150,31 +154,35 @@ io.on('connection', function (socket) {
     }
   });
 
-  socket.on('disconnect', function () {
+  socket.on('disconnect', function() {
     if (votes[socket.id] === 'up') {
       upvotes--;
     }
+
     if (votes[socket.id] === 'down') {
       downvotes--;
     }
-    io.emit('changeVote', {up: upvotes, down: downvotes});
-    io.emit('messageSent', {username: "", message: users[socket.id] + " has left"});
+
+    io.emit('changeVotes', {up: upvotes, down: downvotes});
+    io.emit('chatMessage', {username: "", message: users[socket.id] + " has left"});
     delete users[socket.id];
-    io.emit('onlineusers', users);
+    io.emit('usersOnline', users);
   });
 
-  socket.on('upVote', function(){
-    if (votes[socket.id] === 'down'){
+  socket.on('upVote', function() {
+    if (votes[socket.id] === 'down') {
       votes[socket.id] = 'up';
       downvotes--;
       upvotes++;
     }
+
     if (votes[socket.id] === undefined) {
       votes[socket.id] = 'up';
       upvotes++;
     }
-    io.emit('changeVote', {up: upvotes, down: downvotes});
-  })
+
+    io.emit('changeVotes', {up: upvotes, down: downvotes});
+  });
 
   socket.on('downVote', function(){
     if(votes[socket.id] === 'up'){
@@ -183,11 +191,13 @@ io.on('connection', function (socket) {
       downvotes++;
     }
 
-    if(votes[socket.id] === undefined){
+    if(votes[socket.id] === undefined) {
       votes[socket.id] = 'down';
       downvotes++;
     }
+
     var haters = downvotes/Object.keys(users).length;
+
     if(haters > 0.5) {
       if (queue.length) {
         set = false;
@@ -200,12 +210,13 @@ io.on('connection', function (socket) {
         io.emit('stopVideo');
       }
     }
-    io.emit('changeVote', {up: upvotes, down: downvotes});
-  })
+    
+    io.emit('changeVotes', {up: upvotes, down: downvotes});
+  });
 
   socket.on('getSync', function() {
-    io.sockets.connected[socket.id].emit('sendSync', start);
-  })
+    io.sockets.connected[socket.id].emit('setSync', start);
+  });
 
 });
 

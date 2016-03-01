@@ -1,19 +1,16 @@
 <!DOCTYPE html>
-<html ng-app="musicApp">
+<html ng-app="app">
 
   <head>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert-dev.js"></script>
-
-    <!-- sweetalert to customize alert box -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,900' rel='stylesheet' type='text/css'>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="./css/styles.css">
 
-    <!-- to remove # from url -->
+    <!-- Remove # from url -->
     <base href="/"></base>
 
   </head>
@@ -22,13 +19,13 @@
 
     <header>
 
-      <img src="logo.png" id="logo-image">
+      <img src="./img/logo.png" id="logo-image">
       <!-- YouTube search box -->
       <form id="search" ng-submit="getSearch(); toggleResults()" ng-controller="SearchController">
 
         <input id="search-input" ng-model="field" type="text" placeholder="Search for and add YouTube videos to the playlist" autocomplete="off">
 
-        <input id="search-submit" type="image" src="search.png">
+        <input id="search-submit" type="image" src="./img/search.png">
         <!-- Angular directive to load search results modal on submit -->
         <search-directive show='showResults' width='750px' height='62%'>
 
@@ -37,7 +34,7 @@
             <div class="video" ng-cloak ng-repeat="result in searchList track by $index" ng-click="item.clicked || enqueue(result); item.clicked = true">
 
               <img class="video-thumb" id="thumb-{{result.snippet.title}}" src={{result.snippet.thumbnails.default.url}}>
-              <img class="video-thumb-check" id="check-{{res.snippet.title}}" src="check.png" ng-show="item.clicked">
+              <img class="video-thumb-check" id="check-{{res.snippet.title}}" src="./img/check.png" ng-show="item.clicked">
 
               <span class="video-title">
                 {{result.snippet.title| limitTo: 75 }}{{result.snippet.description.length > 75 ? '...' : ''}}
@@ -82,7 +79,7 @@
               {{ current.title | limitTo: 58 }}{{current.title.length > 60 ? '...' : ''}}
             </span>
             <span id="duration" ng-cloak ng-show="current.title">
-              {{time}}
+              {{duration}}
             </span>
 
         </div>
@@ -95,16 +92,16 @@
 
           <p id="arrows">
             <!-- up green arrow -->
-            <img src="upvote.svg" onmouseover="this.src='uphover.svg';" onmouseout="this.src='upvote.svg';" class="up-arrow" ng-click="upCount()"></img>
+            <img src="./img/upvote.svg" onmouseover="this.src='./img/uphover.svg';" onmouseout="this.src='./img/upvote.svg';" class="up-arrow" ng-click="upVote()"></img>
 
             <span class="vote-count" ng-cloak>
-              {{upcount}}
+              {{upvotes}}
             </span>
             <!-- down red arrow -->
-            <img src="downvote.svg" onmouseover="this.src='downhover.svg';" onmouseout="this.src='downvote.svg';" class="down-arrow" ng-click="downCount()"></img>
+            <img src="./img/downvote.svg" onmouseover="this.src='./img/downhover.svg';" onmouseout="this.src='./img/downvote.svg';" class="down-arrow" ng-click="downVote()"></img>
 
             <span class="vote-count" ng-cloak>
-              {{downcount}}
+              {{downvotes}}
             </span>
 
           </p>
@@ -112,13 +109,13 @@
         <!-- to display videos in playlist -->
         <div id="queue">
 
-          <div class="pending-songs" ng-cloak ng-repeat="song in list track by $index">
+          <div class="pending-songs" ng-cloak ng-repeat="song in playlist track by $index">
 
             <p id="queue-title" ng-cloak>
               {{ song.title | limitTo: 74 }}{{song.title.length > 74 ? '...' : ''}}
             </p>
             <!-- to remove a video from playlist -->
-            <p ng-show="song.username===username" id="queue-remove" ng-cloak type="button" ng-click="dequeue(song)">
+            <p ng-show="song.socket===socketId" id="queue-remove" ng-cloak type="button" ng-click="dequeue(song)">
               Remove
             </p>
 
@@ -130,11 +127,11 @@
       <!-- to display chat window -->
       <div id="chat" ng-controller="ChatController">
         <!-- tabs to display messages or users online -->
-        <div ng-style="chatstyle" id="chat-tab" ng-click="changeTab('chat')">
+        <div ng-style="chatStyle" id="chat-tab" ng-click="changeTab('chat')">
           <strong>chat</strong>
         </div>
 
-        <div ng-style="userstyle" id="users-tab" ng-click="changeTab('users')">
+        <div ng-style="userStyle" id="users-tab" ng-click="changeTab('users')">
           <strong>users </strong><div id="users-connected">({{usersConnected}})</div>
         </div>
 
@@ -167,7 +164,7 @@
 
               <tr ng-repeat="user in usernameList">
 
-                <td ng-cloak id="user-list">
+                <td ng-cloak id="user-playlist">
 
                   <strong>{{user}}</strong>
 
@@ -187,24 +184,14 @@
 
           </form>
       </div>
-    <!-- volume control script -->
-    <script>
-      $('input[type=range]').on('input', function(e){
-        var min = e.target.min,
-            max = e.target.max,
-            val = e.target.value;
-
-        $(e.target).css({
-          'backgroundSize': (val - min) * 100 / (max - min) + '% 100%'
-        });
-      }).trigger('input');
-    </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
-    <script src="chat.js"></script>
-    <script src="search.js"></script>
-    <script src="music.js"></script>
+    <script src="./js/volume.js"></script>
+    <script src="./js/chat.js"></script>
+    <script src="./js/search.js"></script>
+    <script src="./js/video.js"></script>
+    
   </body>
 </html>
 

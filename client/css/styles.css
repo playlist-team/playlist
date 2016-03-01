@@ -4,7 +4,7 @@ html{
 
 body {
   font-family: 'Roboto';
-  background-image: url("background.png");
+  background-image: url("../img/background.png");
   background-size: 100%;
   background-color: white;
   width: 1060px;
@@ -130,7 +130,7 @@ header {
   color: black;
   background-color: rgba(249, 249, 249, 1);
   opacity: 0.85;
-  background-image: url("chat-background.png");
+  background-image: url("../img/chat-background.png");
   list-style-type: none;
   width: 210px;
   text-align: center;
@@ -144,7 +144,7 @@ header {
   color: black;
   background-color: rgba(249, 249, 249, .90);
   opacity: 0.85;
-  background-image: url("chat-background.png");
+  background-image: url("../img/chat-background.png");
   background-position-y: -833px;
   list-style-type: none;
   width: 210px;
@@ -264,7 +264,7 @@ header {
   color: #080808;
   background-color: #616573;
   opacity: 50%;
-  background-image: url("chat-background.png");
+  background-image: url("../img/chat-background.png");
 }
 
 #chat-container {
