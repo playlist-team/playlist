@@ -402,10 +402,7 @@ header {
 .video-thumb-check {
   position: absolute;
   left: 6%;
-  top: 20%;/*
-  float: left;
-  left: 40%;
-  top: 35%;*/
+  top: 20%;
 }
 
 .video:nth-child(2n-1) {
