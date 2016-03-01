@@ -1,5 +1,5 @@
 angular.module('chat', ['ngSanitize'])
-//auto scroll chat content to bototm when there's new message
+//Directive to auto scroll chat content to bottom when new message is sent
 .directive('scrollDirective', function ($rootScope) {
   return {
     scope: {
@@ -23,6 +23,7 @@ angular.module('chat', ['ngSanitize'])
 
 .controller('ChatController', function ($scope, $window, $rootScope){
 
+  //Receives and assigns username from server
   socket.on('setUser',function(username){
     $scope.username = username;
   });
@@ -33,7 +34,7 @@ angular.module('chat', ['ngSanitize'])
   $scope.chatStyle = {'background-color': 'inherit'};
   $scope.userStyle;
 
-  //change tabs on click (chat & user online)
+  //Switch between users and chat tab
   $scope.changeTab = function(tab) {
     $scope.tab = tab;
     $rootScope.$emit('scrollDown');
@@ -47,7 +48,7 @@ angular.module('chat', ['ngSanitize'])
     }
   }
 
-  //get current time of user for chat
+  //Get current time
   $scope.getCurrentTime = function() {
     var date = new Date();
     var hours = date.getHours();
@@ -72,7 +73,7 @@ angular.module('chat', ['ngSanitize'])
 
     $scope.time = hours + ':' + minutes + meridian;
   };
-  //key word is meow for easter effect =D
+
   $scope.easterEgg = function () {
 
     setTimeout(function() { 
@@ -98,7 +99,7 @@ angular.module('chat', ['ngSanitize'])
     }, 6000);
   }
 
-  //send message from each user
+  //Send message to server
   $scope.send = function(message) {
     $scope.getCurrentTime();
     socket.emit('sendMessage', { message: message, 
@@ -112,9 +113,8 @@ angular.module('chat', ['ngSanitize'])
     $scope.message = null;
   }
 
-  //recieve new message from socker when new message comes in
+  //Recieve new messages from server
   socket.on('chatMessage', function(data) {
-    //get local time for each user
     $scope.getCurrentTime();
     $scope.$apply(function() {
       data.time = $scope.time;
@@ -122,7 +122,7 @@ angular.module('chat', ['ngSanitize'])
     })
   });
 
-  //get new updates on newest users from socket
+  //Receive users currently connected from server
   socket.on('usersOnline', function(users) {
     $scope.$apply(function(){
       $scope.usernameList = users;

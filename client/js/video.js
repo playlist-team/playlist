@@ -39,6 +39,7 @@ angular.module('app', ['chat', 'search'])
   this.player;
   this.queue = [];
 
+  //Instantiate new YouTube player after iFrame API has loaded
   $window.onYouTubeIframeAPIReady = function() {
     this.player = new YT.Player('player', {
       height: '360',
@@ -59,11 +60,13 @@ angular.module('app', ['chat', 'search'])
     });
   }
 
-  function onPlayerReady (event) {
+  //Event listener for when YouTube player finished loading
+  function onPlayerReady(event) {
+    //Plays video is video is loaded
     event.target.playVideo();
-
+    //Emits request to server to get current video
     socket.emit('getCurrent');
-
+    //Receives current video from server
     socket.on('setCurrent', function(video) {
       player.setVolume(50);
       context.current = video;
@@ -71,19 +74,19 @@ angular.module('app', ['chat', 'search'])
       $rootScope.$emit('changeQueue');
       socket.emit('getTime');
     });
-
+    //Receives event from server to initalize volume to 50
     socket.on('setVolume', function() {
       player.setVolume(50);
     });
-
+    //Listens for volumeChange from Controller and sets the volume
     $rootScope.$on('volumeChange', function(event, volume) {
       player.setVolume(volume);
     });
   }
 
+  //Event listener for whenever the player's state changes
   function onPlayerStateChange(event) {
     if (event.data === YT.PlayerState.ENDED) {
-      context.current = null;
       socket.emit('ended');
     }
     if (event.data === YT.PlayerState.PLAYING) {
