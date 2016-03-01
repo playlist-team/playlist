@@ -230,6 +230,10 @@ angular.module('musicApp', ['chat', 'search'])
 
   $scope.list = VideoService.queue;
 
+  socket.on('usernamewindow',function(username){
+    $scope.username = username;
+  })
+
   $rootScope.$on('changeQueue', function(){
     $scope.$apply(function() {
       $scope.current = VideoService.current;
