@@ -35,10 +35,10 @@ Once the project moves into development, the press release can be used as a touc
   > "Music shouldn't be listened to by just one person. It should be shared."
 
 ## How to Get Started ##
-  > Go to www.playlist.com and start adding vidoes to the playlist.
+  > Go to http://play-list.herokuapp.com/ and start adding vidoes to the playlist.
 
 ## Customer Quote ##
   > "Just when instant messaging was starting to become not so cool, Playlist comes along and changes everything."
 
 ## Closing and Call to Action ##
-  > Start sharing music at www.playlist.com.
+  > Start sharing music at http://play-list.herokuapp.com/.
