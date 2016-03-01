@@ -383,36 +383,6 @@ header {
   box-shadow: 4px 4px 80px #000;
   overflow-y:auto;
 }
-.techtitle {
-  text-align: center;
-  font-weight: bold;
-  line-height:30px;
-  background-color: #f5f5f9;
-}
-
-.link{
-text-decoration:none;
-}
-
-.photo{
-  position: relative;
-  padding: 10px;
-}
-
-.photo-thumb {
-  float: left;
-  padding-right: 10px;
-}
-
-.photo:nth-child(2n-1) {
-  background-color: #f5f5f9;
-}
-
-.tech-thumb {
-  float: left;
-  padding-right: 35px;
-  padding-left: 35px;
-}
 
 .video {
   position: relative;
@@ -426,6 +396,16 @@ text-decoration:none;
 .video-thumb {
   float: left;
   padding-right: 10px;
+  position: relative;
+}
+
+.video-thumb-check {
+  position: absolute;
+  left: 6%;
+  top: 20%;/*
+  float: left;
+  left: 40%;
+  top: 35%;*/
 }
 
 .video:nth-child(2n-1) {
@@ -457,7 +437,6 @@ text-decoration:none;
   background: #1FA0DF;
   color: white;
 }
-
 
 .time {
   color: #DBDBDC;

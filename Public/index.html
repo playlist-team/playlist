@@ -22,125 +22,40 @@
 
     <header>
 
-    <span ng-controller="AboutController">
-      <!--       playlistLogo -->
-      <img src="logo.png" id="logo-image" ng-click="toggleAbout()" >
+      <img src="logo.png" id="logo-image">
+      <!-- YouTube search box -->
+      <form id="search" ng-submit="getSearch(); toggleResults()" ng-controller="SearchController">
 
-        <about-directive show='showAbout' width='750px' height='62%'>
+        <input id="search-input" ng-model="field" type="text" placeholder="Search for and add YouTube videos to the playlist" autocomplete="off">
 
-          <div id="results">
+        <input id="search-submit" type="image" src="search.png">
+        <!-- Angular directive to load search results modal on submit -->
+        <search-directive show='showResults' width='750px' height='62%'>
 
-            <div class="photo" ng-cloak>
-              <a href="https://github.com/wired4code" target="_blank" class="link">
-                <img class="photo-thumb" src="sonny.png" width="112" height="90">
-                <span class="video-title">
-                  Sonny Sheth
-                </span>
-                <span class="video-author">
-                  Product Owner
-                </span>
-                <span class="video-description">
-                  https://github.com/wired4code
-                </span>
-              </a>
-            </div>
+          <div id="results" ng-if="showResults">
 
+            <div class="video" ng-cloak ng-repeat="result in searchList track by $index" ng-click="item.clicked || enqueue(result); item.clicked = true">
 
-            <div class="photo" ng-cloak>
-              <a href="https://github.com/invisiblebeard" target="_blank" class="link">
-                <img class="photo-thumb" src="calvin.png" width="112" height="90">
-                <span class="video-title">
-                  Calvin Le
-                </span>
-                <span class="video-author">
-                  Scrum Master
-                </span>
-                <span class="video-description">
-                  https://github.com/invisiblebeard
-                </span>
-              </a>
-            </div>
+              <img class="video-thumb" id="thumb-{{result.snippet.title}}" src={{result.snippet.thumbnails.default.url}}>
+              <img class="video-thumb-check" id="check-{{res.snippet.title}}" src="check-mark.png" ng-show="item.clicked">
 
-            <div class="photo" ng-cloak>
-              <a href="https://github.com/abc810221" target="_blank" class="link">
-                <img class="video-thumb" src="ted.png" width="112" height="90">
-                <span class="video-title">
-                  Ted Hsiao
-                </span>
-                <span class="video-author">
-                  Full-Stack Developer
-                </span>
-                <span class="video-description">
-                  https://github.com/abc810221
-                </span>
-              </a>
-            </div>
+              <span class="video-title">
+                {{result.snippet.title| limitTo: 75 }}{{result.snippet.description.length > 75 ? '...' : ''}}
+              </span>
 
-            <div class="photo" ng-cloak>
-              <a href="https://github.com/tcoughlin3" target="_blank" class="link">
-                <img class="video-thumb" src="tom.png" width="112" height="90">
-                <span class="video-title">
-                  Tom Coughlin
-                </span>
-                <span class="video-author">
-                  Full-Stack Developer
-                </span>
-                <span class="video-description">
-                  https://github.com/tcoughlin3
-                </span>
-              </a>
-            </div>
+              <span class="video-author">
+                {{result.snippet.channelTitle}}
+              </span>
 
-            <div class="techtitle">Tech Stack</div>
+              <span class="video-description">
+                {{result.snippet.description | limitTo: 160 }}{{result.snippet.description.length > 160 ? '...' : ''}}
+              </span>
 
-            <div ng-cloak>
-              <img class="tech-thumb" src="angularjs.png" width="112" height="90">
-              <img class="tech-thumb" src="express.png" width="112" height="90">
-              <img class="tech-thumb" src="jquery.jpg" width="112" height="90">
-              <img class="tech-thumb" src="node.png" width="112" height="90">
-              <img class="tech-thumb" style="padding-left:15px; padding-right:25px" src="socketio.png" width="142" height="55">
-              <img class="tech-thumb" src="sweetalert.png" width="112" height="90">
-              <img class="tech-thumb" src="youtube.png" width="120" height="90">
             </div>
 
           </div>
 
-        </about-directive>
-    </span>
-
-
-    <!-- YouTube search box -->
-    <form id="search" ng-submit="getSearch(); toggleResults()" ng-controller="SearchController">
-
-      <input id="search-input" ng-model="field" type="text" placeholder="Search for and add YouTube videos to the playlist" autocomplete="off">
-
-      <input id="search-submit" type="image" src="search.png">
-      <!-- Angular directive to load search results modal on submit -->
-      <search-directive show='showResults' width='750px' height='62%'>
-
-        <div id="results">
-
-          <div class="video" ng-cloak ng-repeat="result in searchList track by $index" ng-click="enqueue(result)">
-
-            <img class="video-thumb" src={{result.snippet.thumbnails.default.url}}>
-
-            <span class="video-title">
-              {{result.snippet.title| limitTo: 75 }}{{result.snippet.description.length > 75 ? '...' : ''}}
-            </span>
-
-            <span class="video-author">
-              {{result.snippet.channelTitle}}
-            </span>
-
-            <span class="video-description">
-              {{result.snippet.description | limitTo: 160 }}{{result.snippet.description.length > 160 ? '...' : ''}}
-            </span>
-
-          </div>
-
-        </div>
-
-      </search-directive>
+        </search-directive>
 
       </form>
       <!-- Controls to skip and sync current video being played -->
