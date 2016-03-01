@@ -118,7 +118,7 @@
               {{ song.title | limitTo: 74 }}{{song.title.length > 74 ? '...' : ''}}
             </p>
             <!-- to remove a video from playlist -->
-            <p id="queue-remove" ng-cloak type="button" ng-click="dequeue(song)">
+            <p ng-show="song.username===username" id="queue-remove" ng-cloak type="button" ng-click="dequeue(song)">
               Remove
             </p>
 
