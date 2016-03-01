@@ -1,3 +1,4 @@
+//Dynamic styling for volume slider
 $('input[type=range]').on('input', function(event){
   var min = event.target.min;
   var max = event.target.max;

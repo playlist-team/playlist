@@ -1,5 +1,5 @@
 angular.module('search', [])
-// to load YouTube search modal
+//:oad YouTube search results in a modal
 .directive('searchDirective', function() {
   return {
     restrict: 'E',
@@ -24,17 +24,17 @@ angular.module('search', [])
   }
 })
 
-// to handle YouTube search view and functionality to add videos
-// to playlist queue
 .controller('SearchController', ['$scope', '$window', 'SearchFactory', function($scope, $window, SearchFactory){
 
   $scope.searchList;
+
   $scope.getSearch = function() {
     SearchFactory.fetchSearch($scope.field, function(results) {
       $scope.searchList = results.data.items;
     });
   }
 
+  //Sends video information to server
   $scope.enqueue = function(thumbnail) {
     socket.emit('enqueue', { id: thumbnail.id.videoId,
                              title: thumbnail.snippet.title,
@@ -44,13 +44,15 @@ angular.module('search', [])
   }
 
   $scope.showResults = false;
+
+  //Toggles the modal view
   $scope.toggleResults = function() {
     $scope.showResults = !$scope.showResults;
   };
 
 }])
 
-// to grab search query from YouTube API
+//Search query from YouTube Data API
 .factory('SearchFactory', ['$http', function($http) {
 
   var fetchSearch = function(query, callback) {

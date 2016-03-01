@@ -25,17 +25,19 @@ var sync;
 var set;
 var switched;
 
+//Helper function to reset the state of clients connected
 var reset = function() {
   votes = {};
   upvotes = 0;
   downvotes = 0;
   io.emit('clearVotes');
   io.emit('nextVideo', current);
-  io.emit('refreshQueue', queue);
+  io.emit('setQueue', queue);
 }
 
 io.on('connection', function(socket) {
 
+  //Receives username from client and emits username, socket id, users online back to client
   socket.on('username', function(username) {
     users[socket.id] = username;
     io.sockets.connected[socket.id].emit('setUser', username);
@@ -44,12 +46,14 @@ io.on('connection', function(socket) {
     io.emit('usersOnline', users);
   });
 
+  //Sends queue information to client
   socket.on('getQueue', function() {
     if (queue.length) {
       io.sockets.connected[socket.id].emit('setQueue', queue);
     }
   });
 
+  //Sends current video to client
   socket.on('getCurrent', function() {
     if (current) {
       io.sockets.connected[socket.id].emit('setCurrent', current);
@@ -58,14 +62,17 @@ io.on('connection', function(socket) {
     }
   });
 
+  //Sends vote information for current video to client
   socket.on('getVotes', function() {
     io.sockets.connected[socket.id].emit('changeVotes', {up: upvotes, down: downvotes});
   });
 
+  //Sends video duration to client
   socket.on('getTime', function() {
     io.sockets.connected[socket.id].emit('setTime', start);
   });
 
+  //Emits message to all clients
   socket.on('sendMessage', function(data) {
     io.emit('chatMessage', data);
   });
@@ -114,6 +121,8 @@ io.on('connection', function(socket) {
     }
   });
 
+  //Receives video ended from client and sets current to next in queue
+  //Jerry-rigged so that the fastest client emits the switch and locks other clients out for 5 seconds
   socket.on('ended', function() {
     if (!switched) {
       switched = true;
@@ -126,6 +135,7 @@ io.on('connection', function(socket) {
     }
   });
 
+  //Allows skipping if event is emitted by client who enqueued video
   socket.on('skip', function(easterEgg) {
     var id = socket.id;
     if (current && id.slice(2) === current.socket || easterEgg) {
@@ -143,6 +153,7 @@ io.on('connection', function(socket) {
     }
   });
 
+  //Start the video sync clock
   socket.on('setDuration', function() {
     if (!set) {
       set = true;
@@ -154,6 +165,7 @@ io.on('connection', function(socket) {
     }
   });
 
+  //Removes client vote information and delete client on client disconnect
   socket.on('disconnect', function() {
     if (votes[socket.id] === 'up') {
       upvotes--;
@@ -164,11 +176,15 @@ io.on('connection', function(socket) {
     }
 
     io.emit('changeVotes', {up: upvotes, down: downvotes});
+
     io.emit('chatMessage', {username: "", message: users[socket.id] + " has left"});
+
     delete users[socket.id];
+
     io.emit('usersOnline', users);
   });
 
+  //Receives upvote from client and updates vote information; emitting to all clients
   socket.on('upVote', function() {
     if (votes[socket.id] === 'down') {
       votes[socket.id] = 'up';
@@ -196,6 +212,7 @@ io.on('connection', function(socket) {
       downvotes++;
     }
 
+    //Skips current video if more haters than non-haters
     var haters = downvotes/Object.keys(users).length;
 
     if(haters > 0.5) {
@@ -214,6 +231,7 @@ io.on('connection', function(socket) {
     io.emit('changeVotes', {up: upvotes, down: downvotes});
   });
 
+  //Sends clock time to client when requested
   socket.on('getSync', function() {
     io.sockets.connected[socket.id].emit('setSync', start);
   });

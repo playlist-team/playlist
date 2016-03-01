@@ -1,5 +1,6 @@
 angular.module('app', ['chat', 'search'])
 
+//Load YouTube iFrame API, connect socket to server, prompt for username on initialize
 .run(function($window) {
   var tag = document.createElement('script');
 
@@ -86,24 +87,29 @@ angular.module('app', ['chat', 'search'])
 
   //Event listener for whenever the player's state changes
   function onPlayerStateChange(event) {
+    //Emit event notifying server that player has ended video
     if (event.data === YT.PlayerState.ENDED) {
       socket.emit('ended');
     }
+    //Calculate remaining time of video playing and emit to controller
     if (event.data === YT.PlayerState.PLAYING) {
       var total = player.getDuration();
       var current = player.getCurrentTime();
       var timeLeft = total - current;
       $rootScope.$emit('setTimer', timeLeft);
     }
+    //Emit to controller that player has paused
     if (event.data === YT.PlayerState.PAUSED) {
       $rootScope.$emit('paused');
     }
   }
 
+  //Receive remaining time from server and seeks video to that time
   socket.on('setTime', function(time) {
     player.seekTo(time, false);
   });
 
+  //Recieve first video from server, plays it and emits queue to controller and time to server
   socket.on('firstVideo', function(video) {
     context.current = video;
     player.loadVideoById(video.id);
@@ -111,6 +117,7 @@ angular.module('app', ['chat', 'search'])
     socket.emit('setDuration', player.getDuration());
   });
 
+  //Recieve next video from server, plays it and emits queue to controller and time to server
   socket.on('nextVideo', function(video) {
     context.current = video;
     player.loadVideoById(video.id);
@@ -142,11 +149,6 @@ angular.module('app', ['chat', 'search'])
     $rootScope.$emit('changeQueue');
   });
 
-  socket.on('refreshQueue', function(queue) {
-    context.queue = queue;
-    $rootScope.$emit('changeQueue');
-  });
-
   socket.on('setSync', function(time) {
     player.stopVideo();
     player.seekTo(time, false);
@@ -165,14 +167,17 @@ angular.module('app', ['chat', 'search'])
   $scope.upvotes = 0;
   $scope.downvotes = 0;
 
+  //Recieve client socket id from server
   socket.on('setId',function(socketId) {
     $scope.socketId = socketId.slice(2);
   });
 
+  //Stops the interval on the timer on a pause event from service
   $rootScope.$on('paused', function(event, time) {
     clearInterval($scope.timer);
   });
 
+  //Receives time remaining from service, creates a clock interval and update duration in scope
   $rootScope.$on('setTimer', function(event, time) {
     $scope.timeleft = Math.round(time);
     clearInterval($scope.timer);
@@ -192,6 +197,7 @@ angular.module('app', ['chat', 'search'])
     }, 1000);
   });
 
+  //Emit volume change information to service
   $scope.$watch('volume', function() {
     $rootScope.$emit('volumeChange', $scope.volume);
   });
