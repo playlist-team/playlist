@@ -63,17 +63,14 @@ angular.module('app', ['chat', 'search'])
 
   //Event listener for when YouTube player finished loading
   function onPlayerReady(event) {
-    //Plays video is video is loaded
-    event.target.playVideo();
     //Emits request to server to get current video
     socket.emit('getCurrent');
     //Receives current video from server
     socket.on('setCurrent', function(video) {
-      player.setVolume(50);
       context.current = video;
-      player.loadVideoById(video.id);
-      $rootScope.$emit('changeQueue');
       socket.emit('getTime');
+      $rootScope.$emit('changeQueue');
+      player.loadVideoById(video.id);
     });
     //Receives event from server to initalize volume to 50
     socket.on('setVolume', function() {
@@ -114,15 +111,15 @@ angular.module('app', ['chat', 'search'])
     context.current = video;
     player.loadVideoById(video.id);
     $rootScope.$emit('changeQueue');
-    socket.emit('setDuration', player.getDuration());
+    socket.emit('setDuration', video.duration);
   });
 
   //Recieve next video from server, plays it and emits queue to controller and time to server
   socket.on('nextVideo', function(video) {
     context.current = video;
+    socket.emit('setDuration', video.duration);
     player.loadVideoById(video.id);
     $rootScope.$emit('changeQueue');
-    socket.emit('setDuration');
   });
 
   socket.on('stopVideo', function() {
@@ -191,7 +188,7 @@ angular.module('app', ['chat', 'search'])
         $scope.minutes = Math.floor($scope.timeleft / 60);
         $scope.duration = $scope.minutes + ":" + $scope.seconds;
         if ($scope.timeleft < 0) {
-          $scope.duration = '0:00';
+          $scope.duration = '--:--';
         }
       });
     }, 1000);

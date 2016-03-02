@@ -28,6 +28,7 @@ angular.module('search', [])
 
   $scope.searchList;
 
+  //Retrieve and populate scope with YouTube search results
   $scope.getSearch = function() {
     SearchFactory.fetchSearch($scope.field, function(results) {
       $scope.searchList = results.data.items;
@@ -36,11 +37,17 @@ angular.module('search', [])
 
   //Sends video information to server
   $scope.enqueue = function(thumbnail) {
-    socket.emit('enqueue', { id: thumbnail.id.videoId,
-                             title: thumbnail.snippet.title,
-                             thumbnail: thumbnail.snippet.thumbnails.default.url,
-                             username: $window.username,
-                             socket: socket.id });
+    SearchFactory.fetchResource(thumbnail.id.videoId, function(result) {
+      var video = result.data.items[0];
+      var length = video.contentDetails.duration.split(/[A-Za-z]/);
+      var seconds = (Number(length[2]) * 60) + Number(length[3]);
+      socket.emit('enqueue', { id: video.id,
+                               title: video.snippet.title,
+                               thumbnail: video.snippet.thumbnails.default.url,
+                               username: $window.username,
+                               socket: socket.id, 
+                               duration: seconds });
+    });
   }
 
   $scope.showResults = false;
@@ -55,9 +62,10 @@ angular.module('search', [])
 //Search query from YouTube Data API
 .factory('SearchFactory', ['$http', function($http) {
 
-  var fetchSearch = function(query, callback) {
+  var fetchSearch = function(query, callback, token) {
     return $http.get('https://www.googleapis.com/youtube/v3/search', {
       params: {
+        pageToken: token || "",
         key: "AIzaSyDxx1rrqR-q7Tcfkz0MqII6sO2GQpONrGg",
         part: "snippet",
         type: "video",
@@ -66,13 +74,22 @@ angular.module('search', [])
         maxResults: 25,
         safeSearch: "none"
       }
-    }).then(function(results){
-      callback(results);
+    }).then(function(results) {
+        callback(results);
     })
   };
 
+  var fetchResource = function(videoId, callback) {
+    return $http({
+      method: 'GET',
+      url: 'https://www.googleapis.com/youtube/v3/videos?id=' + videoId + '&key=AIzaSyDxx1rrqR-q7Tcfkz0MqII6sO2GQpONrGg&part=snippet,contentDetails'
+    }).then(function(result) {
+        callback(result);
+    })
+  }
   return {
-    fetchSearch: fetchSearch
+    fetchSearch: fetchSearch,
+    fetchResource: fetchResource
   }
 
 }])
