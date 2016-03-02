@@ -19,7 +19,8 @@ var votes = {};
 var upvotes = 0;
 var downvotes = 0;
 var current;
-var duration;
+var timeTotal;
+var timeLeft;
 var sync;
 var set;
 var switched;
@@ -68,7 +69,7 @@ io.on('connection', function(socket) {
 
   //Sends video duration to client
   socket.on('getTime', function() {
-    io.sockets.connected[socket.id].emit('setTime', start);
+    io.sockets.connected[socket.id].emit('setTime', timeTotal - timeLeft || timeTotal);
   });
 
   //Emits message to all clients
@@ -153,13 +154,17 @@ io.on('connection', function(socket) {
   });
 
   //Start the video sync clock
-  socket.on('setDuration', function() {
+  socket.on('setDuration', function(duration) {
     if (!set) {
       set = true;
-      start = 0;
+      timeTotal = duration;
+      timeLeft = duration;
       clearInterval(sync);
       sync = setInterval(function() {
-        start++;
+        timeLeft--;
+        if (timeLeft === 0) {
+          clearInterval(sync);
+        }
       }, 1000);
     }
   });
@@ -232,7 +237,7 @@ io.on('connection', function(socket) {
 
   //Sends clock time to client when requested
   socket.on('getSync', function() {
-    io.sockets.connected[socket.id].emit('setSync', start);
+    io.sockets.connected[socket.id].emit('setSync', timeTotal - timeLeft || timeTotal);
   });
 
 });

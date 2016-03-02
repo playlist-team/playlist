@@ -28,6 +28,7 @@ angular.module('search', [])
 
   $scope.searchList;
 
+  //Retrieve and populate scope with YouTube search results
   $scope.getSearch = function() {
     SearchFactory.fetchSearch($scope.field, function(results) {
       $scope.searchList = results.data.items;
@@ -44,7 +45,7 @@ angular.module('search', [])
                                title: video.snippet.title,
                                thumbnail: video.snippet.thumbnails.default.url,
                                username: $window.username,
-                               socket: socket.id 
+                               socket: socket.id, 
                                duration: seconds });
     });
   }
@@ -61,9 +62,10 @@ angular.module('search', [])
 //Search query from YouTube Data API
 .factory('SearchFactory', ['$http', function($http) {
 
-  var fetchSearch = function(query, callback) {
+  var fetchSearch = function(query, callback, token) {
     return $http.get('https://www.googleapis.com/youtube/v3/search', {
       params: {
+        pageToken: token || "",
         key: "AIzaSyDxx1rrqR-q7Tcfkz0MqII6sO2GQpONrGg",
         part: "snippet",
         type: "video",
