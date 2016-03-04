@@ -1,4 +1,4 @@
-angular.module('chat', ['ngSanitize'])
+angular.module('chat', ['ngSanitize', 'emojiApp'])
 //Directive to auto scroll chat content to bottom when new message is sent
 .directive('scrollDirective', function ($rootScope) {
   return {
@@ -22,7 +22,7 @@ angular.module('chat', ['ngSanitize'])
 })
 
 .controller('ChatController', function ($scope, $window, $rootScope){
-
+  $scope.emojiMessage={};
   //Receives and assigns username from server
   socket.on('setUser',function(username){
     $scope.username = username;
@@ -105,10 +105,10 @@ angular.module('chat', ['ngSanitize'])
 
     // if message begins with '@', send direct message
     if (message[0] === "@"){
-      var array = message.split(" ");
+      var array = message.split(/\s/);
       var sendTo = array[0].substr(1);
       var message = array.slice(1).join(" ");
-
+      console.log(array);
       sendPrivateMessage(sendTo, message);
 
     } else {
@@ -122,11 +122,11 @@ angular.module('chat', ['ngSanitize'])
       }
     }
 
-    $scope.message = null;
-
+    $('#messageDiv').html("");
 
     function sendPrivateMessage(sendTo, message){
       // notify user if they have not chosen a specific username
+      console.log('send '+ message + ' to '+ $scope.username);
       if ($scope.username === 'anonymous'){
         socket.emit('errorMessage', { message: "Error: Must have a unique username to send private messages.",
                                     username: 'PlayList chatBot'});
@@ -151,7 +151,17 @@ angular.module('chat', ['ngSanitize'])
       socket.emit('errorMessage', { message: "Error: Username is not found.",
                                     username: 'PlayList ChatBot'});
     }
-  }
+  };
+
+  //Hide emoji popup when chat message changes
+  $scope.$watch(
+    function () { 
+      return $('#messageDiv').html(); 
+    }, function () {
+      if ($('#emojibtn').hasClass('on')) {
+        $('#emojibtn').click();
+      }
+  });
 
   //Recieve new messages from server
   socket.on('chatMessage', function(data) {
@@ -170,4 +180,16 @@ angular.module('chat', ['ngSanitize'])
     });
   });
 
+})
+.directive('ngEnter', function() {
+    return function(scope, element, attrs) {
+        element.bind("keydown", function(e) {
+            if(e.which === 13) {
+                scope.$apply(function(){
+                    scope.$eval(attrs.ngEnter, {'e': e});
+                });
+                e.preventDefault();
+            }
+        });
+    };
 });
