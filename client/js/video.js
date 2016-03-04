@@ -107,12 +107,12 @@ angular.module('app', ['chat', 'search'])
   });
 
   //Recieve first video from server, plays it and emits queue to controller and time to server
-  socket.on('firstVideo', function(video) {
-    context.current = video;
-    player.loadVideoById(video.id);
-    $rootScope.$emit('changeQueue');
-    socket.emit('setDuration', video.duration);
-  });
+  // socket.on('firstVideo', function(video) {
+  //   context.current = video;
+  //   player.loadVideoById(video.id);
+  //   $rootScope.$emit('changeQueue');
+  //   socket.emit('setDuration', video.duration);
+  // });
 
   //Recieve next video from server, plays it and emits queue to controller and time to server
   socket.on('nextVideo', function(video) {
@@ -128,6 +128,7 @@ angular.module('app', ['chat', 'search'])
 
   socket.on('addVideo', function(video) {
     context.queue.push(video);
+    
     $rootScope.$emit('changeQueue');
   });
 
@@ -218,12 +219,17 @@ angular.module('app', ['chat', 'search'])
     });
   });
 
-  $scope.upVote = function() { 
+  $scope.upVote = function() {
+    console.log('upvoted');
     socket.emit('upVote');
+    socket.emit('publishMessage', { action: 'upvoted',
+                                    title: $scope.current.title });
   }
 
   $scope.downVote = function() {
     socket.emit('downVote');
+    socket.emit('publishMessage', { action: 'downvoted',
+                                    title: $scope.current.title })
   }
 
   socket.on('changeVotes', function(votes) {

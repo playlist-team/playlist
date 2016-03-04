@@ -76,6 +76,10 @@ io.on('connection', function(socket) {
   socket.on('sendMessage', function(data) {
     io.emit('chatMessage', data);
   });
+  
+  socket.on('publishMessage', function(data) {
+    io.emit('activityMessage', data);
+  })
 
   socket.on('enqueue', function(data) {
     if (current) {

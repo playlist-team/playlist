@@ -121,6 +121,14 @@ angular.module('chat', ['ngSanitize'])
       $scope.messages.push(data);
     })
   });
+  
+  //Receive new user activity messages from server
+  socket.on('activityMessage', function(data) {
+    var message = { message: $scope.username + ' ' + data.action + ' ' + data.title } 
+    $scope.$apply(function() {
+      $scope.messages.push(message);
+    })
+  });
 
   //Receive users currently connected from server
   socket.on('usersOnline', function(users) {
