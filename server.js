@@ -77,6 +77,28 @@ io.on('connection', function(socket) {
     io.emit('chatMessage', data);
   });
 
+  //Emits data to only specific client (private message)
+  socket.on('privateMessage', function(data){
+    io.sockets.sockets[data.sendToSocketId].emit('chatMessage', data);
+    socket.emit('chatMessage', data);
+  });
+
+  //Send error message to user on submit
+  socket.on('errorMessage', function(data){
+    socket.emit('chatMessage', data);
+  });
+
+  //Check if user exists
+  socket.on('checkUser', function(username){
+    var exist = false;
+    for (var key in users){
+      if (users[key] === username){
+        exist = true;
+      }
+    }
+    socket.emit('userExist', exist);
+  })
+
   socket.on('enqueue', function(data) {
     if (current) {
 

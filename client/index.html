@@ -147,18 +147,25 @@
 
               <tr class="user-name">
                 <!-- to display user name and time stamp of message -->
-                <td ng-cloak id="user-name" ng-show="messages[{{$index-1}}].username !== message.username">
+                <td ng-cloak id="user-name" ng-show="messages[{{$index-1}}].username !== message.username || message.sendToSocketId">
 
-                  <strong>{{ message.username }}</strong> <span class="time">{{message.time}}</span>
+                  <span  ng-if="message.sendToSocketId"><strong class="privateMessage">PRIVATE: from @{{ message.username }} to @{{usernameList[message.sendToSocketId]}}</strong> <span class="time">{{message.time}}</span></span>
+
+                  <span ng-if="!message.sendToSocketId"><strong>{{ message.username }}</strong> <span class="time">{{message.time}}</span></span>
 
                 </td>
 
               </tr>
-
               <tr class="user-message">
                 <!-- to display all messages -->
-                <td id="user-message" ng-cloak ng-bind-html="message.message | linky:'_blank' | colonToSmiley">
+
+                <td ng-if="message.sendToSocketId" class="privateMessageContent" id="user-message" ng-cloak ng-bind-html="message.message | linky:'_blank' | colonToSmiley">
                 </td>
+
+                <td ng-if="!message.sendToSocketId" id="user-message" ng-cloak ng-bind-html="message.message | linky:'_blank' | colonToSmiley">
+
+                </td>
+                
 
               </tr>
 
