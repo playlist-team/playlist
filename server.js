@@ -83,21 +83,21 @@ io.on('connection', function(socket) {
     socket.emit('chatMessage', data);
   });
 
-  // //Send error message to user on submit
-  // socket.on('errorMessage', function(data){
-  //   socket.emit('chatMessage', data);
-  // });
+  //Send error message to user on submit
+  socket.on('errorMessage', function(data){
+    socket.emit('chatMessage', data);
+  });
 
-  // //Check if user exists
-  // socket.on('checkUser', function(username){
-  //   var exist = false;
-  //   for (var key in users){
-  //     if (users[key] === username){
-  //       exist = true;
-  //     }
-  //   }
-  //   socket.emit('userExist', exist);
-  // })
+  //Check if user exists
+  socket.on('checkUser', function(username){
+    var exist = false;
+    for (var key in users){
+      if (users[key] === username){
+        exist = true;
+      }
+    }
+    socket.emit('userExist', exist);
+  })
 
   socket.on('enqueue', function(data) {
     if (current) {
