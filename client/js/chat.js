@@ -102,15 +102,55 @@ angular.module('chat', ['ngSanitize'])
   //Send message to server
   $scope.send = function(message) {
     $scope.getCurrentTime();
-    socket.emit('sendMessage', { message: message, 
+
+    // if message begins with '@', send direct message
+    if (message[0] === "@"){
+      var array = message.split(" ");
+      var sendTo = array[0].substr(1);
+      var message = array.slice(1).join(" ");
+
+      sendPrivateMessage(sendTo, message);
+
+    } else {
+
+      socket.emit('sendMessage', { message: message, 
                                  username: $scope.username, 
                                  time: $scope.time });
 
-    if (message === "meow") {
-      $scope.easterEgg();
+      if (message === "meow") {
+        $scope.easterEgg();
+      }
     }
-    
+
     $scope.message = null;
+
+
+    function sendPrivateMessage(sendTo, message){
+      // notify user if they have not chosen a specific username
+      if ($scope.username === 'anonymous'){
+        socket.emit('errorMessage', { message: "Error: Must have a unique username to send private messages.",
+                                    username: 'PlayList chatBot'});
+        return;
+      }
+      if (sendTo === 'anonymous'){
+        socket.emit('errorMessage', { message: "Error: Can only send private messages to users with unique usernames.",
+                                    username: 'PlayList chatBot'});
+        return;
+      }
+      // sends the private message is username is found
+      for (var key in $scope.usernameList){
+        if ($scope.usernameList[key] === sendTo){
+          socket.emit('privateMessage', { sendToSocketId: key, 
+                                          message: message,
+                                          time: $scope.time,
+                                          username: $scope.username });
+          return;
+        }
+      }
+      // Notify user if username was not found
+      socket.emit('errorMessage', { message: "Error: Username is not found.",
+                                    username: 'PlayList ChatBot'});
+    }
   }
 
   //Recieve new messages from server

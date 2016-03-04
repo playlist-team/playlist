@@ -441,6 +441,12 @@ header {
   bottom: 1.55px;
 }
 
+.privateMessage{
+  color: #F7B3DA;
+  font-size: 1.2em;
+  font-weight: 400;
+}
+
 #duration {
   float: right;
   padding-top: 0px;
