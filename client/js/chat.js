@@ -1,4 +1,4 @@
-angular.module('chat', ['ngSanitize'])
+angular.module('chat', ['ngSanitize', 'emojiApp'])
 //Directive to auto scroll chat content to bottom when new message is sent
 .directive('scrollDirective', function ($rootScope) {
   return {
@@ -22,7 +22,7 @@ angular.module('chat', ['ngSanitize'])
 })
 
 .controller('ChatController', function ($scope, $window, $rootScope){
-
+  $scope.emojiMessage={};
   //Receives and assigns username from server
   socket.on('setUser',function(username){
     $scope.username = username;
@@ -109,9 +109,18 @@ angular.module('chat', ['ngSanitize'])
     if (message === "meow") {
       $scope.easterEgg();
     }
-    
-    $scope.message = null;
-  }
+    $('#messageDiv').html("");
+  };
+
+  //Hide emoji popup when chat message changes
+  $scope.$watch(
+    function () { 
+      return $('#messageDiv').html(); 
+    }, function () {
+      if ($('#emojibtn').hasClass('on')) {
+        $('#emojibtn').click();
+      }
+  });
 
   //Recieve new messages from server
   socket.on('chatMessage', function(data) {
@@ -130,4 +139,16 @@ angular.module('chat', ['ngSanitize'])
     });
   });
 
+})
+.directive('ngEnter', function() {
+    return function(scope, element, attrs) {
+        element.bind("keydown", function(e) {
+            if(e.which === 13) {
+                scope.$apply(function(){
+                    scope.$eval(attrs.ngEnter, {'e': e});
+                });
+                e.preventDefault();
+            }
+        });
+    };
 });
