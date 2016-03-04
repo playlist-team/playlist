@@ -15,19 +15,20 @@ angular.module('app', ['chat', 'search'])
      $window.socket.emit('getQueue');
   });
 
-  swal({
-    title: 'Welcome to Playlist',
-    text: 'Enter your username',
-    type: 'input',
-    inputType: 'text',
-    showCancelButton: true,
-    closeOnConfirm: true,
-    confirmButtonColor: '#1171A2'
-  }, function(username) {
-    $window.username = username || 'anonymous';
-    socket.emit('username', $window.username);
-  });
-})
+      swal({
+        title: 'Welcome to Playlist',
+        text: 'Enter your username',
+        type: 'input',
+        inputType: 'text',
+        showCancelButton: true,
+        closeOnConfirm: true,
+        confirmButtonColor: '#1171A2'
+      }, function(username) {
+        $window.username = username || 'anonymous';
+        socket.emit('username', $window.username);
+      });
+
+  })
 
 .config(function($locationProvider){
   $locationProvider.html5Mode(true);
