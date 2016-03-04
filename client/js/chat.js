@@ -124,10 +124,19 @@ angular.module('chat', ['ngSanitize'])
   
   //Receive new user activity messages from server
   socket.on('activityMessage', function(data) {
-    var message = { message: $scope.username + ' ' + data.action + ' ' + data.title } 
+    var message;
+    
+    if(data.action === 'added') {
+      message = { message: $scope.username + ' ' + data.action + ' ' + data.title + ' to queue.' }
+    } else if (data.action === 'removed') {
+      message = { message: $scope.username + ' ' + data.action + ' ' + data.title + ' from queue.' }
+    } else {
+      message = { message: $scope.username + ' ' + data.action + ' ' + data.title + '.'};
+    }
+    
     $scope.$apply(function() {
       $scope.messages.push(message);
-    })
+    });
   });
 
   //Receive users currently connected from server

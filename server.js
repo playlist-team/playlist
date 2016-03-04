@@ -77,6 +77,7 @@ io.on('connection', function(socket) {
     io.emit('chatMessage', data);
   });
   
+  //Emits activity to all clients
   socket.on('publishMessage', function(data) {
     io.emit('activityMessage', data);
   })

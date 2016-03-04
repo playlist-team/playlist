@@ -128,6 +128,8 @@ angular.module('app', ['chat', 'search'])
 
   socket.on('addVideo', function(video) {
     context.queue.push(video);
+    socket.emit('publishMessage', { action: 'added',
+                                  title: video.title });
     
     $rootScope.$emit('changeQueue');
   });
@@ -137,6 +139,8 @@ angular.module('app', ['chat', 'search'])
       if(video.id === videoId){
         context.queue.splice(index, 1);
       }
+      socket.emit('publishMessage', { action: 'removed', 
+                                  title: video.title });
     });
     $rootScope.$emit('changeQueue');
     socket.emit('updateQueue', context.queue);
@@ -220,7 +224,6 @@ angular.module('app', ['chat', 'search'])
   });
 
   $scope.upVote = function() {
-    console.log('upvoted');
     socket.emit('upVote');
     socket.emit('publishMessage', { action: 'upvoted',
                                     title: $scope.current.title });
