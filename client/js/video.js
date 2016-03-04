@@ -21,11 +21,27 @@ angular.module('app', ['chat', 'search'])
         type: 'input',
         inputType: 'text',
         showCancelButton: true,
-        closeOnConfirm: true,
+        closeOnConfirm: false,
         confirmButtonColor: '#1171A2'
       }, function(username) {
         $window.username = username || 'anonymous';
-        socket.emit('username', $window.username);
+
+        if ($window.username !== 'anonymous'){
+          socket.emit('checkUser', username);
+        } else {
+          socket.emit('username', $window.username);
+        }
+
+        socket.on('userExist', function(exists){
+          if (exists){
+            console.log('it does exist');
+            swal.showInputError("Username exists. Please choose a different name.");
+            return false;
+          }  else {
+            socket.emit('username', $window.username);
+            swal("Nice!", "Welcome to the chat, "+$window.username);
+          }
+        });
       });
 
   })
