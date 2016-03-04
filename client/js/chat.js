@@ -127,11 +127,14 @@ angular.module('chat', ['ngSanitize'])
     var message;
     
     if(data.action === 'added') {
-      message = { message: $scope.username + ' ' + data.action + ' ' + data.title + ' to queue.' }
+      message = { message: $scope.username + ' ' + data.action + ' ' + data.title + ' to queue.',
+                  time: $scope.time };
     } else if (data.action === 'removed') {
-      message = { message: $scope.username + ' ' + data.action + ' ' + data.title + ' from queue.' }
+      message = { message: $scope.username + ' ' + data.action + ' ' + data.title + ' from queue.',
+                  time: $scope.time };
     } else {
-      message = { message: $scope.username + ' ' + data.action + ' ' + data.title + '.'};
+      message = { message: $scope.username + ' ' + data.action + ' ' + data.title + '.',
+                  time: $scope.time };  // case for upvoted & downvotes
     }
     
     $scope.$apply(function() {
