@@ -30,7 +30,7 @@ angular.module('log', [])
       log = { username: data.username,
               action: data.action,
               title: data.title,
-              message: '', };  // case for upvote, downvote and skip
+              message: '', };  // case for upvote, downvote
     }
     
     $scope.$apply(function() {
@@ -70,6 +70,26 @@ angular.module('log', [])
       $scope.logs.push(log);
     });
   });
+  
+  socket.on('skipUnAuth', function() {
+    
+    var log = {
+      message: 'Only the user who added the video to the playlist can skip the current video'
+    };
+    $scope.$apply(function() {
+      $scope.logs.push(log);
+    });
+  });
+  
+  socket.on('skipAuth', function() {
+    var log = {
+      message: 'User who added video has skipped current video'
+    };
+    $scope.$apply(function() {
+      $scope.logs.push(log);
+    });
+  });
+  
   
 });
   

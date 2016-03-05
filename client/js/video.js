@@ -208,8 +208,8 @@ angular.module('app', ['chat', 'search', 'log'])
 
   $scope.skip = function() {
     socket.emit('skip');
-    socket.emit('sendLog', { action: 'skipped',
-                                    title: $scope.current.title });
+    // socket.emit('sendLog', { action: 'skipped',
+    //                                 title: $scope.current.title });
   }
 
   $scope.sync = function() {
@@ -224,8 +224,6 @@ angular.module('app', ['chat', 'search', 'log'])
   });
 
   $scope.upVote = function() {
-    socket.emit('sendLog', { action: 'upvoted',
-                                    title: $scope.current.title });
     socket.emit('upVote');
   }
 
@@ -233,10 +231,15 @@ angular.module('app', ['chat', 'search', 'log'])
     socket.emit('downVote', { title: $scope.current.title });
   }
   
-  socket.on('initialDownvote', function(data) {
+  socket.on('validDownvote', function(data) {
     socket.emit('sendLog', { action: 'downvoted',
                                     title: $scope.current.title })
   });
+  
+  socket.on('validUpvote', function(data) {
+    socket.emit('sendLog', { action: 'upvoted',
+                                    title: $scope.current.title });
+  })
   
   // Listens for when a video is skipped due to majority downvote, tells server to send log
   socket.on('voteSkipped', function(data) {

@@ -76,13 +76,13 @@ io.on('connection', function(socket) {
   socket.on('sendMessage', function(data) {
     io.emit('chatMessage', data);
   });
-  
-  //Emits activity to all clients
+
+  //Emits activity log to all clients
   socket.on('sendLog', function(data) {
     data.username = users[socket.id];
     io.emit('activityLog', data);
   })
-
+  
   socket.on('enqueue', function(data) {
     if (current) {
 
@@ -141,6 +141,7 @@ io.on('connection', function(socket) {
     }
   });
 
+  
   //Allows skipping if event is emitted by client who enqueued video
   socket.on('skip', function(easterEgg) {
     var id = socket.id;
@@ -155,6 +156,9 @@ io.on('connection', function(socket) {
         reset();
         io.emit('stopVideo');
       }
+      socket.emit('skipAuth');
+    } else {
+      io.sockets.connected[socket.id].emit('skipUnAuth');
     }
   });
 
@@ -199,11 +203,15 @@ io.on('connection', function(socket) {
       votes[socket.id] = 'up';
       downvotes--;
       upvotes++;
+      socket.emit('validUpvote');
+    } else if (votes[socket.id] === 'up'){
+      io.sockets.connected[socket.id].emit('upvotedLog');
     }
-
+    
     if (votes[socket.id] === undefined) {
       votes[socket.id] = 'up';
       upvotes++;
+      socket.emit('validUpvote');
     }
 
     io.emit('changeVotes', {up: upvotes, down: downvotes});
@@ -214,7 +222,7 @@ io.on('connection', function(socket) {
       votes[socket.id] = 'down';
       upvotes--;
       downvotes++;
-      socket.emit('initialDownvote')
+      socket.emit('validDownvote')
     } else if (votes[socket.id] === 'down'){
       io.sockets.connected[socket.id].emit('downvotedLog');
     }
@@ -222,7 +230,7 @@ io.on('connection', function(socket) {
     if(votes[socket.id] === undefined) {
       votes[socket.id] = 'down';
       downvotes++;
-      socket.emit('initialDownvote')
+      socket.emit('validDownvote')
     }
 
     //Skips current video if more haters than non-haters
