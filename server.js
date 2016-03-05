@@ -239,15 +239,15 @@ io.on('connection', function(socket) {
         reset();
         io.emit('stopVideo');
       }
-      socket.emit('voteSkipped', data);
+      //Tells client video skipped due to majority downvote - implemented the same way us initialDownvote so that skip log comes after downvote log
+      socket.emit('voteSkipped', data); 
     }
-    
     io.emit('changeVotes', {up: upvotes, down: downvotes});
   });
   
+  //When server receives from client, logs message
   socket.on('sendVoteSkipped', function(data) {
-    console.log('sendVoteSkipped', data)
-    socket.emit('voteSkipLog', {})
+    socket.emit('voteSkipLog', data);
   });
 
   //Sends clock time to client when requested

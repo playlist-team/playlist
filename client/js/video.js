@@ -238,10 +238,9 @@ angular.module('app', ['chat', 'search', 'log'])
                                     title: $scope.current.title })
   });
   
-  // tells server vote has been skipped
+  // Listens for when a video is skipped due to majority downvote, tells server to send log
   socket.on('voteSkipped', function(data) {
-    console.log('voteskipped', data)
-    socket.emit('sendVoteSkipped');
+    socket.emit('sendVoteSkipped', data);
   });
 
   socket.on('changeVotes', function(votes) {
