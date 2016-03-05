@@ -114,6 +114,24 @@
             <p id="queue-title" ng-cloak>
               {{ song.title | limitTo: 74 }}{{song.title.length > 74 ? '...' : ''}}
             </p>
+               <div class="votes" ng-show="current.title">
+                  <!-- maz edit -->
+                  <p id="arrows">
+                    <!-- up green arrow -->
+                    <img src="./img/upvote.svg" onmouseover="this.src='./img/uphover.svg';" onmouseout="this.src='./img/upvote.svg';" class="up-arrow" ng-click="qUpVote(song.id)"></img>
+
+                    <span class="vote-count" ng-cloak>
+                      {{song.votes.upvotes}}
+                    </span>
+                    <!-- down red arrow -->
+                    <img src="./img/downvote.svg" onmouseover="this.src='./img/downhover.svg';" onmouseout="this.src='./img/downvote.svg';" class="down-arrow" ng-click="qDownVote(song.id)"></img>
+
+                    <span class="vote-count" ng-cloak>
+                      {{song.votes.downvotes}}
+                    </span>
+
+                  </p>
+              </div>
             <!-- to remove a video from playlist -->
             <p ng-show="song.socket===socketId" id="queue-remove" ng-cloak type="button" ng-click="dequeue(song)">
               Remove

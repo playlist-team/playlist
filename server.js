@@ -32,6 +32,7 @@ var reset = function() {
   downvotes = 0;
   io.emit('clearVotes');
   io.emit('nextVideo', current);
+  console.log('queue in reset ', queue)
   io.emit('setQueue', queue);
 }
 
@@ -79,7 +80,8 @@ io.on('connection', function(socket) {
 
   socket.on('enqueue', function(data) {
     if (current) {
-
+      //maz edit
+      data.votes = {upvotes: 0, downvotes: 0}
       queue.push(data);
       io.emit('addVideo', data);
 
@@ -190,6 +192,7 @@ io.on('connection', function(socket) {
 
   //Receives upvote from client and updates vote information; emitting to all clients
   socket.on('upVote', function() {
+    console.log('UPVOTED')
     if (votes[socket.id] === 'down') {
       votes[socket.id] = 'up';
       downvotes--;
@@ -231,10 +234,15 @@ io.on('connection', function(socket) {
         io.emit('stopVideo');
       }
     }
+
     
     io.emit('changeVotes', {up: upvotes, down: downvotes});
   });
 
+  socket.on('qUpVote', function(songID){
+    console.log('called qUpVote server.js')
+    console.log(songID)
+  })
   //Sends clock time to client when requested
   socket.on('getSync', function() {
     io.sockets.connected[socket.id].emit('setSync', timeTotal - timeLeft || timeTotal);

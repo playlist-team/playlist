@@ -127,7 +127,11 @@ angular.module('app', ['chat', 'search'])
   });
 
   socket.on('addVideo', function(video) {
+    console.log('video in addVideo ', video)
+    //maz edit
+    // video.votes = {upvotes: 17, downvotes: 17}
     context.queue.push(video);
+    console.log('queue after add video ', context.queue)
     $rootScope.$emit('changeQueue');
   });
 
@@ -155,7 +159,7 @@ angular.module('app', ['chat', 'search'])
 }])
 
 .controller('YouTubeController', ['$scope', 'VideoService', '$rootScope', function($scope, VideoService, $rootScope) {
-
+  //maz edit
   $scope.volume;
   $scope.timer;
   $scope.duration;
@@ -163,6 +167,7 @@ angular.module('app', ['chat', 'search'])
   $scope.playlist;
   $scope.upvotes = 0;
   $scope.downvotes = 0;
+  
 
   //Recieve client socket id from server
   socket.on('setId',function(socketId) {
@@ -224,6 +229,15 @@ angular.module('app', ['chat', 'search'])
 
   $scope.downVote = function() {
     socket.emit('downVote');
+  }
+
+  $scope.qUpVote = function(songID){
+    socket.emit('qUpVote', songID)
+    console.log('songID ', songID)
+  }
+
+  $scope.qDownVote = function(songID){
+
   }
 
   socket.on('changeVotes', function(votes) {
