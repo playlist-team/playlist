@@ -39,7 +39,6 @@ angular.module('app', ['chat', 'search'])
             swal.showInputError("Username exists. Please choose a different name.");
             return false;
           } 
-          
           swal("Nice!", "Welcome to the site, "+ $window.username);
           socket.emit('username', $window.username);
         });
