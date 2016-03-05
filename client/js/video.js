@@ -27,6 +27,7 @@ angular.module('app', ['chat', 'search'])
         $window.username = username || 'anonymous';
 
         if ($window.username !== 'anonymous'){
+          console.log('not anonymous was called')
           socket.emit('checkUser', username);
         } else {
           socket.emit('username', $window.username);
@@ -37,10 +38,10 @@ angular.module('app', ['chat', 'search'])
             console.log('it does exist');
             swal.showInputError("Username exists. Please choose a different name.");
             return false;
-          }  else {
-            socket.emit('username', $window.username);
-            swal("Nice!", "Welcome to the chat, "+$window.username);
-          }
+          } 
+          
+          swal("Nice!", "Welcome to the site, "+ $window.username);
+          socket.emit('username', $window.username);
         });
       });
 
