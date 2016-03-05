@@ -39,7 +39,7 @@ io.on('connection', function(socket) {
 
   //Receives username from client and emits username, socket id, users online back to client
   socket.on('username', function(username) {
-    if (!userExist(users, username)){
+    if (!userExist(users, username) || username === 'anonymous'){
       io.emit('chatMessage', {username: "", message: username + " has joined"});
     }
     users[socket.id] = username;
