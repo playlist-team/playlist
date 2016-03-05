@@ -156,9 +156,10 @@ io.on('connection', function(socket) {
         reset();
         io.emit('stopVideo');
       }
-      socket.emit('skipAuth');
+      console.log(current);
+      socket.emit('skipAuth', { username: users[socket.id], title: current.title });
     } else {
-      io.sockets.connected[socket.id].emit('skipUnAuth');
+      io.sockets.connected[socket.id].emit('skipUnAuth', { title: current.username });
     }
   });
 

@@ -71,19 +71,21 @@ angular.module('log', [])
     });
   });
   
-  socket.on('skipUnAuth', function() {
+  socket.on('skipUnAuth', function(data) {
     
     var log = {
-      message: 'Only the user who added the video to the playlist can skip the current video'
+      message: 'Only ' + data.title +' can skip the current video'
     };
     $scope.$apply(function() {
       $scope.logs.push(log);
     });
   });
   
-  socket.on('skipAuth', function() {
+  socket.on('skipAuth', function(data) {
     var log = {
-      message: 'User who added video has skipped current video'
+      username: data.username,
+      action: ' has skipped',
+      title: data.title
     };
     $scope.$apply(function() {
       $scope.logs.push(log);
