@@ -68,5 +68,17 @@ angular.module('log', [])
     });
   });
   
+  socket.on('voteSkip', function(data) {
+    $scope.$apply(function() {
+      var log;
+      
+      log = { 
+        title: data.title,
+        message: 'was skipped by majority downvote' };
+      
+      $scope.logs.push(log);
+    });
+  });
+  
 });
   

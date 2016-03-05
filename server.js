@@ -187,7 +187,7 @@ io.on('connection', function(socket) {
 
     io.emit('changeVotes', {up: upvotes, down: downvotes});
 
-    io.emit('chatMessage', {username: "", message: users[socket.id] + " has left"});
+    io.emit('activityMessage', {username: users[socket.id], action: "has left", title: ""});
 
     delete users[socket.id];
 
@@ -210,7 +210,7 @@ io.on('connection', function(socket) {
     io.emit('changeVotes', {up: upvotes, down: downvotes});
   });
 
-  socket.on('downVote', function(){
+  socket.on('downVote', function(data){
     if(votes[socket.id] === 'up'){
       votes[socket.id] = 'down';
       upvotes--;
@@ -236,6 +236,7 @@ io.on('connection', function(socket) {
         reset();
         io.emit('stopVideo');
       }
+      socket.emit('voteSkip', data);
     }
     
     io.emit('changeVotes', {up: upvotes, down: downvotes});
@@ -244,15 +245,6 @@ io.on('connection', function(socket) {
   //Sends clock time to client when requested
   socket.on('getSync', function() {
     io.sockets.connected[socket.id].emit('setSync', timeTotal - timeLeft || timeTotal);
-  });
-  
-  //Populates playlist with default video if playlist is empty for more than 5 seconds
-  socket.on('autoPopulate', function() {
-    if(!queue.length) {
-      setTimeout( function() {
-        // adds random video to queue
-      }, 5000);
-    }
   });
 
 });

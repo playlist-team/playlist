@@ -125,14 +125,10 @@ angular.module('app', ['chat', 'search', 'log'])
   socket.on('stopVideo', function() {
     player.stopVideo();
   });
-
+  
+  // bug?? - suspect each instance has it's on event listener - line 80 socket.on('sendLog') twice?
   socket.on('addVideo', function(video) {
-    console.log('socketid:', socket.id)
-    console.log('addVideooooo')
     context.queue.push(video);
-    socket.emit('sendLog', { action: 'added',
-                                  title: video.title });
-    
     $rootScope.$emit('changeQueue');
   });
 
@@ -141,9 +137,6 @@ angular.module('app', ['chat', 'search', 'log'])
       if(video.id === videoId){
         context.queue.splice(index, 1);
       }
-      socket.emit('sendLog', { action: 'removed', 
-                                  title: video.title });
-      // socket.emit('autoPopulate')
     });
     $rootScope.$emit('changeQueue');
     socket.emit('updateQueue', context.queue);
@@ -207,8 +200,10 @@ angular.module('app', ['chat', 'search', 'log'])
     $rootScope.$emit('volumeChange', $scope.volume);
   });
 
-  $scope.dequeue = function(videoId) {
-    socket.emit('dequeue', videoId);
+  $scope.dequeue = function(video) {
+    socket.emit('dequeue', video);
+    socket.emit('sendLog', { action: 'removed', 
+                                title: video.title });
   }
 
   $scope.skip = function() {
@@ -229,15 +224,15 @@ angular.module('app', ['chat', 'search', 'log'])
   });
 
   $scope.upVote = function() {
-    socket.emit('upVote');
     socket.emit('sendLog', { action: 'upvoted',
                                     title: $scope.current.title });
+    socket.emit('upVote');
   }
 
   $scope.downVote = function() {
-    socket.emit('downVote');
     socket.emit('sendLog', { action: 'downvoted',
                                     title: $scope.current.title })
+    socket.emit('downVote', { title: $scope.current.title });
   }
 
   socket.on('changeVotes', function(votes) {

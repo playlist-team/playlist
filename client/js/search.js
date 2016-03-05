@@ -47,6 +47,8 @@ angular.module('search', [])
                                username: $window.username,
                                socket: socket.id, 
                                duration: seconds });
+      socket.emit('sendLog', { action: 'added',
+                                    title: video.snippet.title });
     });
   }
 
