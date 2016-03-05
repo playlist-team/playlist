@@ -1,4 +1,4 @@
-angular.module('app', ['chat', 'search'])
+angular.module('app', ['chat', 'search', 'log'])
 
 //Load YouTube iFrame API, connect socket to server, prompt for username on initialize
 .run(function($window) {
@@ -106,13 +106,13 @@ angular.module('app', ['chat', 'search'])
     player.seekTo(time, false);
   });
 
-  //Recieve first video from server, plays it and emits queue to controller and time to server
-  // socket.on('firstVideo', function(video) {
-  //   context.current = video;
-  //   player.loadVideoById(video.id);
-  //   $rootScope.$emit('changeQueue');
-  //   socket.emit('setDuration', video.duration);
-  // });
+  // Recieve first video from server, plays it and emits queue to controller and time to server
+  socket.on('firstVideo', function(video) {
+    context.current = video;
+    player.loadVideoById(video.id);
+    $rootScope.$emit('changeQueue');
+    socket.emit('setDuration', video.duration);
+  });
 
   //Recieve next video from server, plays it and emits queue to controller and time to server
   socket.on('nextVideo', function(video) {
@@ -127,8 +127,10 @@ angular.module('app', ['chat', 'search'])
   });
 
   socket.on('addVideo', function(video) {
+    console.log('socketid:', socket.id)
+    console.log('addVideooooo')
     context.queue.push(video);
-    socket.emit('publishMessage', { action: 'added',
+    socket.emit('sendLog', { action: 'added',
                                   title: video.title });
     
     $rootScope.$emit('changeQueue');
@@ -139,8 +141,9 @@ angular.module('app', ['chat', 'search'])
       if(video.id === videoId){
         context.queue.splice(index, 1);
       }
-      socket.emit('publishMessage', { action: 'removed', 
+      socket.emit('sendLog', { action: 'removed', 
                                   title: video.title });
+      // socket.emit('autoPopulate')
     });
     $rootScope.$emit('changeQueue');
     socket.emit('updateQueue', context.queue);
@@ -210,6 +213,8 @@ angular.module('app', ['chat', 'search'])
 
   $scope.skip = function() {
     socket.emit('skip');
+    socket.emit('sendLog', { action: 'skipped',
+                                    title: $scope.current.title });
   }
 
   $scope.sync = function() {
@@ -225,13 +230,13 @@ angular.module('app', ['chat', 'search'])
 
   $scope.upVote = function() {
     socket.emit('upVote');
-    socket.emit('publishMessage', { action: 'upvoted',
+    socket.emit('sendLog', { action: 'upvoted',
                                     title: $scope.current.title });
   }
 
   $scope.downVote = function() {
     socket.emit('downVote');
-    socket.emit('publishMessage', { action: 'downvoted',
+    socket.emit('sendLog', { action: 'downvoted',
                                     title: $scope.current.title })
   }
 

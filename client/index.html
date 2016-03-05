@@ -184,12 +184,37 @@
 
           </form>
       </div>
+      
+      <div id='log' ng-controller="LogController">
+      
+        <table class="log-table">
+        
+          <th>Activity Log</th>
+          
+          <tbody ng-repeat="log in logs track by $index">
+          
+            <tr>
+            
+              <td>
+              
+                <strong>{{ log.username }}</strong> <span> {{ log.action }}</span> <span><i>{{ log.title }}</i></span> <span>{{ log.message }}</span>
+                <span class="time">{{ log.time }}</span>
+              </td>
+              
+            </tr>
+            
+          </tbody>
+          
+        </table>
+        
+      </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
     <script src="./js/volume.js"></script>
     <script src="./js/chat.js"></script>
     <script src="./js/search.js"></script>
+    <script src="./js/log.js"></script>
     <script src="./js/video.js"></script>
     
   </body>

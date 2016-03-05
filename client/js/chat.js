@@ -122,25 +122,7 @@ angular.module('chat', ['ngSanitize'])
     })
   });
   
-  //Receive new user activity messages from server
-  socket.on('activityMessage', function(data) {
-    var message;
-    
-    if(data.action === 'added') {
-      message = { message: $scope.username + ' ' + data.action + ' ' + data.title + ' to queue.',
-                  time: $scope.time };
-    } else if (data.action === 'removed') {
-      message = { message: $scope.username + ' ' + data.action + ' ' + data.title + ' from queue.',
-                  time: $scope.time };
-    } else {
-      message = { message: $scope.username + ' ' + data.action + ' ' + data.title + '.',
-                  time: $scope.time };  // case for upvoted & downvotes
-    }
-    
-    $scope.$apply(function() {
-      $scope.messages.push(message);
-    });
-  });
+  
 
   //Receive users currently connected from server
   socket.on('usersOnline', function(users) {

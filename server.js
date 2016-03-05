@@ -36,13 +36,13 @@ var reset = function() {
 }
 
 io.on('connection', function(socket) {
-
+  
   //Receives username from client and emits username, socket id, users online back to client
   socket.on('username', function(username) {
     users[socket.id] = username;
     io.sockets.connected[socket.id].emit('setUser', username);
     io.sockets.connected[socket.id].emit('setId', socket.id);
-    io.emit('chatMessage', {username: "", message: users[socket.id] + " has joined"});
+    io.emit('activityMessage', {username: users[socket.id], action: "has joined", title: ""});
     io.emit('usersOnline', users);
   });
 
@@ -78,7 +78,9 @@ io.on('connection', function(socket) {
   });
   
   //Emits activity to all clients
-  socket.on('publishMessage', function(data) {
+  socket.on('sendLog', function(data) {
+    console.log('serverrrrr')
+    data.username = users[socket.id];
     io.emit('activityMessage', data);
   })
 
@@ -144,7 +146,6 @@ io.on('connection', function(socket) {
   socket.on('skip', function(easterEgg) {
     var id = socket.id;
     if (current && id.slice(2) === current.socket || easterEgg) {
-
       if (queue.length) {
         set = false;
         current = queue.shift();
@@ -243,6 +244,15 @@ io.on('connection', function(socket) {
   //Sends clock time to client when requested
   socket.on('getSync', function() {
     io.sockets.connected[socket.id].emit('setSync', timeTotal - timeLeft || timeTotal);
+  });
+  
+  //Populates playlist with default video if playlist is empty for more than 5 seconds
+  socket.on('autoPopulate', function() {
+    if(!queue.length) {
+      setTimeout( function() {
+        // adds random video to queue
+      }, 5000);
+    }
   });
 
 });
