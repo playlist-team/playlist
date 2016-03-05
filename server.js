@@ -39,6 +39,9 @@ io.on('connection', function(socket) {
   
   //Receives username from client and emits username, socket id, users online back to client
   socket.on('username', function(username) {
+    if (!userExist(users, username) || username === 'anonymous'){
+      io.emit('chatMessage', {username: "", message: username + " has joined"});
+    }
     users[socket.id] = username;
     io.sockets.connected[socket.id].emit('setUser', username);
     io.sockets.connected[socket.id].emit('setId', socket.id);
@@ -103,7 +106,16 @@ io.on('connection', function(socket) {
       }
     }
     socket.emit('userExist', exist);
-  })
+  });
+
+  function userExist(object, username){
+    for (var key in object){
+      if (users[key] === username){
+        return true;
+      }
+    }
+    return false;
+  }
 
   socket.on('enqueue', function(data) {
     if (current) {
