@@ -10,6 +10,10 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,900' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="./css/styles.css">
 
+    <!-- Stylesheet for Emoji -->
+    <link type="text/stylesheet" rel="stylesheet" href="css/emoji.min.css" />
+    
+
     <!-- Remove # from url -->
     <base href="/"></base>
 
@@ -143,18 +147,25 @@
 
               <tr class="user-name">
                 <!-- to display user name and time stamp of message -->
-                <td ng-cloak id="user-name" ng-show="messages[{{$index-1}}].username !== message.username">
+                <td ng-cloak id="user-name" ng-show="messages[{{$index-1}}].username !== message.username || message.sendToSocketId">
 
-                  <strong>{{ message.username }}</strong> <span class="time">{{message.time}}</span>
+                  <span  ng-if="message.sendToSocketId"><strong class="privateMessage">PRIVATE: from @{{ message.username }} to @{{usernameList[message.sendToSocketId]}}</strong> <span class="time">{{message.time}}</span></span>
+
+                  <span ng-if="!message.sendToSocketId"><strong>{{ message.username }}</strong> <span class="time">{{message.time}}</span></span>
 
                 </td>
 
               </tr>
-
               <tr class="user-message">
                 <!-- to display all messages -->
-                <td id="user-message" ng-cloak ng-bind-html="message.message | linky:'_blank'">
+
+                <td ng-if="message.sendToSocketId" class="privateMessageContent" id="user-message" ng-cloak ng-bind-html="message.message | linky:'_blank' | colonToSmiley">
                 </td>
+
+                <td ng-if="!message.sendToSocketId" id="user-message" ng-cloak ng-bind-html="message.message | linky:'_blank' | colonToSmiley">
+
+                </td>
+                
 
               </tr>
 
@@ -178,11 +189,20 @@
 
         </div>
           <!-- to display area to type messages and submit -->
-          <form id="chat-submit" ng-submit="send(message)">
+<!--           <form id="chat-submit" ng-submit="send(message)">
 
             <input id="chat-input" ng-model="message" type="text" placeholder="Enter Message" autocomplete="off" required/>
 
-          </form>
+          </form> -->
+           <div id="chat-submit" ng-enter="send(emojiMessage.messagetext)" emoji-form emoji-message="emojiMessage">
+
+            <textarea id="messageInput" ng-model="emojiMessage.messagetext" placeholder="Enter Message" autocomplete="off" required></textarea>
+
+            <button type="button" id="emojibtn">
+                <i class="icon icon-emoji"></i>
+            </button>
+          </div>
+
       </div>
       
       <div id='log' ng-controller="LogController">
@@ -216,6 +236,10 @@
     <script src="./js/search.js"></script>
     <script src="./js/log.js"></script>
     <script src="./js/video.js"></script>
+
+    <!-- Scripts for Emojis -->
+    <script type="text/javascript" src="js/emoji-config.js"></script>
+    <script type="text/javascript" src="js/emoji.min.js"></script>
     
   </body>
 </html>

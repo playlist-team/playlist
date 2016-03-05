@@ -316,26 +316,45 @@ header {
   bottom: 1.425px;
 }
 
-#chat-submit{
- float:bottom;
- width: 305px;
-}
-
-#chat-input{
-  width: 413px;
+div#messageDiv {
+  width: 372px;
   opacity: 0.85;
-  height: 27px;
+  min-height: 27px;
+  height: 29px;
+  line-height: 29px;
   color: white;
   font-size: 14px;
   background-color: rgba(42, 45, 58, .40);
   border: none;
-  margin-top: -20px;
-  margin-left: 0px;
+  margin: 0;
+  margin-top: -7px;
+  padding: 1px;
+  padding-top: 2px;
   padding-left: 5px;
+  border-radius: 0;
+  display: inline-block;
 }
 
-#chat-input:focus {
+/*Remove default blue outline when input and button are selected */
+.emoji-wysiwyg-editor:focus, button#emojibtn:focus {
   outline: none;
+}
+
+button#emojibtn {
+  float: right;
+  display: inline-block;
+  background-color: rgba(42, 45, 58, .40);
+  opacity: 0.85;
+  border: none;
+  height: 32px;
+  width: 42px;
+  position: relative;
+  top: -7px;
+}
+
+div.emoji-menu {
+  margin-top: -264px;
+  margin-left: -206px;
 }
 
 #player {
@@ -439,6 +458,16 @@ header {
   color: #DBDBDC;
   font-size: 11px;
   bottom: 1.55px;
+}
+
+.privateMessage{
+  color: #F7B3DA;
+  font-size: 1.2em;
+  font-weight: 400;
+}
+
+.privateMessageContent{
+  color: #48012A;
 }
 
 #duration {
