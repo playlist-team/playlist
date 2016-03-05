@@ -142,7 +142,7 @@
         <div id="chat-container" scroll-directive="messages" ng-model="messages">
 
           <table class="chat-table">
-
+            <tbody ng-show="tab =='chat'" id="messages" ng-repeat="message in messages track by $index"><span id="username-header"><strong>USERNAME:</strong> {{username || "pending..."}}</span></tbody>
             <tbody ng-show="tab =='chat'" id="messages" ng-repeat="message in messages track by $index">
 
               <tr class="user-name">
