@@ -39,8 +39,11 @@ angular.module('app', ['chat', 'search'])
             swal.showInputError("Username exists. Please choose a different name.");
             return false;
           } 
-          swal("Nice!", "Welcome to the site, "+ $window.username);
           socket.emit('username', $window.username);
+          swal({  title: "Nice!",   
+                  text: "<section style='font-size: 2em''><p>Welcome to the site, "+$window.username+"</p><p>To send private messages use '@'. (ex. @peter hey!)</p><p>To see a list of slash commands type '/help'</p></section>",   
+                  html: true,
+                  timer: 5000 });
         });
       });
 
