@@ -230,10 +230,19 @@ angular.module('app', ['chat', 'search', 'log'])
   }
 
   $scope.downVote = function() {
-    socket.emit('sendLog', { action: 'downvoted',
-                                    title: $scope.current.title })
     socket.emit('downVote', { title: $scope.current.title });
   }
+  
+  socket.on('initialDownvote', function(data) {
+    socket.emit('sendLog', { action: 'downvoted',
+                                    title: $scope.current.title })
+  });
+  
+  // tells server vote has been skipped
+  socket.on('voteSkipped', function(data) {
+    console.log('voteskipped', data)
+    socket.emit('sendVoteSkipped');
+  });
 
   socket.on('changeVotes', function(votes) {
     $scope.$apply(function() {

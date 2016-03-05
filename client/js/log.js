@@ -7,7 +7,7 @@ angular.module('log', [])
   });
   
   // Receive new user activity messages from server
-  socket.on('activityMessage', function(data) {
+  socket.on('activityLog', function(data) {
     var log;
     
     if(data.action === 'added') {
@@ -38,14 +38,34 @@ angular.module('log', [])
     });
   });
   
-  socket.on('voteSkip', function(data) {
+  socket.on('voteSkipLog', function(data) {
     $scope.$apply(function() {
-      var log;
       
-      log = { 
+      var log = { 
         title: data.title,
         message: 'was skipped by majority downvote' };
       
+      $scope.logs.push(log);
+    });
+  });
+  
+  socket.on('downvotedLog', function() {
+     var log = {
+      message: 'You have already downvoted current video' 
+    };
+    
+    $scope.$apply(function() {
+      $scope.logs.push(log);
+    });
+  });
+  
+  socket.on('upvotedLog', function() {
+    
+     var log = {
+      message: 'You have already upvoted current video' 
+    };
+    
+    $scope.$apply(function() {
       $scope.logs.push(log);
     });
   });

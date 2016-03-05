@@ -42,7 +42,7 @@ io.on('connection', function(socket) {
     users[socket.id] = username;
     io.sockets.connected[socket.id].emit('setUser', username);
     io.sockets.connected[socket.id].emit('setId', socket.id);
-    io.emit('activityMessage', {username: users[socket.id], action: "has joined", title: ""});
+    io.emit('activityLog', {username: users[socket.id], action: "has joined", title: ""});
     io.emit('usersOnline', users);
   });
 
@@ -80,7 +80,7 @@ io.on('connection', function(socket) {
   //Emits activity to all clients
   socket.on('sendLog', function(data) {
     data.username = users[socket.id];
-    io.emit('activityMessage', data);
+    io.emit('activityLog', data);
   })
 
   socket.on('enqueue', function(data) {
@@ -186,7 +186,7 @@ io.on('connection', function(socket) {
 
     io.emit('changeVotes', {up: upvotes, down: downvotes});
 
-    io.emit('activityMessage', {username: users[socket.id], action: "has left", title: ""});
+    io.emit('activityLog', {username: users[socket.id], action: "has left", title: ""});
 
     delete users[socket.id];
 
@@ -214,11 +214,15 @@ io.on('connection', function(socket) {
       votes[socket.id] = 'down';
       upvotes--;
       downvotes++;
+      socket.emit('initialDownvote')
+    } else if (votes[socket.id] === 'down'){
+      io.sockets.connected[socket.id].emit('downvotedLog');
     }
 
     if(votes[socket.id] === undefined) {
       votes[socket.id] = 'down';
       downvotes++;
+      socket.emit('initialDownvote')
     }
 
     //Skips current video if more haters than non-haters
@@ -235,10 +239,15 @@ io.on('connection', function(socket) {
         reset();
         io.emit('stopVideo');
       }
-      socket.emit('voteSkip', data);
+      socket.emit('voteSkipped', data);
     }
     
     io.emit('changeVotes', {up: upvotes, down: downvotes});
+  });
+  
+  socket.on('sendVoteSkipped', function(data) {
+    console.log('sendVoteSkipped', data)
+    socket.emit('voteSkipLog', {})
   });
 
   //Sends clock time to client when requested
