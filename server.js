@@ -79,7 +79,6 @@ io.on('connection', function(socket) {
   
   //Emits activity to all clients
   socket.on('sendLog', function(data) {
-    console.log('serverrrrr')
     data.username = users[socket.id];
     io.emit('activityMessage', data);
   })
