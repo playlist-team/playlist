@@ -316,6 +316,13 @@ header {
   bottom: 1.425px;
 }
 
+#username-header{
+  border-bottom: 1px solid black;
+  width: 96%;
+  padding: 4px;
+  display: block;
+}
+
 div#messageDiv {
   width: 372px;
   opacity: 0.85;
