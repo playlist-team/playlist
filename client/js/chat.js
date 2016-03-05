@@ -108,9 +108,19 @@ angular.module('chat', ['ngSanitize', 'emojiApp'])
       var array = message.split(/\s/);
       var sendTo = array[0].substr(1);
       var message = array.slice(1).join(" ");
-      console.log(array);
       sendPrivateMessage(sendTo, message);
 
+    } else if (message[0] === "/"){
+      var params = message.split(/\s/);
+      var command = params.shift().substr(1);
+      if (typeof $scope.slashCommands[command] === "function") {
+        $scope.slashCommands[command].apply(null, params);
+      } else {
+        socket.emit('errorMessage', { 
+          message: "Error: Could not find command " + command + ".",
+          username: 'PlayList chatBot'
+        });
+      }
     } else {
 
       socket.emit('sendMessage', { message: message, 
@@ -129,12 +139,12 @@ angular.module('chat', ['ngSanitize', 'emojiApp'])
       console.log('send '+ message + ' to '+ $scope.username);
       if ($scope.username === 'anonymous'){
         socket.emit('errorMessage', { message: "Error: Must have a unique username to send private messages.",
-                                    username: 'PlayList chatBot'});
+                                    username: 'PlayList ChatBot'});
         return;
       }
       if (sendTo === 'anonymous'){
         socket.emit('errorMessage', { message: "Error: Can only send private messages to users with unique usernames.",
-                                    username: 'PlayList chatBot'});
+                                    username: 'PlayList ChatBot'});
         return;
       }
       // sends the private message is username is found
@@ -151,6 +161,24 @@ angular.module('chat', ['ngSanitize', 'emojiApp'])
       socket.emit('errorMessage', { message: "Error: Username is not found.",
                                     username: 'PlayList ChatBot'});
     }
+  };
+
+  //functions for slash commands
+  $scope.slashCommands = {
+    add: function () {
+      var sum = parseInt(arguments[0]) + parseInt(arguments[1]);
+      socket.emit('sendMessage', { 
+        message: arguments[0] + ' + ' + arguments[1] + ' = ' + sum, 
+        username: 'MathBot', 
+        time: $scope.time 
+      });
+    },
+    downvote: function () {
+      socket.emit('downVote');
+    },
+    upvote: function () {
+      socket.emit('upVote');
+    } 
   };
 
   //Hide emoji popup when chat message changes
