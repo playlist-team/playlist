@@ -100,11 +100,11 @@ io.on('connection', function(socket) {
     }
   });
 
-  socket.on('updateQueue', function(data) {
-    queue = data;
-    console.log('queue in server updateQ ', queue)
-    socket.emit('refreshQueue', queue);
-  });
+  // socket.on('updateQueue', function(data) {
+  //   queue = data;
+  //   console.log('queue in server updateQ ', queue)
+  //   socket.emit('refreshQueue', queue);
+  // });
 
   socket.on('easterEgg', function() {
     if (queue.length) {
@@ -240,14 +240,35 @@ io.on('connection', function(socket) {
   });
 
   socket.on('qUpVote', function(songID){
-    queue.map(function(song){
-      if(song.id === songID){
-        console.log('qUpVote in server ', queue)
-        return song.votes.upvotes++
-        //io.emit('changeQueue')
-      }
-    })
-        socket.emit('updateQueue', queue)
+    if (votes[socket.id + songID] !== 'up'){
+      queue.forEach(function(song){
+        if(song.id === songID){
+          console.log('qUpVote in server ', queue)
+          song.votes.upvotes++
+        }
+        if (votes[socket.id + songID] === 'down'){
+          song.votes.downvotes--
+        }
+        votes[socket.id + songID] = 'up'
+      })
+    }
+        io.emit('updateQueue', queue)
+  })
+
+  socket.on('qDownVote', function(songID){
+    if (votes[socket.id + songID] !== 'down'){
+      queue.forEach(function(song){
+        if(song.id === songID){
+          console.log('qDownVote in server ', queue)
+          song.votes.downvotes++
+        }
+        if (votes[socket.id + songID] === 'up'){
+          song.votes.upvotes--
+        }
+        votes[socket.id + songID] = 'down'
+      })
+    }
+        io.emit('updateQueue', queue)
   })
   //Sends clock time to client when requested
   socket.on('getSync', function() {

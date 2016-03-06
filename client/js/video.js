@@ -237,15 +237,18 @@ angular.module('app', ['chat', 'search'])
 
   $scope.qUpVote = function(songID){
     socket.emit('qUpVote', songID)
-    // console.log('songID ', songID)
-    // setTimeout(function(){
-    // $rootScope.$emit('changeQueue', context.queue);
-    // },500)
   }
 
   $scope.qDownVote = function(songID){
-
+    socket.emit('qDownVote', songID)
   }
+
+  socket.on('updateQueue', function(data) {
+    queue = data;
+    VideoService.queue = queue
+    console.log('queue in video updateQ ', queue)
+    $rootScope.$emit('changeQueue');
+  });
 
   socket.on('changeVotes', function(votes) {
     $scope.$apply(function() {
