@@ -3,6 +3,27 @@ angular.module('log', [])
 .controller('LogController', function($scope, $window, $rootScope) {
   $scope.logs = [];
   
+  var upvotedNotif = function() {
+    new PNotify({
+                title: 'Regular Notice',
+                text: 'You already upvoted current video'
+            });
+  };
+  
+  var downvotedNotif = function() {
+    new PNotify({
+                title: 'Regular Notice',
+                text: 'You already downvoted current video'
+            });
+  };
+  
+  var skipUnAuthNotif = function(data) {
+    new PNotify({
+                title: 'Regular Notice',
+                text: 'Only ' + data.username + ' can skip the current video'
+            });
+  };
+  
   // Receive new user activity messages from server
   socket.on('activityLog', function(data) {
     var log;
@@ -47,34 +68,41 @@ angular.module('log', [])
   });
   
   socket.on('downvotedLog', function() {
-     var log = {
-      message: 'You have already downvoted current video' 
-    };
+  //    var log = {
+  //     message: 'You have already downvoted current video' 
+  //   };
     
-    $scope.$apply(function() {
-      $scope.logs.push(log);
-    });
+  //   $scope.$apply(function() {
+  //     $scope.logs.push(log);
+  //   });
+    downvotedNotif()
   });
+  
+
   
   socket.on('upvotedLog', function() {
     
-     var log = {
-      message: 'You have already upvoted current video' 
-    };
+    //  var log = {
+    //   message: 'You have already upvoted current video' 
+    // };
     
-    $scope.$apply(function() {
-      $scope.logs.push(log);
-    });
+    // $scope.$apply(function() {
+    //   $scope.logs.push(log);
+    // });
+    
+    upvotedNotif()
   });
   
   socket.on('skipUnAuth', function(data) {
     
-    var log = {
-      message: 'Only ' + data.title +' can skip the current video'
-    };
-    $scope.$apply(function() {
-      $scope.logs.push(log);
-    });
+    // var log = {
+    //   message: 'Only ' + data.title +' can skip the current video'
+    // };
+    // $scope.$apply(function() {
+    //   $scope.logs.push(log);
+    // });
+    
+    skipUnAuthNotif(data);
   });
   
   socket.on('skipAuth', function(data) {
@@ -93,4 +121,3 @@ angular.module('log', [])
   });
   
 });
-  

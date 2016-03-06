@@ -201,7 +201,7 @@ io.on('connection', function(socket) {
       }
       io.emit('skipAuth', { username: users[socket.id], title: current.title });
     } else {
-      io.sockets.connected[socket.id].emit('skipUnAuth', { title: current.username });
+      io.sockets.connected[socket.id].emit('skipUnAuth', { username: current.username });
     }
   });
 
@@ -267,7 +267,7 @@ io.on('connection', function(socket) {
       downvotes++;
       socket.emit('validDownvote')
     } else if (votes[socket.id] === 'down'){
-      socket.emit('downVotedLog')
+      socket.emit('downvotedLog')
     }
 
     if(votes[socket.id] === undefined) {
