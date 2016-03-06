@@ -37,10 +37,13 @@ angular.module('app', ['chat', 'search', 'log', 'history'])
             console.log('it does exist');
             swal.showInputError("Username exists. Please choose a different name.");
             return false;
-          }  else {
-            socket.emit('username', $window.username);
-            swal("Nice!", "Welcome to the chat, "+$window.username);
-          }
+          } 
+          socket.emit('username', $window.username);
+          swal({  title: "Welcome, "+$window.username,   
+                  text: "<section style='font-size: 30px''><p'font-size: 30px'>To send private messages use '@' <span style='color:red'>(ex. @peter hey!)</span></p><br/><p style='font-size: 30px'>To see a list of slash commands type <span style='color: green'>'/help'</span></p></section>",   
+                  html: true
+                  // , timer: 7000 
+                });
         });
       });
 

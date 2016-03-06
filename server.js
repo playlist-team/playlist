@@ -84,8 +84,13 @@ io.on('connection', function(socket) {
   socket.on('sendLog', function(data) {
     data.username = users[socket.id];
     io.emit('activityLog', data);
-  })
-  
+  });
+
+  //Emits alert message only to sender
+  socket.on('sendAlert', function(data) {
+    socket.emit('chatMessage', data);
+  });
+
   //Emits data to only specific client (private message)
   socket.on('privateMessage', function(data){
     io.sockets.sockets[data.sendToSocketId].emit('chatMessage', data);

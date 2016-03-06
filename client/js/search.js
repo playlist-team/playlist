@@ -32,6 +32,7 @@ angular.module('search', [])
   $scope.getSearch = function() {
     SearchFactory.fetchSearch($scope.field, function(results) {
       $scope.searchList = results.data.items;
+      $scope.field = '';
     });
   }
 
