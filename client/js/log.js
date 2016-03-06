@@ -88,6 +88,9 @@ angular.module('log', [])
     });
   });
   
+  socket.on('clearLog', function() {
+    $scope.logs = [];
+  });
   
 });
   

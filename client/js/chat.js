@@ -183,6 +183,9 @@ angular.module('chat', ['ngSanitize', 'emojiApp'])
     clear: function () {
       $scope.messages = [];
     },
+    clearLog: function () {
+      socket.emit('sendClear');
+    },
     help: function () {
       socket.emit('sendAlert', { 
         message: 'Hey! Welcome to PlayList.',
@@ -203,7 +206,12 @@ angular.module('chat', ['ngSanitize', 'emojiApp'])
         message: '> /clear : clears the chat window',
         time: $scope.time,
         username: 'HelpBot' 
-      }); 
+      });
+      socket.emit('sendAlert', {
+        message: '> /clearLog: clears the log window',
+        time: $scope.time,
+        username: 'HelpBot'
+      });
       socket.emit('sendAlert', { 
         message: '> /math [math operations]: performs math',
         time: $scope.time,

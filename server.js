@@ -170,7 +170,6 @@ io.on('connection', function(socket) {
   //Receives video ended from client and sets current to next in queue
   //Jerry-rigged so that the fastest client emits the switch and locks other clients out for 5 seconds
   socket.on('ended', function() {
-    console.log('on ended, current');
     io.emit('addToHistory', current);
     if (!switched) {
       switched = true;
@@ -190,19 +189,16 @@ io.on('connection', function(socket) {
     if (current && id.slice(2) === current.socket || easterEgg) {
       if (queue.length) {
         io.emit('addToHistory', current);
-        console.log('skipped current, queue left');
         set = false;
         current = queue.shift();
         reset();
       } else {
         io.emit('addToHistory', current);
         set= false;
-        console.log('skipped current no queue left');
         current = null;
         reset();
         io.emit('stopVideo');
       }
-      console.log(current);
       io.emit('skipAuth', { username: users[socket.id], title: current.title });
     } else {
       io.sockets.connected[socket.id].emit('skipUnAuth', { title: current.username });
@@ -284,7 +280,6 @@ io.on('connection', function(socket) {
     var haters = downvotes/Object.keys(users).length;
 
     if(haters > 0.5) {
-      console.log('downvote skip')
       io.emit('addToHistory', current);
       if (queue.length) {
         set = false;
@@ -311,6 +306,11 @@ io.on('connection', function(socket) {
   socket.on('getSync', function() {
     io.sockets.connected[socket.id].emit('setSync', timeTotal - timeLeft || timeTotal);
   });
+  
+  //relays clearLog slash command to log controller
+  socket.on('sendClear', function() {
+    socket.emit('clearLog');
+  })
 
 });
 
