@@ -109,14 +109,14 @@
         <!-- to display videos in playlist -->
         <div id="queue">
 
-          <div class="pending-songs" ng-cloak ng-repeat="song in playlist | orderBy:'song.duration' track by $index">
+          <div class="pending-songs" ng-cloak ng-repeat="song in playlist | orderBy:'((-votes.upvotes) - (-votes.downvotes))' track by $index">
 
             <p id="queue-title" ng-cloak>
               {{ song.title | limitTo: 74 }}{{song.title.length > 74 ? '...' : ''}}
             </p>
-               <div class="votes" ng-show="current.title">
+               <div class="votes" ng-show="song.title">
                   <!-- maz edit -->
-                  <p id="arrows">
+                  <p id="Qarrows">
                     <!-- up green arrow -->
                     <img src="./img/upvote.svg" onmouseover="this.src='./img/uphover.svg';" onmouseout="this.src='./img/upvote.svg';" class="up-arrow" ng-click="qUpVote(song.id)"></img>
 

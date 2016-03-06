@@ -66,6 +66,13 @@ header {
   padding-right: 20px;
 }
 
+#Qarrows {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  float: right;
+  padding-right: 20px;
+}
+
 .vote-count {
   margin: 0px;
   padding-right: 3px;
