@@ -299,7 +299,7 @@ io.on('connection', function(socket) {
   
   //When server receives from client, logs message
   socket.on('sendVoteSkipped', function(data) {
-    socket.emit('voteSkipLog', data);
+    io.emit('voteSkipLog', data);
   });
 
   //Sends clock time to client when requested
