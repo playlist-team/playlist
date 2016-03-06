@@ -243,7 +243,7 @@
       </div>
       
       <div id="history-container" ng-controller="HistoryController">
-        <div class="history" scroll-directive="historyList" ng-model="historyList">
+        <div class="history">
           <table class="history-table">
             <tbody ng-repeat="listItem in historyList track by $index" ng-click="enqueue(listItem)">
               <tr>
