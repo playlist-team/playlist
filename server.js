@@ -12,6 +12,7 @@ var io = require('socket.io')({
   transports: ["xhr-polling"],
   'polling duration': 10
 }).listen(server);
+console.log('Listening on ', port)
 
 var users = {};
 var queue = [];
@@ -32,7 +33,6 @@ var reset = function() {
   downvotes = 0;
   io.emit('clearVotes');
   io.emit('nextVideo', current);
-  console.log('queue in reset ', queue)
   io.emit('setQueue', queue);
 }
 
@@ -102,7 +102,8 @@ io.on('connection', function(socket) {
 
   socket.on('updateQueue', function(data) {
     queue = data;
-    socket.broadcast.emit('refreshQueue', queue);
+    console.log('queue in server updateQ ', queue)
+    socket.emit('refreshQueue', queue);
   });
 
   socket.on('easterEgg', function() {
@@ -192,7 +193,6 @@ io.on('connection', function(socket) {
 
   //Receives upvote from client and updates vote information; emitting to all clients
   socket.on('upVote', function() {
-    console.log('UPVOTED')
     if (votes[socket.id] === 'down') {
       votes[socket.id] = 'up';
       downvotes--;
@@ -240,8 +240,14 @@ io.on('connection', function(socket) {
   });
 
   socket.on('qUpVote', function(songID){
-    console.log('called qUpVote server.js')
-    console.log(songID)
+    queue.map(function(song){
+      if(song.id === songID){
+        console.log('qUpVote in server ', queue)
+        return song.votes.upvotes++
+        //io.emit('changeQueue')
+      }
+    })
+        socket.emit('updateQueue', queue)
   })
   //Sends clock time to client when requested
   socket.on('getSync', function() {

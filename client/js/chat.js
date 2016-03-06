@@ -124,8 +124,6 @@ angular.module('chat', ['ngSanitize'])
 
   //Receive users currently connected from server
   socket.on('usersOnline', function(users) {
-    //maz edit
-    console.log('users ', users)
     $scope.$apply(function(){
       $scope.usernameList = users;
       $scope.usersConnected = Object.keys(users).length;

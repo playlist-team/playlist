@@ -128,8 +128,6 @@ angular.module('app', ['chat', 'search'])
 
   socket.on('addVideo', function(video) {
     console.log('video in addVideo ', video)
-    //maz edit
-    // video.votes = {upvotes: 17, downvotes: 17}
     context.queue.push(video);
     console.log('queue after add video ', context.queue)
     $rootScope.$emit('changeQueue');
@@ -218,8 +216,10 @@ angular.module('app', ['chat', 'search'])
 
   $rootScope.$on('changeQueue', function() {
     $scope.$apply(function() {
+    console.log('changeQueue called')
       $scope.current = VideoService.current;
       $scope.playlist = VideoService.queue;
+      console.log('playlist in changeQueue ', $scope.playlist)
     });
   });
 
@@ -231,9 +231,16 @@ angular.module('app', ['chat', 'search'])
     socket.emit('downVote');
   }
 
+  socket.on('refreshQueue', function(queue){
+    console.log('refreshQueue video ', queue)
+  })
+
   $scope.qUpVote = function(songID){
     socket.emit('qUpVote', songID)
-    console.log('songID ', songID)
+    // console.log('songID ', songID)
+    // setTimeout(function(){
+    // $rootScope.$emit('changeQueue', context.queue);
+    // },500)
   }
 
   $scope.qDownVote = function(songID){
