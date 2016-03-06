@@ -240,6 +240,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('qUpVote', function(songID){
+    console.log('votes before', votes)
     if (votes[socket.id + songID] !== 'up'){
       queue.forEach(function(song){
         if(song.id === songID){
@@ -251,7 +252,8 @@ io.on('connection', function(socket) {
         }
         votes[socket.id + songID] = 'up'
       })
-    }
+    }   
+    console.log('votes after ', votes)
         io.emit('updateQueue', queue)
   })
 
