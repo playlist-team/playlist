@@ -165,10 +165,11 @@ angular.module('chat', ['ngSanitize', 'emojiApp'])
 
   //functions for slash commands
   $scope.slashCommands = {
-    add: function () {
-      var sum = parseInt(arguments[0]) + parseInt(arguments[1]);
+    math: function () {
+      var calc = Array.prototype.join.call(arguments, " ");
+      var ans = math.eval(calc);
       socket.emit('sendMessage', { 
-        message: arguments[0] + ' + ' + arguments[1] + ' = ' + sum, 
+        message: calc + ' = ' + ans, 
         username: 'MathBot', 
         time: $scope.time 
       });
@@ -178,7 +179,47 @@ angular.module('chat', ['ngSanitize', 'emojiApp'])
     },
     upvote: function () {
       socket.emit('upVote');
-    } 
+    }, 
+    clear: function () {
+      $scope.messages = [];
+    },
+    help: function () {
+      socket.emit('sendAlert', { 
+        message: 'Hey! Welcome to PlayList.',
+        time: $scope.time,
+        username: 'HelpBot' 
+      });
+      socket.emit('sendAlert', { 
+        message: 'Here is a list of commands you can use:',
+        time: $scope.time,
+        username: 'HelpBot' 
+      }); 
+      socket.emit('sendAlert', { 
+        message: '> /help : displays this help menu',
+        time: $scope.time,
+        username: 'HelpBot' 
+      }); 
+      socket.emit('sendAlert', { 
+        message: '> /clear : clears the chat window',
+        time: $scope.time,
+        username: 'HelpBot' 
+      }); 
+      socket.emit('sendAlert', { 
+        message: '> /math [math operations]: performs math',
+        time: $scope.time,
+        username: 'HelpBot' 
+      });
+      socket.emit('sendAlert', { 
+        message: '> /upvote : upvotes the currently playing video',
+        time: $scope.time,
+        username: 'HelpBot' 
+      }); 
+      socket.emit('sendAlert', { 
+        message: '> /downvote : downvotes the currently playing video',
+        time: $scope.time,
+        username: 'HelpBot' 
+      }); 
+    }
   };
 
   //Hide emoji popup when chat message changes
@@ -191,7 +232,7 @@ angular.module('chat', ['ngSanitize', 'emojiApp'])
       }
   });
 
-  //Recieve new messages from server
+  //Receive new messages from server
   socket.on('chatMessage', function(data) {
     $scope.getCurrentTime();
     $scope.$apply(function() {
