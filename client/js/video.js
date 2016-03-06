@@ -146,7 +146,6 @@ angular.module('app', ['chat', 'search', 'log', 'history'])
     player.stopVideo();
   });
   
-  // bug?? - suspect each instance has it's on event listener - line 80 socket.on('sendLog') twice?
   socket.on('addVideo', function(video) {
     context.queue.push(video);
     $rootScope.$emit('changeQueue');

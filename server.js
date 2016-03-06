@@ -24,6 +24,7 @@ var timeLeft;
 var sync;
 var set;
 var switched;
+var historyQueue = [];
 
 //Helper function to reset the state of clients connected
 var reset = function() {
@@ -123,6 +124,7 @@ io.on('connection', function(socket) {
   }
 
   socket.on('enqueue', function(data) {
+    // data.username = users[socket.id];
     if (current) {
 
       queue.push(data);
@@ -169,6 +171,7 @@ io.on('connection', function(socket) {
   //Receives video ended from client and sets current to next in queue
   //Jerry-rigged so that the fastest client emits the switch and locks other clients out for 5 seconds
   socket.on('ended', function() {
+    console.log('on ended, current', current);
     if (!switched) {
       switched = true;
       set = false;
@@ -186,11 +189,13 @@ io.on('connection', function(socket) {
     var id = socket.id;
     if (current && id.slice(2) === current.socket || easterEgg) {
       if (queue.length) {
+        console.log('skipped current, queue left', current);
         set = false;
         current = queue.shift();
         reset();
       } else {
         set= false;
+        console.log('skipped current no queue left', current);
         current = null;
         reset();
         io.emit('stopVideo');
@@ -276,7 +281,8 @@ io.on('connection', function(socket) {
     //Skips current video if more haters than non-haters
     var haters = downvotes/Object.keys(users).length;
 
-    if(haters > 0.5) {
+    if(haters > 0.5) {      
+      io.emit('addToHistory', current);
       if (queue.length) {
         set = false;
         current = queue.shift();

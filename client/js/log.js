@@ -36,7 +36,6 @@ angular.module('log', [])
   });
   
   socket.on('voteSkipLog', function(data) {
-    console.log('reached:',data);
     var log = { 
       title: data.title,
       message: 'was skipped by majority downvote' 
