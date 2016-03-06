@@ -40,10 +40,11 @@ angular.module('app', ['chat', 'search'])
             return false;
           } 
           socket.emit('username', $window.username);
-          swal({  title: "Nice!",   
-                  text: "<section style='font-size: 2em''><p>Welcome to the site, "+$window.username+"</p><p>To send private messages use '@'. (ex. @peter hey!)</p><p>To see a list of slash commands type '/help'</p></section>",   
-                  html: true,
-                  timer: 5000 });
+          swal({  title: "Welcome, "+$window.username,   
+                  text: "<section style='font-size: 30px''><p'font-size: 30px'>To send private messages use '@' <span style='color:red'>(ex. @peter hey!)</span></p><br/><p style='font-size: 30px'>To see a list of slash commands type <span style='color: green'>'/help'</span></p></section>",   
+                  html: true
+                  // , timer: 7000 
+                });
         });
       });
 
