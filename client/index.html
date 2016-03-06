@@ -224,8 +224,8 @@
               
                 <td>
                 
-                  <strong>{{ log.username }}</strong> <span> {{ log.action }}</span> <span><i>{{ log.title }}</i></span> <span> {{ log.message }}</span>
-                  <span class="time">{{ log.time }}</span>
+                  <strong>{{ log.username }}</strong><span> {{ log.action }}</span><span> <i>{{ log.title }}</i></span><span> {{ log.message }}</span>
+                  
                 </td>
                 
               </tr>
@@ -234,6 +234,22 @@
             
           </table>
           
+        </div>
+        
+      </div>
+      
+      <div id="history-container" ng-controller="HistoryController">
+        <div class="history" scroll-directive="videos" ng-model="videos">
+          <table class="history-table">
+            <tbody ng-repeat="video in videos track by $index">
+              <tr>
+                <td>
+                  <span class="history-thumbnail">thumbnail</span>
+                  <span class="history-title">video title</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         
       </div>
