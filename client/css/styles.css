@@ -545,3 +545,15 @@ input[type=range]::-moz-range-thumb {
   box-shadow: 0 0 1px 0px rgba(0,0,0,0.1);
 }
 
+/* ====================== activity log styles ======================= */
+
+div.log {
+  height: 250px;
+  overflow-x: hidden;
+  width:640px;
+  padding-bottom: 10px;
+  margin-bottom: 5px;
+  border: 1px solid black;
+}
+
+

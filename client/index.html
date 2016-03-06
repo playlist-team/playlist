@@ -205,27 +205,36 @@
 
       </div>
       
-      <div id='log' ng-controller="LogController">
       
-        <table class="log-table">
+      <div id="log-container" ng-controller="LogController">
+      
+<!--         <div class= "log-button">
+          Show Activity Log
+        </div>
         
-          <th>Activity Log</th>
-          
-          <tbody ng-repeat="log in logs track by $index">
-          
-            <tr>
+        <div class="log-heading">Activity Log</div> -->
+        
+        <div class="log" scroll-directive="logs" ng-model="logs">
+        
+          <table class="log-table">
             
-              <td>
-              
-                <strong>{{ log.username }}</strong> <span> {{ log.action }}</span> <span><i>{{ log.title }}</i></span> <span> {{ log.message }}</span>
-                <span class="time">{{ log.time }}</span>
-              </td>
-              
-            </tr>
+            <tbody ng-repeat="log in logs track by $index">
             
-          </tbody>
+              <tr>
+              
+                <td>
+                
+                  <strong>{{ log.username }}</strong> <span> {{ log.action }}</span> <span><i>{{ log.title }}</i></span> <span> {{ log.message }}</span>
+                  <span class="time">{{ log.time }}</span>
+                </td>
+                
+              </tr>
+              
+            </tbody>
+            
+          </table>
           
-        </table>
+        </div>
         
       </div>
 

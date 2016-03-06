@@ -40,12 +40,12 @@ io.on('connection', function(socket) {
   //Receives username from client and emits username, socket id, users online back to client
   socket.on('username', function(username) {
     if (!userExist(users, username) || username === 'anonymous'){
-      io.emit('chatMessage', {username: "", message: username + " has joined"});
+      io.emit('activityLog', {username: username, action: "has joined", title: ""});
     }
     users[socket.id] = username;
     io.sockets.connected[socket.id].emit('setUser', username);
     io.sockets.connected[socket.id].emit('setId', socket.id);
-    io.emit('activityLog', {username: users[socket.id], action: "has joined", title: ""});
+    
     io.emit('usersOnline', users);
   });
 

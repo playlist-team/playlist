@@ -1,4 +1,5 @@
 angular.module('log', [])
+
 .controller('LogController', function($scope, $window, $rootScope) {
   $scope.logs = [];
   
