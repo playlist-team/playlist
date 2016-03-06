@@ -239,9 +239,9 @@
       </div>
       
       <div id="history-container" ng-controller="HistoryController">
-        <div class="history" scroll-directive="videos" ng-model="videos">
+        <div class="history" scroll-directive="historyList" ng-model="historyList">
           <table class="history-table">
-            <tbody ng-repeat="video in videos track by $index">
+            <tbody ng-repeat="listItem in historyList track by $index">
               <tr>
                 <td>
                   <span class="history-thumbnail">thumbnail</span>
@@ -251,7 +251,6 @@
             </tbody>
           </table>
         </div>
-        
       </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular.min.js"></script>
@@ -260,6 +259,7 @@
     <script src="./js/chat.js"></script>
     <script src="./js/search.js"></script>
     <script src="./js/log.js"></script>
+    <script src="./js/history.js"></script>
     <script src="./js/video.js"></script>
 
     <!-- Scripts for Emojis -->

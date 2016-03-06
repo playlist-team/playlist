@@ -1,4 +1,4 @@
-angular.module('app', ['chat', 'search', 'log'])
+angular.module('app', ['chat', 'search', 'log', 'history'])
 
 //Load YouTube iFrame API, connect socket to server, prompt for username on initialize
 .run(function($window) {

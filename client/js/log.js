@@ -3,10 +3,6 @@ angular.module('log', [])
 .controller('LogController', function($scope, $window, $rootScope) {
   $scope.logs = [];
   
-    socket.on('setUser',function(username){
-    $scope.username = username;
-  });
-  
   // Receive new user activity messages from server
   socket.on('activityLog', function(data) {
     var log;
