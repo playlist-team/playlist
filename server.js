@@ -248,7 +248,7 @@ io.on('connection', function(socket) {
       upvotes++;
       socket.emit('validUpvote');
     } else if (votes[socket.id] === 'up'){
-      io.sockets.connected[socket.id].emit('upvotedLog');
+      socket.emit('upvotedLog');
     }
     
     if (votes[socket.id] === undefined) {
@@ -267,7 +267,7 @@ io.on('connection', function(socket) {
       downvotes++;
       socket.emit('validDownvote')
     } else if (votes[socket.id] === 'down'){
-      io.sockets.connected[socket.id].emit('downvotedLog');
+      socket.emit('downVotedLog')
     }
 
     if(votes[socket.id] === undefined) {
