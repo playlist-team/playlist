@@ -10,6 +10,7 @@ body {
   width: 1060px;
   margin-right: auto;
   margin-left: auto;
+  padding-top: 50px;
 }
 
 ::-webkit-scrollbar {
@@ -60,6 +61,13 @@ header {
 }
 
 #arrows {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  float: right;
+  padding-right: 20px;
+}
+
+#Qarrows {
   margin-top: 5px;
   margin-bottom: 5px;
   float: right;
@@ -570,6 +578,7 @@ div#log-container {
 
 div.log {
   display: inline-block;
+  float: left;
   height: 250px;
   overflow-x: hidden;
   width:640px;
@@ -583,9 +592,10 @@ div.log {
 
 div.history {
   display: inline-block;
-  height: 250px;
+  float: right;
+  height: 258px;
   overflow-x: hidden;
-  width: 410px;
+  width: 418px;
   border: 1px solid black;
   background-color: #22242A;
 }
