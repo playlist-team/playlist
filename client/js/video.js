@@ -147,7 +147,9 @@ angular.module('app', ['chat', 'search', 'log', 'history'])
   });
   
   socket.on('addVideo', function(video) {
+    console.log('video in addVideo ', video)
     context.queue.push(video);
+    console.log('queue after add video ', context.queue)
     $rootScope.$emit('changeQueue');
   });
 
@@ -175,7 +177,7 @@ angular.module('app', ['chat', 'search', 'log', 'history'])
 }])
 
 .controller('YouTubeController', ['$scope', 'VideoService', '$rootScope', function($scope, VideoService, $rootScope) {
-
+  //maz edit
   $scope.volume;
   $scope.timer;
   $scope.duration;
@@ -183,6 +185,7 @@ angular.module('app', ['chat', 'search', 'log', 'history'])
   $scope.playlist;
   $scope.upvotes = 0;
   $scope.downvotes = 0;
+  
 
   //Recieve client socket id from server
   socket.on('setId',function(socketId) {
@@ -237,8 +240,10 @@ angular.module('app', ['chat', 'search', 'log', 'history'])
 
   $rootScope.$on('changeQueue', function() {
     $scope.$apply(function() {
+    console.log('changeQueue called')
       $scope.current = VideoService.current;
       $scope.playlist = VideoService.queue;
+      console.log('playlist in changeQueue ', $scope.playlist)
     });
   });
 
@@ -263,6 +268,25 @@ angular.module('app', ['chat', 'search', 'log', 'history'])
   // Listens for when a video is skipped due to majority downvote, tells server to send log
   socket.on('voteSkipped', function(data) {
     socket.emit('sendVoteSkipped', data);
+  });
+
+  socket.on('refreshQueue', function(queue){
+    console.log('refreshQueue video ', queue)
+  })
+
+  $scope.qUpVote = function(songID){
+    socket.emit('qUpVote', songID)
+  }
+
+  $scope.qDownVote = function(songID){
+    socket.emit('qDownVote', songID)
+  }
+
+  socket.on('updateQueue', function(data) {
+    queue = data;
+    VideoService.queue = queue
+    console.log('queue in video updateQ ', queue)
+    $rootScope.$emit('changeQueue');
   });
 
   socket.on('changeVotes', function(votes) {
