@@ -10,6 +10,7 @@ body {
   width: 1060px;
   margin-right: auto;
   margin-left: auto;
+  padding-top: 50px;
 }
 
 ::-webkit-scrollbar {
@@ -18,10 +19,8 @@ body {
 }
 
 header {
-  margin-top: 50px;
   color: white;
   background-color: #22242A;
-  border-radius: 5px 5px 0 0;
 }
 
 #default-playlist-message {
@@ -582,8 +581,8 @@ div.log {
   float: left;
   height: 250px;
   overflow-x: hidden;
-  width:600px;
-  padding: 20px;
+  width:640px;
+  padding-bottom: 10px;
   background-color: rgba(249, 249, 249, 1);
   opacity: 0.85;
   background-image: url("../img/chat-background.png");
