@@ -82,10 +82,10 @@
         <option value="viewCount">View Count</option>
       </select> -->
       <!-- Controls to skip and sync current video being played -->
-      <h1 id="skip" ng-click="skip()">skip</h1>
-      <h1 id="sync" ng-click="sync()">sync</h1>
+      <h1 id="skip" ng-click="skip()" ng-cloak>skip</h1>
+      <h1 id="sync" ng-click="sync()" ng-cloak>sync</h1>
       <!-- Volume control slider -->
-      <input id="volume" min ="0" max="100" step="1" type="range" ng-model="volume" value="50"></input>
+      <input id="volume" min ="0" max="100" step="1" type="range" ng-model="volume" value="50" ng-cloak></input>
 
     </header>
       <!-- container holds video screen, playlist queue and chat -->
@@ -118,13 +118,13 @@
 
           <p id="arrows">
             <!-- up green arrow -->
-            <img src="./img/upvote.svg" onmouseover="this.src='./img/uphover.svg';" onmouseout="this.src='./img/upvote.svg';" class="up-arrow" ng-click="upVote()"></img>
+            <img src="./img/upvote.svg" onmouseover="this.src='./img/uphover.svg';" onmouseout="this.src='./img/upvote.svg';" class="up-arrow" ng-click="upVote()" ng-cloak></img>
 
             <span class="vote-count" ng-cloak>
               {{upvotes}}
             </span>
             <!-- down red arrow -->
-            <img src="./img/downvote.svg" onmouseover="this.src='./img/downhover.svg';" onmouseout="this.src='./img/downvote.svg';" class="down-arrow" ng-click="downVote()"></img>
+            <img src="./img/downvote.svg" onmouseover="this.src='./img/downhover.svg';" onmouseout="this.src='./img/downvote.svg';" class="down-arrow" ng-click="downVote()" ng-cloak></img>
 
             <span class="vote-count" ng-cloak>
               {{downvotes}}
@@ -135,11 +135,29 @@
         <!-- to display videos in playlist -->
         <div id="queue">
 
-          <div class="pending-songs" ng-cloak ng-repeat="song in playlist track by $index">
+          <div class="pending-songs" ng-cloak ng-repeat="song in playlist | orderBy:'((-votes.upvotes) - (-votes.downvotes))' track by $index">
 
-            <p id="queue-title" ng-cloak>
-              {{ song.title | limitTo: 74 }}{{song.title.length > 74 ? '...' : ''}}
-            </p>
+          
+               <div class="votes" ng-show="song.title">
+                  <p id="queue-title" ng-cloak>
+                    {{ song.title | limitTo: 74 }}{{song.title.length > 74 ? '...' : ''}}
+                  </p>
+                  <!-- maz edit -->
+                  <p id="Qarrows">
+                    <!-- up green arrow -->
+                    <img src="./img/upvote.svg" onmouseover="this.src='./img/uphover.svg';" onmouseout="this.src='./img/upvote.svg';" class="up-arrow" ng-click="qUpVote(song.id)" ng-cloak></img>
+
+                    <span class="vote-count" ng-cloak>
+                      {{song.votes.upvotes}}
+                    </span>
+                    <!-- down red arrow -->
+                    <img src="./img/downvote.svg" onmouseover="this.src='./img/downhover.svg';" onmouseout="this.src='./img/downvote.svg';" class="down-arrow" ng-click="qDownVote(song.id)" ng-cloak></img>
+
+                    <span class="vote-count" ng-cloak>
+                      {{song.votes.downvotes}}
+                    </span>
+                  </p>
+              </div>
             <!-- to remove a video from playlist -->
             <p ng-show="song.socket===socketId" id="queue-remove" ng-cloak type="button" ng-click="dequeue(song)">
               Remove
