@@ -34,6 +34,7 @@ angular.module('search', [])
 
   //Retrieve and populate scope with YouTube search results
   $scope.getSearch = function(token) {
+    var order = $scope.order;
     SearchFactory.fetchSearch($scope.field, function(results) {
       $scope.searchList = results.data.items;
       
@@ -48,36 +49,9 @@ angular.module('search', [])
         $scope.prevPage = null;
       }
       
-    }, token);
-  };
-  
-  $scope.getSearchByOrder = function(order, token) {
-    SearchFactory.fetchSearchByOrder($scope.field, function(results) {
-      $scope.searchList = results.data.items;
-      
-      if(results.data.nextPageToken) {
-        $scope.nextPage = results.data.nextPageToken;
-      } else {
-        $scope.nextPage = null;
-      }
-      if(results.data.prevPageToken) {
-        $scope.prevPage = results.data.prevPageToken;
-      } else {
-        $scope.prevPage = null;
-      }
     }, order, token);
   };
   
-  $scope.search = function(token) {
-    var order = $scope.order;
-    if(order === 'relevance') {
-      $scope.getSearch(token);
-    } else {
-      $scope.getSearchByOrder(order, token);
-    }
-  };
-
-  //Sends video information to server
   $scope.enqueue = function(thumbnail) {
     SearchFactory.fetchResource(thumbnail.id.videoId, function(result) {
       var video = result.data.items[0];
@@ -115,25 +89,7 @@ angular.module('search', [])
 //Search query from YouTube Data API
 .factory('SearchFactory', ['$http', function($http) {
 
-  var fetchSearch = function(query, callback, token) {
-    return $http.get('https://www.googleapis.com/youtube/v3/search', {
-      params: {
-        pageToken: token || "",
-        key: "AIzaSyDxx1rrqR-q7Tcfkz0MqII6sO2GQpONrGg",
-        part: "snippet",
-        type: "video",
-        videoType: "any",
-        q: query,
-        maxResults: 25,
-        safeSearch: "none"
-      }
-    }).then(function(results) {
-        callback(results);
-    });
-  };
-  
-  // Orders search results by order parameter given
-  var fetchSearchByOrder = function(query, callback, order, token) {
+  var fetchSearch = function(query, callback, order, token) {
     return $http.get('https://www.googleapis.com/youtube/v3/search', {
       params: {
         pageToken: token || "",
@@ -162,7 +118,6 @@ angular.module('search', [])
   return {
     fetchSearch: fetchSearch,
     fetchResource: fetchResource,
-    fetchSearchByOrder: fetchSearchByOrder
   };
 
 }]);

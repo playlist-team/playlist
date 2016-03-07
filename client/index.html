@@ -31,7 +31,7 @@
 
       <img src="./img/logo.png" id="logo-image">
       <!-- YouTube search box -->
-      <form id="search" ng-submit="search(); toggleResults();" ng-controller="SearchController">
+      <form id="search" ng-submit="getSearch(); toggleResults();" ng-controller="SearchController">
 
         <input id="search-input" ng-model="field" type="text" placeholder="Search for and add YouTube videos to the playlist" autocomplete="off">
 
@@ -64,8 +64,8 @@
             
             <div class="video-navigation">
             
-             <span class="video-navigation-prev" ng-if="prevPage" ng-click="search(prevPage)">Previous</span>
-             <span class="video-navigation-next" ng-if="nextPage" ng-click="search(nextPage)">Next</span>
+             <span class="video-navigation-prev" ng-if="prevPage" ng-click="getSearch(prevPage)">Previous</span>
+             <span class="video-navigation-next" ng-if="nextPage" ng-click="getSearch(nextPage)">Next</span>
              
             </div>
             
