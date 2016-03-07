@@ -15,19 +15,40 @@ angular.module('app', ['chat', 'search'])
      $window.socket.emit('getQueue');
   });
 
-  swal({
-    title: 'Welcome to Playlist',
-    text: 'Enter your username',
-    type: 'input',
-    inputType: 'text',
-    showCancelButton: true,
-    closeOnConfirm: true,
-    confirmButtonColor: '#1171A2'
-  }, function(username) {
-    $window.username = username || 'anonymous';
-    socket.emit('username', $window.username);
-  });
-})
+      swal({
+        title: 'Welcome to Playlist',
+        text: 'Enter your username',
+        type: 'input',
+        inputType: 'text',
+        showCancelButton: true,
+        closeOnConfirm: false,
+        confirmButtonColor: '#1171A2'
+      }, function(username) {
+        $window.username = username || 'anonymous';
+
+        if ($window.username !== 'anonymous'){
+          console.log('not anonymous was called')
+          socket.emit('checkUser', username);
+        } else {
+          socket.emit('username', $window.username);
+        }
+
+        socket.on('userExist', function(exists){
+          if (exists){
+            console.log('it does exist');
+            swal.showInputError("Username exists. Please choose a different name.");
+            return false;
+          } 
+          socket.emit('username', $window.username);
+          swal({  title: "Welcome, "+$window.username,   
+                  text: "<section style='font-size: 30px''><p'font-size: 30px'>To send private messages use '@' <span style='color:red'>(ex. @peter hey!)</span></p><br/><p style='font-size: 30px'>To see a list of slash commands type <span style='color: green'>'/help'</span></p></section>",   
+                  html: true
+                  // , timer: 7000 
+                });
+        });
+      });
+
+  })
 
 .config(function($locationProvider){
   $locationProvider.html5Mode(true);

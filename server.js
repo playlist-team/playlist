@@ -40,10 +40,12 @@ io.on('connection', function(socket) {
 
   //Receives username from client and emits username, socket id, users online back to client
   socket.on('username', function(username) {
+    if (!userExist(users, username) || username === 'anonymous'){
+      io.emit('chatMessage', {username: "", message: username + " has joined"});
+    }
     users[socket.id] = username;
     io.sockets.connected[socket.id].emit('setUser', username);
     io.sockets.connected[socket.id].emit('setId', socket.id);
-    io.emit('chatMessage', {username: "", message: users[socket.id] + " has joined"});
     io.emit('usersOnline', users);
   });
 
@@ -77,6 +79,42 @@ io.on('connection', function(socket) {
   socket.on('sendMessage', function(data) {
     io.emit('chatMessage', data);
   });
+
+  //Emits alert message only to sender
+  socket.on('sendAlert', function(data) {
+    socket.emit('chatMessage', data);
+  });
+
+  //Emits data to only specific client (private message)
+  socket.on('privateMessage', function(data){
+    io.sockets.sockets[data.sendToSocketId].emit('chatMessage', data);
+    socket.emit('chatMessage', data);
+  });
+
+  //Send error message to user on submit
+  socket.on('errorMessage', function(data){
+    socket.emit('chatMessage', data);
+  });
+
+  //Check if user exists
+  socket.on('checkUser', function(username){
+    var exist = false;
+    for (var key in users){
+      if (users[key] === username){
+        exist = true;
+      }
+    }
+    socket.emit('userExist', exist);
+  });
+
+  function userExist(object, username){
+    for (var key in object){
+      if (users[key] === username){
+        return true;
+      }
+    }
+    return false;
+  }
 
   socket.on('enqueue', function(data) {
     if (current) {
