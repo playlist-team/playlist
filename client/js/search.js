@@ -17,27 +17,56 @@ angular.module('search', [])
       }
       scope.hideResults = function() {
         scope.show = false;
-      }
+      };
     },
     transclude: true,
     template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='hideResults()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
-  }
+  };
 })
+//scroll to top whenever content changes
+// .directive('scrollTop', function() {
+//   return {
+//           restrict: 'A',
+//           scope: {
+//               trigger: '=scrollToTop'
+//           },
+//           link: function postLink(scope, elem) {
+//               scope.$watch('trigger', function() {
+//                   elem[0].scrollTop = 0;
+//               });
+//           }
+//       };
+//   })
 
 .controller('SearchController', ['$scope', '$window', 'SearchFactory', function($scope, $window, SearchFactory){
 
   $scope.searchList;
+  $scope.nextPage = null;
+  $scope.prevPage = null;
 
   //Retrieve and populate scope with YouTube search results
-  $scope.getSearch = function() {
+  $scope.getSearch = function(token) {
     SearchFactory.fetchSearch($scope.field, function(results) {
+      console.log('results:', results);
       $scope.searchList = results.data.items;
-      $scope.field = '';
-    });
-  }
+      
+      if(results.data.nextPageToken) {
+        $scope.nextPage = results.data.nextPageToken;
+      } else {
+        $scope.nextPage = null;
+      }
+      if(results.data.prevPageToken) {
+        $scope.prevPage = results.data.prevPageToken;
+      } else {
+        $scope.prevPage = null;
+      }
+      
+    }, token);
+  };
 
   //Sends video information to server
   $scope.enqueue = function(thumbnail) {
+    console.log('thumbnail:', thumbnail);
     SearchFactory.fetchResource(thumbnail.id.videoId, function(result) {
       var video = result.data.items[0];
       var length = video.contentDetails.duration.split(/[A-Za-z]/);
@@ -51,7 +80,7 @@ angular.module('search', [])
       socket.emit('sendLog', { action: 'added',
                                     title: video.snippet.title });
     });
-  }
+  };
 
   $scope.showResults = false;
 
@@ -79,7 +108,7 @@ angular.module('search', [])
       }
     }).then(function(results) {
         callback(results);
-    })
+    });
   };
 
   var fetchResource = function(videoId, callback) {
@@ -88,11 +117,11 @@ angular.module('search', [])
       url: 'https://www.googleapis.com/youtube/v3/videos?id=' + videoId + '&key=AIzaSyDxx1rrqR-q7Tcfkz0MqII6sO2GQpONrGg&part=snippet,contentDetails'
     }).then(function(result) {
         callback(result);
-    })
-  }
+    });
+  };
   return {
     fetchSearch: fetchSearch,
     fetchResource: fetchResource
-  }
+  };
 
-}])
+}]);

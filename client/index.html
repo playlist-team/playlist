@@ -39,7 +39,7 @@
         <!-- Angular directive to load search results modal on submit -->
         <search-directive show='showResults' width='750px' height='62%'>
 
-          <div id="results" ng-if="showResults">
+          <div id="results" ng-if="showResults" data-scroll-to-top="searchList">
 
             <div class="video" ng-cloak ng-repeat="result in searchList track by $index" ng-click="item.clicked || enqueue(result); item.clicked = true">
 
@@ -59,7 +59,14 @@
               </span>
 
             </div>
-
+            
+            <div class="video-navigation">
+            
+             <span class="video-navigation-prev" ng-if="prevPage" ng-click="getSearch(prevPage)">Previous</span>
+             <span class="video-navigation-next" ng-if="nextPage" ng-click="getSearch(nextPage)">Next</span>
+             
+            </div>
+            
           </div>
 
         </search-directive>

@@ -456,6 +456,23 @@ div.emoji-menu {
   display:block;
 }
 
+.video-navigation {
+  padding: 25px;
+  cursor: pointer;
+  font-size: 22px;
+}
+
+.video-navigation-prev {
+  float: left;
+}
+
+.video-navigation-next {
+  float: right;
+}
+.video-navigation:hover {
+  color: #1FA0DF;
+}
+
 .video:hover {
   background: #1FA0DF;
   color: white;
