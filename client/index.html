@@ -157,11 +157,11 @@
                       {{song.votes.downvotes}}
                     </span>
                   </p>
-              </div>
-            <!-- to remove a video from playlist -->
             <p ng-show="song.socket===socketId" id="queue-remove" ng-cloak type="button" ng-click="dequeue(song)">
               Remove
             </p>
+              </div>
+            <!-- to remove a video from playlist -->
 
           </div>
 
@@ -245,6 +245,22 @@
 
       </div>
       
+      <div id="history-container" ng-controller="HistoryController">
+        <div class="history">
+          <table class="history-table">
+            <tbody ng-repeat="listItem in historyList track by $index" ng-click="enqueue(listItem)">
+              <tr>
+                <td>
+                  <div class="history-listItem">
+                    <span class="history-thumbnail"><img src="{{ listItem.thumbnail }}"></span>
+                    <span class="history-title">{{ listItem.title }}</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
       
       <div id="log-container" ng-controller="LogController">
       
@@ -278,22 +294,6 @@
         
       </div>
       
-      <div id="history-container" ng-controller="HistoryController">
-        <div class="history">
-          <table class="history-table">
-            <tbody ng-repeat="listItem in historyList track by $index" ng-click="enqueue(listItem)">
-              <tr>
-                <td>
-                  <div class="history-listItem">
-                    <span class="history-thumbnail"><img src="{{ listItem.thumbnail }}"></span>
-                    <span class="history-title">{{ listItem.title }}</span>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
