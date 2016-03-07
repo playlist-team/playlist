@@ -23,31 +23,18 @@ angular.module('search', [])
     template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='hideResults()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
   };
 })
-//scroll to top whenever content changes
-// .directive('scrollTop', function() {
-//   return {
-//           restrict: 'A',
-//           scope: {
-//               trigger: '=scrollToTop'
-//           },
-//           link: function postLink(scope, elem) {
-//               scope.$watch('trigger', function() {
-//                   elem[0].scrollTop = 0;
-//               });
-//           }
-//       };
-//   })
 
 .controller('SearchController', ['$scope', '$window', 'SearchFactory', function($scope, $window, SearchFactory){
 
   $scope.searchList;
+  $scope.order = 'relevance'
+  $scope.orderTitle = 'relevance';
   $scope.nextPage = null;
   $scope.prevPage = null;
 
   //Retrieve and populate scope with YouTube search results
   $scope.getSearch = function(token) {
     SearchFactory.fetchSearch($scope.field, function(results) {
-      console.log('results:', results);
       $scope.searchList = results.data.items;
       
       if(results.data.nextPageToken) {
@@ -63,10 +50,35 @@ angular.module('search', [])
       
     }, token);
   };
+  
+  $scope.getSearchByOrder = function(order, token) {
+    SearchFactory.fetchSearchByOrder($scope.field, function(results) {
+      $scope.searchList = results.data.items;
+      
+      if(results.data.nextPageToken) {
+        $scope.nextPage = results.data.nextPageToken;
+      } else {
+        $scope.nextPage = null;
+      }
+      if(results.data.prevPageToken) {
+        $scope.prevPage = results.data.prevPageToken;
+      } else {
+        $scope.prevPage = null;
+      }
+    }, order, token);
+  };
+  
+  $scope.search = function(token) {
+    var order = $scope.order;
+    if(order === 'relevance') {
+      $scope.getSearch(token);
+    } else {
+      $scope.getSearchByOrder(order, token);
+    }
+  };
 
   //Sends video information to server
   $scope.enqueue = function(thumbnail) {
-    console.log('thumbnail:', thumbnail);
     SearchFactory.fetchResource(thumbnail.id.videoId, function(result) {
       var video = result.data.items[0];
       var length = video.contentDetails.duration.split(/[A-Za-z]/);
@@ -88,6 +100,15 @@ angular.module('search', [])
   $scope.toggleResults = function() {
     $scope.showResults = !$scope.showResults;
   };
+  
+  //Changes order of search result
+  socket.on('changeSearchOrder', function(data) {
+    
+    $scope.$apply(function() {
+      $scope.order = data.order;
+      $scope.orderTitle = data.title;
+    });
+  });
 
 }])
 
@@ -110,6 +131,25 @@ angular.module('search', [])
         callback(results);
     });
   };
+  
+  // Orders search results by order parameter given
+  var fetchSearchByOrder = function(query, callback, order, token) {
+    return $http.get('https://www.googleapis.com/youtube/v3/search', {
+      params: {
+        pageToken: token || "",
+        key: "AIzaSyDxx1rrqR-q7Tcfkz0MqII6sO2GQpONrGg",
+        part: "snippet",
+        type: "video",
+        videoType: "any",
+        q: query,
+        order: order,
+        maxResults: 25,
+        safeSearch: "none"
+      }
+    }).then(function(results) {
+        callback(results);
+    });
+  };
 
   var fetchResource = function(videoId, callback) {
     return $http({
@@ -121,7 +161,8 @@ angular.module('search', [])
   };
   return {
     fetchSearch: fetchSearch,
-    fetchResource: fetchResource
+    fetchResource: fetchResource,
+    fetchSearchByOrder: fetchSearchByOrder
   };
 
 }]);

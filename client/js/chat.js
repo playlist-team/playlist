@@ -184,7 +184,19 @@ angular.module('chat', ['ngSanitize', 'emojiApp'])
       $scope.messages = [];
     },
     clearlog: function () {
-      socket.emit('sendClear');
+      socket.emit('sendClearLog');
+    },
+    searchByRelevance: function(){
+      socket.emit('sendSearchOrder', { order: 'relevance', title: 'relevance'});
+    },
+    searchByDate: function(){
+      socket.emit('sendSearchOrder', { order: 'date', title: 'date' });
+    },
+    searchByRating: function(){
+      socket.emit('sendSearchOrder', { order: 'rating', title: 'rating' });
+    },
+    searchByViewCount: function(){
+      socket.emit('sendSearchOrder', { order: 'viewCount', title: 'view count' });
     },
     help: function () {
       socket.emit('sendAlert', { 
@@ -224,6 +236,26 @@ angular.module('chat', ['ngSanitize', 'emojiApp'])
       }); 
       socket.emit('sendAlert', { 
         message: '> /downvote : downvotes the currently playing video',
+        time: $scope.time,
+        username: 'HelpBot' 
+      });
+      socket.emit('sendAlert', { 
+        message: '> /searchByRelevance : orders search results by relevance',
+        time: $scope.time,
+        username: 'HelpBot' 
+      }); 
+      socket.emit('sendAlert', { 
+        message: '> /searchByRating : orders search results by rating',
+        time: $scope.time,
+        username: 'HelpBot' 
+      }); 
+      socket.emit('sendAlert', { 
+        message: '> /searchByViewCount : orders search results by view count',
+        time: $scope.time,
+        username: 'HelpBot' 
+      }); 
+      socket.emit('sendAlert', { 
+        message: '> /searchByDate : orders search results by date',
         time: $scope.time,
         username: 'HelpBot' 
       }); 

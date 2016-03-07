@@ -33,7 +33,7 @@ var reset = function() {
   io.emit('clearVotes');
   io.emit('nextVideo', current);
   io.emit('setQueue', queue);
-}
+};
 
 io.on('connection', function(socket) {
   
@@ -265,15 +265,15 @@ io.on('connection', function(socket) {
       votes[socket.id] = 'down';
       upvotes--;
       downvotes++;
-      socket.emit('validDownvote')
+      socket.emit('validDownvote');
     } else if (votes[socket.id] === 'down'){
-      socket.emit('downvotedLog')
+      socket.emit('downvotedLog');
     }
 
     if(votes[socket.id] === undefined) {
       votes[socket.id] = 'down';
       downvotes++;
-      socket.emit('validDownvote')
+      socket.emit('validDownvote');
     }
 
     //Skips current video if more haters than non-haters
@@ -307,10 +307,16 @@ io.on('connection', function(socket) {
     io.sockets.connected[socket.id].emit('setSync', timeTotal - timeLeft || timeTotal);
   });
   
-  //relays clearLog slash command to log controller
-  socket.on('sendClear', function() {
+  //relays clearlog slash command to log controller
+  socket.on('sendClearLog', function() {
     socket.emit('clearLog');
-  })
+  });
+  
+  //relays search by slash command to search controller
+  socket.on('sendSearchOrder', function(data){
+    socket.emit('changeSearchOrder', data);
+    socket.emit('searchOrderLog', data);
+  });
 
 });
 

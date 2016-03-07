@@ -5,21 +5,18 @@ angular.module('log', [])
   
   var upvotedNotif = function() {
     new PNotify({
-                title: 'Regular Notice',
-                text: 'You already upvoted current video'
+                text: 'You upvoted current video'
             });
   };
   
   var downvotedNotif = function() {
     new PNotify({
-                title: 'Regular Notice',
-                text: 'You already downvoted current video'
+                text: 'You downvoted current video'
             });
   };
   
   var skipUnAuthNotif = function(data) {
     new PNotify({
-                title: 'Regular Notice',
                 text: 'Only ' + data.username + ' can skip the current video'
             });
   };
@@ -75,7 +72,7 @@ angular.module('log', [])
   //   $scope.$apply(function() {
   //     $scope.logs.push(log);
   //   });
-    downvotedNotif()
+    downvotedNotif();
   });
   
 
@@ -90,7 +87,7 @@ angular.module('log', [])
     //   $scope.logs.push(log);
     // });
     
-    upvotedNotif()
+    upvotedNotif();
   });
   
   socket.on('skipUnAuth', function(data) {
@@ -118,6 +115,15 @@ angular.module('log', [])
   
   socket.on('clearLog', function() {
     $scope.logs = [];
+  });
+  
+  socket.on('searchOrderLog', function(data) {
+    var log = {
+      message: 'Set search to ' + data.title
+    }
+    $scope.$apply(function() {
+      $scope.logs.push(log);
+    });
   });
   
 });
