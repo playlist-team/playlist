@@ -16,7 +16,7 @@
 
     <header>
 
-      <img src="./img/logo.png" id="logo-image">
+    <img src="./img/logo-2.png" id="logo-image">
       <form id="search" ng-submit="getSearch(); toggleResults();" ng-controller="SearchController">
 
         <input id="search-input" ng-model="field" type="text" placeholder="Search for and add YouTube videos to the playlist" autocomplete="off">
@@ -202,6 +202,7 @@
   <div id="history-container" ng-controller="HistoryController">
     <div class="history">
       <table class="history-table">
+      <h2 class="history">History</h2>
         <tbody ng-repeat="listItem in historyList track by $index" ng-click="enqueue(listItem)">
           <tr>
             <td>
@@ -222,7 +223,7 @@
     <div class="log" scroll-directive="logs" ng-model="logs">
 
       <table class="log-table">
-
+    <h2 class="activity">Activity</h2>
         <tbody ng-repeat="log in logs track by $index">
 
           <tr>

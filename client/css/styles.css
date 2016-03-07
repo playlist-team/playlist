@@ -150,6 +150,15 @@ header {
   position: absolute;
 }
 
+.history {
+  color: white;
+  font-size: 1.1em;
+  font-weight: normal;
+}
+.activity {
+  font-size: 1.1em;
+}
+
 #users-tab {
   color: black;
   background-color: rgba(249, 249, 249, .90);
