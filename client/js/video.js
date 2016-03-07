@@ -1,4 +1,4 @@
-angular.module('app', ['chat', 'search'])
+angular.module('app', ['chat', 'search', 'log', 'history'])
 
 //Load YouTube iFrame API, connect socket to server, prompt for username on initialize
 .run(function($window) {
@@ -27,7 +27,6 @@ angular.module('app', ['chat', 'search'])
         $window.username = username || 'anonymous';
 
         if ($window.username !== 'anonymous'){
-          console.log('not anonymous was called')
           socket.emit('checkUser', username);
         } else {
           socket.emit('username', $window.username);
@@ -127,7 +126,7 @@ angular.module('app', ['chat', 'search'])
     player.seekTo(time, false);
   });
 
-  //Recieve first video from server, plays it and emits queue to controller and time to server
+  // Recieve first video from server, plays it and emits queue to controller and time to server
   socket.on('firstVideo', function(video) {
     context.current = video;
     player.loadVideoById(video.id);
@@ -146,7 +145,7 @@ angular.module('app', ['chat', 'search'])
   socket.on('stopVideo', function() {
     player.stopVideo();
   });
-
+  
   socket.on('addVideo', function(video) {
     console.log('video in addVideo ', video)
     context.queue.push(video);
@@ -223,12 +222,16 @@ angular.module('app', ['chat', 'search'])
     $rootScope.$emit('volumeChange', $scope.volume);
   });
 
-  $scope.dequeue = function(videoId) {
-    socket.emit('dequeue', videoId);
+  $scope.dequeue = function(video) {
+    socket.emit('dequeue', video);
+    socket.emit('sendLog', { action: 'removed', 
+                                title: video.title });
   }
 
   $scope.skip = function() {
     socket.emit('skip');
+    // socket.emit('sendLog', { action: 'skipped',
+    //                                 title: $scope.current.title });
   }
 
   $scope.sync = function() {
@@ -244,13 +247,28 @@ angular.module('app', ['chat', 'search'])
     });
   });
 
-  $scope.upVote = function() { 
+  $scope.upVote = function() {
     socket.emit('upVote');
   }
 
   $scope.downVote = function() {
-    socket.emit('downVote');
+    socket.emit('downVote', { title: $scope.current.title });
   }
+  
+  socket.on('validDownvote', function(data) {
+    socket.emit('sendLog', { action: 'downvoted',
+                                    title: $scope.current.title })
+  });
+  
+  socket.on('validUpvote', function(data) {
+    socket.emit('sendLog', { action: 'upvoted',
+                                    title: $scope.current.title });
+  })
+  
+  // Listens for when a video is skipped due to majority downvote, tells server to send log
+  socket.on('voteSkipped', function(data) {
+    socket.emit('sendVoteSkipped', data);
+  });
 
   socket.on('refreshQueue', function(queue){
     console.log('refreshQueue video ', queue)

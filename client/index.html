@@ -17,6 +17,8 @@
     <!-- Stylesheet for Emoji -->
     <link type="text/stylesheet" rel="stylesheet" href="css/emoji.min.css" />
     
+    <!-- Stylesheet for PNotify -->
+    <link type="text/stylesheet" rel="stylesheet" href="css/pnotify.custom.min.css" />
 
     <!-- Remove # from url -->
     <base href="/"></base>
@@ -29,7 +31,7 @@
 
       <img src="./img/logo.png" id="logo-image">
       <!-- YouTube search box -->
-      <form id="search" ng-submit="getSearch(); toggleResults()" ng-controller="SearchController">
+      <form id="search" ng-submit="getSearch(); toggleResults();" ng-controller="SearchController">
 
         <input id="search-input" ng-model="field" type="text" placeholder="Search for and add YouTube videos to the playlist" autocomplete="off">
 
@@ -38,6 +40,8 @@
         <search-directive show='showResults' width='750px' height='62%'>
 
           <div id="results" ng-if="showResults">
+          
+            <div class= "video-orderBy">Order: {{ orderTitle }}</div>
 
             <div class="video" ng-cloak ng-repeat="result in searchList track by $index" ng-click="item.clicked || enqueue(result); item.clicked = true">
 
@@ -57,12 +61,26 @@
               </span>
 
             </div>
-
+            
+            <div class="video-navigation">
+            
+             <span class="video-navigation-prev" ng-if="prevPage" ng-click="getSearch(prevPage)">Previous</span>
+             <span class="video-navigation-next" ng-if="nextPage" ng-click="getSearch(nextPage)">Next</span>
+             
+            </div>
+            
           </div>
 
         </search-directive>
 
       </form>
+<!--       <div>Search By:</div> -->
+<!--       <select ng-model="order">
+        <option value="relevance" selected="selected">Relevance</option>
+        <option value="rating">Rating</option>
+        <option value="date">Date</option>
+        <option value="viewCount">View Count</option>
+      </select> -->
       <!-- Controls to skip and sync current video being played -->
       <h1 id="skip" ng-click="skip()" ng-cloak>skip</h1>
       <h1 id="sync" ng-click="sync()" ng-cloak>sync</h1>
@@ -226,18 +244,73 @@
           </div>
 
       </div>
+      
+      
+      <div id="log-container" ng-controller="LogController">
+      
+<!--         <div class= "log-button">
+          Show Activity Log
+        </div>
+        
+        <div class="log-heading">Activity Log</div> -->
+        
+        <div class="log" scroll-directive="logs" ng-model="logs">
+        
+          <table class="log-table">
+            
+            <tbody ng-repeat="log in logs track by $index">
+            
+              <tr>
+              
+                <td>
+                
+                  <strong>{{ log.username }}</strong><span> {{ log.action }}</span><span> <i>{{ log.title }}</i></span><span> {{ log.message }}</span>
+                  
+                </td>
+                
+              </tr>
+              
+            </tbody>
+            
+          </table>
+          
+        </div>
+        
+      </div>
+      
+      <div id="history-container" ng-controller="HistoryController">
+        <div class="history">
+          <table class="history-table">
+            <tbody ng-repeat="listItem in historyList track by $index" ng-click="enqueue(listItem)">
+              <tr>
+                <td>
+                  <div class="history-listItem">
+                    <span class="history-thumbnail"><img src="{{ listItem.thumbnail }}"></span>
+                    <span class="history-title">{{ listItem.title }}</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
     <script src="./js/volume.js"></script>
     <script src="./js/chat.js"></script>
     <script src="./js/search.js"></script>
+    <script src="./js/log.js"></script>
+    <script src="./js/history.js"></script>
     <script src="./js/video.js"></script>
 
     <!-- Scripts for Emojis -->
     <script type="text/javascript" src="js/emoji-config.js"></script>
     <script type="text/javascript" src="js/emoji.min.js"></script>
-
+    
+    <!-- Scripts for PNotify -->
+    <script type="text/javascript" src="js/pnotify.custom.min.js"></script>
+    
   </body>
 </html>
 

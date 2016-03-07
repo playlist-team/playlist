@@ -1,5 +1,5 @@
 html{
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 body {
@@ -463,6 +463,23 @@ div.emoji-menu {
   display:block;
 }
 
+.video-navigation {
+  padding: 25px;
+  cursor: pointer;
+  font-size: 22px;
+}
+
+.video-navigation-prev {
+  float: left;
+}
+
+.video-navigation-next {
+  float: right;
+}
+.video-navigation:hover {
+  color: #1FA0DF;
+}
+
 .video:hover {
   background: #1FA0DF;
   color: white;
@@ -550,5 +567,48 @@ input[type=range]::-moz-range-thumb {
   background: #fff;
   border-radius: 100%;
   box-shadow: 0 0 1px 0px rgba(0,0,0,0.1);
+}
+
+/* ====================== activity log styles ======================= */
+
+div#log-container {
+ display: inline-block;
+}
+
+div.log {
+  display: inline-block;
+  height: 250px;
+  overflow-x: hidden;
+  width:640px;
+  padding-bottom: 10px;
+  background-color: rgba(249, 249, 249, 1);
+  opacity: 0.85;
+  background-image: url("../img/chat-background.png");
+}
+
+/* ====================== history panel styles ======================= */
+
+div.history {
+  display: inline-block;
+  height: 250px;
+  overflow-x: hidden;
+  width: 410px;
+  border: 1px solid black;
+  background-color: #22242A;
+}
+span.history-thumbnail {
+  float: left;
+}
+
+div.history-listItem {
+  width: 100%
+  font-size: 15px;
+  color: #727785;
+  border-top: 1px solid #616573;
+  cursor: pointer;
+}
+
+div.video-orderBy {
+  padding: 20px;
 }
 
