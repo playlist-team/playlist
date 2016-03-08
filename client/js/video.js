@@ -1,4 +1,4 @@
-angular.module('app', ['chat', 'search'])
+angular.module('app', ['chat', 'search', 'log', 'history'])
 
 //Load YouTube iFrame API, connect socket to server, prompt for username on initialize
 .run(function($window) {
@@ -15,19 +15,38 @@ angular.module('app', ['chat', 'search'])
      $window.socket.emit('getQueue');
   });
 
-  swal({
-    title: 'Welcome to Playlist',
-    text: 'Enter your username',
-    type: 'input',
-    inputType: 'text',
-    showCancelButton: true,
-    closeOnConfirm: true,
-    confirmButtonColor: '#1171A2'
-  }, function(username) {
-    $window.username = username || 'anonymous';
-    socket.emit('username', $window.username);
-  });
-})
+      swal({
+        title: 'Welcome to Playlist',
+        text: 'Enter your username',
+        type: 'input',
+        inputType: 'text',
+        showCancelButton: true,
+        closeOnConfirm: false,
+        confirmButtonColor: '#1171A2'
+      }, function(username) {
+        $window.username = username || 'anonymous';
+
+        if ($window.username !== 'anonymous'){
+          socket.emit('checkUser', username);
+        } else {
+          socket.emit('username', $window.username);
+        }
+
+        socket.on('userExist', function(exists){
+          if (exists){
+            swal.showInputError("Username exists. Please choose a different name.");
+            return false;
+          } 
+          socket.emit('username', $window.username);
+          swal({  title: "Welcome, "+$window.username,   
+                  text: "<section style='font-size: 30px''><p'font-size: 30px'>To send private messages use '@' <span style='color:red'>(ex. @peter hey!)</span></p><br/><p style='font-size: 30px'>To see a list of slash commands type <span style='color: green'>'/help'</span></p></section>",   
+                  html: true
+                  // , timer: 7000 
+                });
+        });
+      });
+
+  })
 
 .config(function($locationProvider){
   $locationProvider.html5Mode(true);
@@ -106,7 +125,7 @@ angular.module('app', ['chat', 'search'])
     player.seekTo(time, false);
   });
 
-  //Recieve first video from server, plays it and emits queue to controller and time to server
+  // Recieve first video from server, plays it and emits queue to controller and time to server
   socket.on('firstVideo', function(video) {
     context.current = video;
     player.loadVideoById(video.id);
@@ -125,7 +144,7 @@ angular.module('app', ['chat', 'search'])
   socket.on('stopVideo', function() {
     player.stopVideo();
   });
-
+  
   socket.on('addVideo', function(video) {
     context.queue.push(video);
     $rootScope.$emit('changeQueue');
@@ -155,7 +174,7 @@ angular.module('app', ['chat', 'search'])
 }])
 
 .controller('YouTubeController', ['$scope', 'VideoService', '$rootScope', function($scope, VideoService, $rootScope) {
-
+  //maz edit
   $scope.volume;
   $scope.timer;
   $scope.duration;
@@ -163,6 +182,7 @@ angular.module('app', ['chat', 'search'])
   $scope.playlist;
   $scope.upvotes = 0;
   $scope.downvotes = 0;
+  
 
   //Recieve client socket id from server
   socket.on('setId',function(socketId) {
@@ -199,12 +219,16 @@ angular.module('app', ['chat', 'search'])
     $rootScope.$emit('volumeChange', $scope.volume);
   });
 
-  $scope.dequeue = function(videoId) {
-    socket.emit('dequeue', videoId);
+  $scope.dequeue = function(video) {
+    socket.emit('dequeue', video);
+    socket.emit('sendLog', { action: 'removed', 
+                                title: video.title });
   }
 
   $scope.skip = function() {
-    socket.emit('skip');
+    socket.emit('skip', { title: $scope.current.title });
+    // socket.emit('sendLog', { action: 'skipped',
+    //                                 title: $scope.current.title });
   }
 
   $scope.sync = function() {
@@ -218,13 +242,45 @@ angular.module('app', ['chat', 'search'])
     });
   });
 
-  $scope.upVote = function() { 
+  $scope.upVote = function() {
     socket.emit('upVote');
   }
 
   $scope.downVote = function() {
-    socket.emit('downVote');
+    socket.emit('downVote', { title: $scope.current.title });
   }
+  
+  socket.on('validDownvote', function(data) {
+    socket.emit('sendLog', { action: 'downvoted',
+                                    title: $scope.current.title })
+  });
+  
+  socket.on('validUpvote', function(data) {
+    socket.emit('sendLog', { action: 'upvoted',
+                                    title: $scope.current.title });
+  })
+  
+  // Listens for when a video is skipped due to majority downvote, tells server to send log
+  socket.on('voteSkipped', function(data) {
+    socket.emit('sendVoteSkipped', data);
+  });
+
+  socket.on('refreshQueue', function(queue){
+  })
+
+  $scope.qUpVote = function(songID){
+    socket.emit('qUpVote', songID)
+  }
+
+  $scope.qDownVote = function(songID){
+    socket.emit('qDownVote', songID)
+  }
+
+  socket.on('updateQueue', function(data) {
+    queue = data;
+    VideoService.queue = queue
+    $rootScope.$emit('changeQueue');
+  });
 
   socket.on('changeVotes', function(votes) {
     $scope.$apply(function() {

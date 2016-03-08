@@ -1,4 +1,4 @@
-angular.module('chat', ['ngSanitize'])
+angular.module('chat', ['ngSanitize', 'emojiApp'])
 //Directive to auto scroll chat content to bottom when new message is sent
 .directive('scrollDirective', function ($rootScope) {
   return {
@@ -22,7 +22,7 @@ angular.module('chat', ['ngSanitize'])
 })
 
 .controller('ChatController', function ($scope, $window, $rootScope){
-
+  $scope.emojiMessage={};
   //Receives and assigns username from server
   socket.on('setUser',function(username){
     $scope.username = username;
@@ -102,18 +102,176 @@ angular.module('chat', ['ngSanitize'])
   //Send message to server
   $scope.send = function(message) {
     $scope.getCurrentTime();
-    socket.emit('sendMessage', { message: message, 
+
+    // if message begins with '@', send direct message
+    if (message[0] === "@"){
+      var array = message.split(/\s/);
+      var sendTo = array[0].substr(1);
+      var message = array.slice(1).join(" ");
+      sendPrivateMessage(sendTo, message);
+
+    } else if (message[0] === "/"){
+      var params = message.split(/\s/);
+      var command = params.shift().substr(1);
+      if (typeof $scope.slashCommands[command] === "function") {
+        $scope.slashCommands[command].apply(null, params);
+      } else {
+        socket.emit('errorMessage', { 
+          message: "Error: Could not find command " + command + ".",
+          username: 'PlayList chatBot'
+        });
+      }
+    } else {
+
+      socket.emit('sendMessage', { message: message, 
                                  username: $scope.username, 
                                  time: $scope.time });
 
-    if (message === "meow") {
-      $scope.easterEgg();
+      if (message === "meow") {
+        $scope.easterEgg();
+      }
     }
-    
-    $scope.message = null;
-  }
 
-  //Recieve new messages from server
+    $('#messageDiv').html("");
+
+    function sendPrivateMessage(sendTo, message){
+      // notify user if they have not chosen a specific username
+      if ($scope.username === 'anonymous'){
+        socket.emit('errorMessage', { message: "Error: Must have a unique username to send private messages.",
+                                    username: 'PlayList ChatBot'});
+        return;
+      }
+      if (sendTo === 'anonymous'){
+        socket.emit('errorMessage', { message: "Error: Can only send private messages to users with unique usernames.",
+                                    username: 'PlayList ChatBot'});
+        return;
+      }
+      // sends the private message is username is found
+      for (var key in $scope.usernameList){
+        if ($scope.usernameList[key] === sendTo){
+          socket.emit('privateMessage', { sendToSocketId: key, 
+                                          message: message,
+                                          time: $scope.time,
+                                          username: $scope.username });
+          return;
+        }
+      }
+      // Notify user if username was not found
+      socket.emit('errorMessage', { message: "Error: Username is not found.",
+                                    username: 'PlayList ChatBot'});
+    }
+  };
+
+  //functions for slash commands
+  $scope.slashCommands = {
+    math: function () {
+      var calc = Array.prototype.join.call(arguments, " ");
+      var ans = math.eval(calc);
+      socket.emit('sendMessage', { 
+        message: calc + ' = ' + ans, 
+        username: 'MathBot', 
+        time: $scope.time 
+      });
+    },
+    downvote: function () {
+      socket.emit('downVote');
+    },
+    upvote: function () {
+      socket.emit('upVote');
+    }, 
+    clear: function () {
+      $scope.messages = [];
+    },
+    clearlog: function () {
+      socket.emit('sendClearLog');
+    },
+    byrelevance: function(){
+      socket.emit('sendSearchOrder', { order: 'relevance', title: 'relevance'});
+    },
+    bydate: function(){
+      socket.emit('sendSearchOrder', { order: 'date', title: 'date' });
+    },
+    byrating: function(){
+      socket.emit('sendSearchOrder', { order: 'rating', title: 'rating' });
+    },
+    byviewcount: function(){
+      socket.emit('sendSearchOrder', { order: 'viewCount', title: 'view count' });
+    },
+    help: function () {
+      socket.emit('sendAlert', { 
+        message: 'Hey! Welcome to PlayList.',
+        time: $scope.time,
+        username: 'HelpBot' 
+      });
+      socket.emit('sendAlert', { 
+        message: 'Here is a list of commands you can use:',
+        time: $scope.time,
+        username: 'HelpBot' 
+      }); 
+      socket.emit('sendAlert', { 
+        message: '> /help : displays this help menu',
+        time: $scope.time,
+        username: 'HelpBot' 
+      }); 
+      socket.emit('sendAlert', { 
+        message: '> /clear : clears the chat window',
+        time: $scope.time,
+        username: 'HelpBot' 
+      });
+      socket.emit('sendAlert', {
+        message: '> /clearlog: clears the log window',
+        time: $scope.time,
+        username: 'HelpBot'
+      });
+      socket.emit('sendAlert', { 
+        message: '> /math [math operations]: performs math',
+        time: $scope.time,
+        username: 'HelpBot' 
+      });
+      socket.emit('sendAlert', { 
+        message: '> /upvote : upvotes the currently playing video',
+        time: $scope.time,
+        username: 'HelpBot' 
+      }); 
+      socket.emit('sendAlert', { 
+        message: '> /downvote : downvotes the currently playing video',
+        time: $scope.time,
+        username: 'HelpBot' 
+      });
+      socket.emit('sendAlert', { 
+        message: '> /byrelevance : orders search results by relevance',
+        time: $scope.time,
+        username: 'HelpBot' 
+      }); 
+      socket.emit('sendAlert', { 
+        message: '> /byrating : orders search results by rating',
+        time: $scope.time,
+        username: 'HelpBot' 
+      }); 
+      socket.emit('sendAlert', { 
+        message: '> /byviewcount : orders search results by view count',
+        time: $scope.time,
+        username: 'HelpBot' 
+      }); 
+      socket.emit('sendAlert', { 
+        message: '> /bydate : orders search results by date',
+        time: $scope.time,
+        username: 'HelpBot' 
+      }); 
+    }
+  };
+
+  //Hide emoji popup when chat message changes
+  $scope.$watch(
+    function () { 
+      return $('#messageDiv').html(); 
+    }, function () {
+      if ($('#emojibtn').hasClass('on')) {
+        $('#emojibtn').click();
+      }
+  });
+
+  //Receive new messages from server
   socket.on('chatMessage', function(data) {
     $scope.getCurrentTime();
     $scope.$apply(function() {
@@ -121,6 +279,8 @@ angular.module('chat', ['ngSanitize'])
       $scope.messages.push(data);
     })
   });
+  
+  
 
   //Receive users currently connected from server
   socket.on('usersOnline', function(users) {
@@ -130,4 +290,16 @@ angular.module('chat', ['ngSanitize'])
     });
   });
 
+})
+.directive('ngEnter', function() {
+    return function(scope, element, attrs) {
+        element.bind("keydown", function(e) {
+            if(e.which === 13) {
+                scope.$apply(function(){
+                    scope.$eval(attrs.ngEnter, {'e': e});
+                });
+                e.preventDefault();
+            }
+        });
+    };
 });

@@ -1,5 +1,5 @@
 html{
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 body {
@@ -10,6 +10,7 @@ body {
   width: 1060px;
   margin-right: auto;
   margin-left: auto;
+  padding-top: 50px;
 }
 
 ::-webkit-scrollbar {
@@ -20,6 +21,8 @@ body {
 header {
   color: white;
   background-color: #22242A;
+  padding: 20px;
+  border-radius: 10px 10px 0 0;
 }
 
 #default-playlist-message {
@@ -29,14 +32,14 @@ header {
 }
 
 #current-song {
-  width: 100%
+  width: 100%;
   height: 20px;
-  font-size: 20px;
+  font-size: 19px;
   background-color: #22242A;
   color: white;
-  padding-left: 10px;
+  padding-left: 15px;
   padding-right: 5px;
-  padding-top: 10px;
+  padding-top: 20px;
   margin-top: auto;
   margin-bottom: auto;
 }
@@ -57,10 +60,18 @@ header {
   font-style: italic;
   float: left;
   padding-left: 25px;
+  margin-top: 3px;
 }
 
 #arrows {
   margin-top: 5px;
+  margin-bottom: 5px;
+  float: right;
+  padding-right: 20px;
+}
+
+#Qarrows {
+  margin-top: 10px;
   margin-bottom: 5px;
   float: right;
   padding-right: 20px;
@@ -74,56 +85,90 @@ header {
 
 #logo-image {
   padding-left: 25px;
-  padding-right: 15px;
+  padding-right: 30px;
   padding-top: 10px;
 }
 
 #volume {
+  position: absolute;
+
+}
+#volume-container {
+  display: inline-block;
+  height: 30px;
   position: relative;
-  left: 15px;
-  bottom: 27.25px;
+
 }
 
-#skip {
-  font-size: 14px;
+#skip{
+  font-size: 13px;
+  letter-spacing: .1em;
+  color: #fff;
+  font-weight: normal;
   float: right;
   position: relative;
   display: inline-block;
-  padding-left: 20px;
-  padding-right: 15px;
+  background-color: #931c1d;
+  padding: 7px 17px;
+  border-radius: 8px;
+  margin-right: 30px;
+/*  padding-left: 20px;
+  padding-right: 15px;*/
   -webkit-user-select: none;
   -moz-user-select: none;
+  top: 30px;
+  margin-left: 15px;
 }
 
 #skip:hover {
-  color: #AC0809;
+  color: #fff;
   cursor: pointer;
   outline: none;
 }
 
 #sync {
+  font-size: 13px;
+  letter-spacing: .1em;
+  color: #fff;
+  font-weight: normal;
+  float: right;
+  position: relative;
+  display: inline-block;
+  background-color: #931c1d;
+  padding: 7px 17px;
+  border-radius: 8px;
+  margin-right: 20px;
   position: relative;
   float: right;
-  font-size: 14px;
-  display: inline-block;
-  top: 45px;
-  left: 49px;
+  top: 30px;
+  left: 20px;
 }
 
 #sync:hover {
-  color: #1171A2;
+  color: #fff;
   cursor: pointer;
   outline: none;
 }
 
 .up-arrow {
+  position: relative;
+  top: 2px;
+  width: 20%;
+  height: auto;
+  margin-right: 3px;
 }
 
 .down-arrow {
   position: relative;
   top: 2px;
-  width: 26.75%;
+  width: 21%;
   height: auto;
+  margin-right: 2px;
+  margin-left: 8px;
+}
+
+div.history img {
+  margin: 0 15px 10px 0;
 }
 
 #chat-tab {
@@ -138,6 +183,19 @@ header {
   height: 25px; 
   line-height: 25px; 
   position: absolute;
+}
+
+h2.history {
+  color: #b2b7c5;
+  font-weight: normal;
+  font-size: 1.1em;
+  margin-top: 5px;
+  margin-left: 4px;
+}
+.activity {
+  font-size: 1.1em;
+  margin-left: 4px;
+  margin-top: 5px;
 }
 
 #users-tab {
@@ -160,14 +218,15 @@ header {
   bottom: 25.5px;
   left: 10px;
   background: #616573;
-  width: 640px;
+  width: 440px;
   line-height: 30px;
   height: 15px;
-  padding: 10px;
+  padding: 15px 15px 15px 18px;
   color: white;
   font-size: 14px;
   border-radius: 20px;
   border: none;
+  margin-right: 5px;
 }
 
 #search {
@@ -183,7 +242,7 @@ header {
 
 #search-submit{
   position: relative;
-  right: 30.5px;
+  right: 45.5px;
   bottom: 14.5px;
 }
 
@@ -213,6 +272,7 @@ header {
 
 .queue-table {
   margin-left: 30px;
+  color: #b1b4bd;
 }
 
 #queue {
@@ -230,9 +290,10 @@ header {
   width: 100%
   height: 35px;
   font-size: 15px;
+  font-weight: normal;
   background-color: #22242A;
-  color: #727785;
-  padding-left: 10px;
+  color: #b1b4bd;
+  padding-left: 20px;
   border-top: 1px solid #616573;
   cursor: pointer;
 }
@@ -316,26 +377,52 @@ header {
   bottom: 1.425px;
 }
 
-#chat-submit{
- float:bottom;
- width: 305px;
+#username-header{
+  border-bottom: 1px solid black;
+  width: 96%;
+  padding: 4px;
+  display: block;
 }
 
-#chat-input{
-  width: 413px;
+div#messageDiv {
+  width: 372px;
   opacity: 0.85;
-  height: 27px;
+  min-height: 27px;
+  height: 29px;
+  line-height: 29px;
   color: white;
   font-size: 14px;
   background-color: rgba(42, 45, 58, .40);
   border: none;
-  margin-top: -20px;
-  margin-left: 0px;
+  margin: 0;
+  margin-top: -7px;
+  padding: 1px;
+  padding-top: 2px;
   padding-left: 5px;
+  border-radius: 0;
+  display: inline-block;
 }
 
-#chat-input:focus {
+/*Remove default blue outline when input and button are selected */
+.emoji-wysiwyg-editor:focus, button#emojibtn:focus {
   outline: none;
+}
+
+button#emojibtn {
+  float: right;
+  display: inline-block;
+  background-color: rgba(42, 45, 58, .40);
+  opacity: 0.85;
+  border: none;
+  height: 32px;
+  width: 42px;
+  position: relative;
+  top: -7px;
+}
+
+div.emoji-menu {
+  margin-top: -264px;
+  margin-left: -206px;
 }
 
 #player {
@@ -430,6 +517,23 @@ header {
   display:block;
 }
 
+.video-navigation {
+  padding: 25px;
+  cursor: pointer;
+  font-size: 22px;
+}
+
+.video-navigation-prev {
+  float: left;
+}
+
+.video-navigation-next {
+  float: right;
+}
+.video-navigation:hover {
+  color: #1FA0DF;
+}
+
 .video:hover {
   background: #1FA0DF;
   color: white;
@@ -441,10 +545,20 @@ header {
   bottom: 1.55px;
 }
 
+.privateMessage{
+  color: #F7B3DA;
+  font-size: 1.2em;
+  font-weight: 400;
+}
+
+.privateMessageContent{
+  color: #48012A;
+}
+
 #duration {
   float: right;
   padding-top: 0px;
-  padding-right: 16px;
+  padding-right: 35px;
 }
 
 input:focus::-webkit-input-placeholder {
@@ -507,5 +621,54 @@ input[type=range]::-moz-range-thumb {
   background: #fff;
   border-radius: 100%;
   box-shadow: 0 0 1px 0px rgba(0,0,0,0.1);
+}
+
+/* ====================== activity log styles ======================= */
+
+div#log-container {
+ display: inline-block;
+}
+
+div.log {
+  display: inline-block;
+  font-size: .9em;
+  float: left;
+  height: 260px;
+  overflow-x: hidden;
+  width:610px;
+  padding: 15px;
+  background-color: rgba(249, 249, 249, 1);
+  opacity: 0.85;
+  background-image: url("../img/chat-background.png");
+}
+
+
+
+/* ====================== history panel styles ======================= */
+
+div.history {
+  display: inline-block;
+  float: right;
+  height: 258px;
+  overflow-x: hidden;
+  width: 388px;
+  padding: 15px;
+  border: 1px solid black;
+  background-color: #22242A;
+}
+span.history-thumbnail {
+  float: left;
+}
+
+div.history-listItem {
+  width: 100%
+  font-size: 15px;
+  color: #727785;
+/*  border-top: 1px solid #616573;
+*/  cursor: pointer;
+}
+
+div.video-orderBy {
+  padding: 20px;
 }
 
