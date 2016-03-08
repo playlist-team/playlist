@@ -34,12 +34,12 @@ header {
 #current-song {
   width: 100%;
   height: 20px;
-  font-size: 20px;
+  font-size: 19px;
   background-color: #22242A;
   color: white;
-  padding-left: 10px;
+  padding-left: 15px;
   padding-right: 5px;
-  padding-top: 10px;
+  padding-top: 20px;
   margin-top: auto;
   margin-bottom: auto;
 }
@@ -60,6 +60,7 @@ header {
   font-style: italic;
   float: left;
   padding-left: 25px;
+  margin-top: 3px;
 }
 
 #arrows {
@@ -70,7 +71,7 @@ header {
 }
 
 #Qarrows {
-  margin-top: 5px;
+  margin-top: 10px;
   margin-bottom: 5px;
   float: right;
   padding-right: 20px;
@@ -150,13 +151,24 @@ header {
 }
 
 .up-arrow {
+  position: relative;
+  top: 2px;
+  width: 20%;
+  height: auto;
+  margin-right: 3px;
 }
 
 .down-arrow {
   position: relative;
   top: 2px;
-  width: 26.75%;
+  width: 21%;
   height: auto;
+  margin-right: 2px;
+  margin-left: 8px;
+}
+
+div.history img {
+  margin: 0 15px 10px 0;
 }
 
 #chat-tab {
@@ -173,13 +185,17 @@ header {
   position: absolute;
 }
 
-.history {
-  color: white;
-  font-size: 1.1em;
+h2.history {
+  color: #b2b7c5;
   font-weight: normal;
+  font-size: 1.1em;
+  margin-top: 5px;
+  margin-left: 4px;
 }
 .activity {
   font-size: 1.1em;
+  margin-left: 4px;
+  margin-top: 5px;
 }
 
 #users-tab {
@@ -256,6 +272,7 @@ header {
 
 .queue-table {
   margin-left: 30px;
+  color: #b1b4bd;
 }
 
 #queue {
@@ -273,9 +290,10 @@ header {
   width: 100%
   height: 35px;
   font-size: 15px;
+  font-weight: normal;
   background-color: #22242A;
-  color: #727785;
-  padding-left: 10px;
+  color: #b1b4bd;
+  padding-left: 20px;
   border-top: 1px solid #616573;
   cursor: pointer;
 }
@@ -540,7 +558,7 @@ div.emoji-menu {
 #duration {
   float: right;
   padding-top: 0px;
-  padding-right: 16px;
+  padding-right: 35px;
 }
 
 input:focus::-webkit-input-placeholder {
@@ -613,15 +631,18 @@ div#log-container {
 
 div.log {
   display: inline-block;
+  font-size: .9em;
   float: left;
-  height: 250px;
+  height: 260px;
   overflow-x: hidden;
-  width:640px;
-  padding-bottom: 10px;
+  width:610px;
+  padding: 15px;
   background-color: rgba(249, 249, 249, 1);
   opacity: 0.85;
   background-image: url("../img/chat-background.png");
 }
+
+
 
 /* ====================== history panel styles ======================= */
 
@@ -630,7 +651,8 @@ div.history {
   float: right;
   height: 258px;
   overflow-x: hidden;
-  width: 418px;
+  width: 388px;
+  padding: 15px;
   border: 1px solid black;
   background-color: #22242A;
 }
@@ -642,8 +664,8 @@ div.history-listItem {
   width: 100%
   font-size: 15px;
   color: #727785;
-  border-top: 1px solid #616573;
-  cursor: pointer;
+/*  border-top: 1px solid #616573;
+*/  cursor: pointer;
 }
 
 div.video-orderBy {
