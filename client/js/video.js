@@ -34,7 +34,6 @@ angular.module('app', ['chat', 'search', 'log', 'history'])
 
         socket.on('userExist', function(exists){
           if (exists){
-            console.log('it does exist');
             swal.showInputError("Username exists. Please choose a different name.");
             return false;
           } 

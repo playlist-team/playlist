@@ -218,8 +218,6 @@ io.on('connection', function(socket) {
         io.emit('stopVideo');
       }
         io.emit('skipAuth', { username: users[socket.id], title: data.title });
-      // console.log('current', current);
-      // console.log('current.tile', current.title);
 
     } else {
       io.sockets.connected[socket.id].emit('skipUnAuth', { username: current.username });
