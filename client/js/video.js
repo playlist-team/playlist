@@ -147,9 +147,7 @@ angular.module('app', ['chat', 'search', 'log', 'history'])
   });
   
   socket.on('addVideo', function(video) {
-    console.log('video in addVideo ', video)
     context.queue.push(video);
-    console.log('queue after add video ', context.queue)
     $rootScope.$emit('changeQueue');
   });
 
@@ -229,7 +227,7 @@ angular.module('app', ['chat', 'search', 'log', 'history'])
   }
 
   $scope.skip = function() {
-    socket.emit('skip');
+    socket.emit('skip', { title: $scope.current.title });
     // socket.emit('sendLog', { action: 'skipped',
     //                                 title: $scope.current.title });
   }
@@ -240,10 +238,8 @@ angular.module('app', ['chat', 'search', 'log', 'history'])
 
   $rootScope.$on('changeQueue', function() {
     $scope.$apply(function() {
-    console.log('changeQueue called')
       $scope.current = VideoService.current;
       $scope.playlist = VideoService.queue;
-      console.log('playlist in changeQueue ', $scope.playlist)
     });
   });
 
@@ -271,7 +267,6 @@ angular.module('app', ['chat', 'search', 'log', 'history'])
   });
 
   socket.on('refreshQueue', function(queue){
-    console.log('refreshQueue video ', queue)
   })
 
   $scope.qUpVote = function(songID){
@@ -285,7 +280,6 @@ angular.module('app', ['chat', 'search', 'log', 'history'])
   socket.on('updateQueue', function(data) {
     queue = data;
     VideoService.queue = queue
-    console.log('queue in video updateQ ', queue)
     $rootScope.$emit('changeQueue');
   });
 
