@@ -108,7 +108,7 @@
 
         <div class="votes" ng-show="song.title">
           <p id="queue-title" ng-cloak>
-            {{ song.title | limitTo: 74 }}{{song.title.length > 74 ? '...' : ''}}
+            {{ song.title | limitTo: 50 }}{{song.title.length > 50 ? '...' : ''}}
           </p>
           <p id="Qarrows">
             <img src="./img/upvote.svg" onmouseover="this.src='./img/uphover.svg';" onmouseout="this.src='./img/upvote.svg';" class="up-arrow" ng-click="qUpVote(song.id)" ng-cloak></img>

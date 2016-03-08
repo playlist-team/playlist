@@ -124,7 +124,6 @@ io.on('connection', function(socket) {
   }
 
   socket.on('enqueue', function(data) {
-    // data.username = users[socket.id];
     if (current) {
       //maz edit
       data.votes = {upvotes: 0, downvotes: 0}
@@ -137,6 +136,22 @@ io.on('connection', function(socket) {
       reset();
     }
   });
+  
+  socket.on('enqueueFromHistory', function(data) {
+    data.socket = socket.id.slice(2);
+      if (current) {
+        //maz edit
+        data.votes = {upvotes: 0, downvotes: 0}
+        queue.push(data);
+        io.emit('addVideo', data);
+
+      } else {
+        set = false;
+        current = data;
+        reset();
+      }
+    });
+
 
   socket.on('dequeue', function(data) {
     var id = socket.id;
@@ -187,7 +202,7 @@ io.on('connection', function(socket) {
 
   
   //Allows skipping if event is emitted by client who enqueued video
-  socket.on('skip', function(easterEgg) {
+  socket.on('skip', function(data, easterEgg) {
     var id = socket.id;
     if (current && id.slice(2) === current.socket || easterEgg) {
       if (queue.length) {
@@ -202,7 +217,8 @@ io.on('connection', function(socket) {
         reset();
         io.emit('stopVideo');
       }
-      io.emit('skipAuth', { username: users[socket.id], title: current.title });
+        io.emit('skipAuth', { username: users[socket.id], title: data.title });
+
     } else {
       io.sockets.connected[socket.id].emit('skipUnAuth', { username: current.username });
     }
@@ -312,7 +328,6 @@ io.on('connection', function(socket) {
     if (votes[socket.id + songID] !== 'up'){
       queue.forEach(function(song){
         if(song.id === songID){
-          console.log('qUpVote in server ', queue)
           song.votes.upvotes++
           if (votes[socket.id + songID] === 'down'){
             song.votes.downvotes--
@@ -328,7 +343,6 @@ io.on('connection', function(socket) {
     if (votes[socket.id + songID] !== 'down'){
       queue.forEach(function(song){
         if(song.id === songID){
-          console.log('qDownVote in server ', queue)
           song.votes.downvotes++
           if (votes[socket.id + songID] === 'up'){
             song.votes.upvotes--

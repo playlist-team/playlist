@@ -136,7 +136,6 @@ angular.module('chat', ['ngSanitize', 'emojiApp'])
 
     function sendPrivateMessage(sendTo, message){
       // notify user if they have not chosen a specific username
-      console.log('send '+ message + ' to '+ $scope.username);
       if ($scope.username === 'anonymous'){
         socket.emit('errorMessage', { message: "Error: Must have a unique username to send private messages.",
                                     username: 'PlayList ChatBot'});

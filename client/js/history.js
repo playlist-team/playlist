@@ -4,9 +4,10 @@ angular.module('history', [])
   $scope.historyList = [];
   
   $scope.enqueue = function(video) {
-    socket.emit('enqueue', video);
+    socket.emit('enqueueFromHistory', video);
     socket.emit('sendLog', { action: 'added',
-                              title: video.title });
+                              title: video.title,
+                            });
   };
   
   socket.on('addToHistory', function(video) {
