@@ -124,7 +124,6 @@ io.on('connection', function(socket) {
   }
 
   socket.on('enqueue', function(data) {
-    // data.username = users[socket.id];
     if (current) {
       //maz edit
       data.votes = {upvotes: 0, downvotes: 0}
@@ -137,6 +136,22 @@ io.on('connection', function(socket) {
       reset();
     }
   });
+  
+  socket.on('enqueueFromHistory', function(data) {
+    data.socket = socket.id.slice(2);
+      if (current) {
+        //maz edit
+        data.votes = {upvotes: 0, downvotes: 0}
+        queue.push(data);
+        io.emit('addVideo', data);
+
+      } else {
+        set = false;
+        current = data;
+        reset();
+      }
+    });
+
 
   socket.on('dequeue', function(data) {
     var id = socket.id;
