@@ -59,10 +59,11 @@
       </search-directive>
 
     </form>
-
-    <h1 id="skip" ng-click="skip()" ng-cloak>skip</h1>
-    <h1 id="sync" ng-click="sync()" ng-cloak>sync</h1>
+    <div id="volume-container">
     <input id="volume" min ="0" max="100" step="1" type="range" ng-model="volume" value="50" ng-cloak></input>
+    </div>
+    <h1 id="skip" ng-click="skip()" ng-cloak>SKIP</h1>
+    <h1 id="sync" ng-click="sync()" ng-cloak>SYNC</h1>
 
   </header>
 
@@ -126,11 +127,8 @@
             Remove
           </p>
         </div>
-
       </div>
-
     </div>
-
   </div>
   <div id="chat" ng-controller="ChatController">
     <div ng-style="chatStyle" id="chat-tab" ng-click="changeTab('chat')">
