@@ -13,7 +13,16 @@ angular.module('app', ['chat', 'search'])
 
   $window.socket.on('connect', function() {
      $window.socket.emit('getQueue');
+     setTimeout(function() {
+      $window.socket.emit('ping');
+     }, 25000);
   });
+
+  $window.socket.on('pong', function() {
+    setTimeout(function(id) {
+     $window.socket.emit('ping');
+    }, 25000);
+  })
 
   swal({
     title: 'Welcome to Playlist',

@@ -37,6 +37,12 @@ var reset = function() {
 
 io.on('connection', function(socket) {
 
+  socket.on('ping', function() {
+    setTimeout(function() {
+      io.sockets.connected[socket.id].emit('pong', socket.id);
+    })
+  })
+  
   //Receives username from client and emits username, socket id, users online back to client
   socket.on('username', function(username) {
     users[socket.id] = username;
