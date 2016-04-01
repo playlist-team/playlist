@@ -9,7 +9,7 @@ angular.module('app', ['chat', 'search'])
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-  $window.socket = io.connect();
+  $window.socket = io();
 
   $window.socket.on('connect', function() {
      $window.socket.emit('getQueue');
