@@ -126,15 +126,11 @@ angular.module('app', ['chat', 'search'])
 
   //Recieve next video from server, plays it and emits queue to controller and time to server
   $window.socket.on('nextVideo', function(video) {
-    if (video !== null) {
       context.current = video;
       $window.socket.emit('setDuration', video.duration);
       player.loadVideoById(video.id);
       $rootScope.$emit('changeQueue');
-    } else {
-      $window.socket.emit('setDuration', video.duration);
-      $rootScope.$emit('changeQueue');
-    }
+    } 
   });
 
   $window.socket.on('stopVideo', function() {
