@@ -15,13 +15,13 @@ angular.module('app', ['chat', 'search'])
      $window.socket.emit('getQueue');
      setTimeout(function() {
       $window.socket.emit('ping');
-     }, 25000);
+     }, 100);
   });
 
   $window.socket.on('pong', function() {
     setTimeout(function(id) {
      $window.socket.emit('ping');
-    }, 25000);
+    }, 100);
   })
 
   swal({
