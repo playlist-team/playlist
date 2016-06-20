@@ -131,7 +131,10 @@ angular.module('app', ['chat', 'search'])
       $window.socket.emit('setDuration', video.duration);
       player.loadVideoById(video.id);
       $rootScope.$emit('changeQueue');
-    } else {}
+    } else {
+      $window.socket.emit('setDuration', video.duration);
+      $rootScope.$emit('changeQueue');
+    }
   });
 
   $window.socket.on('stopVideo', function() {
