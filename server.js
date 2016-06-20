@@ -10,7 +10,9 @@ var server = app.listen(port);
 
 var io = require('socket.io')({
   transports: ["xhr-polling"],
-  'polling duration': 10
+  'polling duration': 10,
+  'pingInterval': 100,
+  'pingTimeout': Infinity
 }).listen(server);
 
 var users = {};
