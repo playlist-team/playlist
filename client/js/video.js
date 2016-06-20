@@ -11,19 +11,6 @@ angular.module('app', ['chat', 'search'])
 
   $window.socket = io.connect();
 
-  $window.socket.on('connect', function() {
-     $window.socket.emit('getQueue');
-     setTimeout(function() {
-      $window.socket.emit('ping');
-     }, 100);
-  });
-
-  $window.socket.on('pong', function() {
-    setTimeout(function(id) {
-     $window.socket.emit('ping');
-    }, 100);
-  })
-
   swal({
     title: 'Welcome to Playlist',
     text: 'Enter your username',
@@ -34,7 +21,20 @@ angular.module('app', ['chat', 'search'])
     confirmButtonColor: '#1171A2'
   }, function(username) {
     $window.username = username || 'anonymous';
-    socket.emit('username', $window.username);
+    $window.socket.emit('username', $window.username);
+
+    $window.socket.on('connect', function() {
+       $window.socket.emit('getQueue');
+       setTimeout(function() {
+        $window.socket.emit('ping');
+       }, 100);
+    });
+
+    $window.socket.on('pong', function() {
+      setTimeout(function(id) {
+       $window.socket.emit('ping');
+      }, 100);
+    })
   });
 })
 
@@ -56,6 +56,7 @@ angular.module('app', ['chat', 'search'])
       width: '640',
       playerVars: {
         'autohide': 1,
+        'autoplay': 0,
         'modestbranding': 1,
         'controls': 0,
         'iv_load_policy': 3,
@@ -73,16 +74,16 @@ angular.module('app', ['chat', 'search'])
   //Event listener for when YouTube player finished loading
   function onPlayerReady(event) {
     //Emits request to server to get current video
-    socket.emit('getCurrent');
+    $window.socket.emit('getCurrent');
     //Receives current video from server
-    socket.on('setCurrent', function(video) {
+    $window.socket.on('setCurrent', function(video) {
       context.current = video;
-      socket.emit('getTime');
+      $window.socket.emit('getTime');
       $rootScope.$emit('changeQueue');
       player.loadVideoById(video.id);
     });
     //Receives event from server to initalize volume to 50
-    socket.on('setVolume', function() {
+    $window.socket.on('setVolume', function() {
       player.setVolume(50);
     });
     //Listens for volumeChange from Controller and sets the volume
@@ -95,7 +96,7 @@ angular.module('app', ['chat', 'search'])
   function onPlayerStateChange(event) {
     //Emit event notifying server that player has ended video
     if (event.data === YT.PlayerState.ENDED) {
-      socket.emit('ended');
+      $window.socket.emit('ended');
     }
     //Calculate remaining time of video playing and emit to controller
     if (event.data === YT.PlayerState.PLAYING) {
@@ -111,12 +112,12 @@ angular.module('app', ['chat', 'search'])
   }
 
   //Receive remaining time from server and seeks video to that time
-  socket.on('setTime', function(time) {
+  $window.socket.on('setTime', function(time) {
     player.seekTo(time, false);
   });
 
   //Recieve first video from server, plays it and emits queue to controller and time to server
-  socket.on('firstVideo', function(video) {
+  $window.socket.on('firstVideo', function(video) {
     context.current = video;
     player.loadVideoById(video.id);
     $rootScope.$emit('changeQueue');
@@ -124,38 +125,40 @@ angular.module('app', ['chat', 'search'])
   });
 
   //Recieve next video from server, plays it and emits queue to controller and time to server
-  socket.on('nextVideo', function(video) {
-    context.current = video;
-    socket.emit('setDuration', video.duration);
-    player.loadVideoById(video.id);
-    $rootScope.$emit('changeQueue');
+  $window.socket.on('nextVideo', function(video) {
+    if (video !== null) {
+      context.current = video;
+      $window.socket.emit('setDuration', video.duration);
+      player.loadVideoById(video.id);
+      $rootScope.$emit('changeQueue');
+    } else {}
   });
 
-  socket.on('stopVideo', function() {
+  $window.socket.on('stopVideo', function() {
     player.stopVideo();
   });
 
-  socket.on('addVideo', function(video) {
+  $window.socket.on('addVideo', function(video) {
     context.queue.push(video);
     $rootScope.$emit('changeQueue');
   });
 
-  socket.on('removeVideo', function(videoId){
+  $window.socket.on('removeVideo', function(videoId){
     context.queue.forEach(function(video, index){
       if(video.id === videoId){
         context.queue.splice(index, 1);
       }
     });
     $rootScope.$emit('changeQueue');
-    socket.emit('updateQueue', context.queue);
+    $window.socket.emit('updateQueue', context.queue);
   });
 
-  socket.on('setQueue', function(queue) {
+  $window.socket.on('setQueue', function(queue) {
     context.queue = queue;
     $rootScope.$emit('changeQueue');
   });
 
-  socket.on('setSync', function(time) {
+  $window.socket.on('setSync', function(time) {
     player.stopVideo();
     player.seekTo(time, false);
     player.playVideo();
@@ -163,7 +166,7 @@ angular.module('app', ['chat', 'search'])
 
 }])
 
-.controller('YouTubeController', ['$scope', 'VideoService', '$rootScope', function($scope, VideoService, $rootScope) {
+.controller('YouTubeController', ['$window', '$scope', 'VideoService', '$rootScope', function($window, $scope, VideoService, $rootScope) {
 
   $scope.volume;
   $scope.timer;
@@ -174,7 +177,7 @@ angular.module('app', ['chat', 'search'])
   $scope.downvotes = 0;
 
   //Recieve client socket id from server
-  socket.on('setId',function(socketId) {
+  $window.socket.on('setId',function(socketId) {
     $scope.socketId = socketId.slice(2);
   });
 
@@ -209,15 +212,15 @@ angular.module('app', ['chat', 'search'])
   });
 
   $scope.dequeue = function(videoId) {
-    socket.emit('dequeue', videoId);
+    $window.socket.emit('dequeue', videoId);
   }
 
   $scope.skip = function() {
-    socket.emit('skip');
+    $window.socket.emit('skip');
   }
 
   $scope.sync = function() {
-    socket.emit('getSync');
+    $window.socket.emit('getSync');
   }
 
   $rootScope.$on('changeQueue', function() {
@@ -228,21 +231,21 @@ angular.module('app', ['chat', 'search'])
   });
 
   $scope.upVote = function() { 
-    socket.emit('upVote');
+    $window.socket.emit('upVote');
   }
 
   $scope.downVote = function() {
-    socket.emit('downVote');
+    $window.socket.emit('downVote');
   }
 
-  socket.on('changeVotes', function(votes) {
+  $window.socket.on('changeVotes', function(votes) {
     $scope.$apply(function() {
       $scope.upvotes = votes.up;
       $scope.downvotes = votes.down;
     });
   });
 
-  socket.on('clearVotes', function() {
+  $window.socket.on('clearVotes', function() {
     $scope.$apply(function() {
       $scope.upvotes = 0;
       $scope.downvotes = 0;
