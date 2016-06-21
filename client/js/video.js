@@ -26,11 +26,6 @@ angular.module('app', ['chat', 'search'])
     $window.socket.on('connect', function() {
        $window.socket.emit('getQueue');
     });
-
-    $window.socket.on('pong', function() {
-      console.log('pong');
-      $window.socket.emit('ping');
-    })
   });
 })
 
