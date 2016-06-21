@@ -42,7 +42,7 @@ io.on('connection', function(socket) {
   socket.on('ping', function() {
     setTimeout(function() {
       io.sockets.connected[socket.id].emit('pong', socket.id);
-    })
+    }, 1000);
   })
   
   //Receives username from client and emits username, socket id, users online back to client
@@ -195,6 +195,20 @@ io.on('connection', function(socket) {
 
     io.emit('usersOnline', users);
   });
+
+  //Handles socket reconnect event with client
+  socket.on('reconnect', function() {
+    io.sockets.connected[socket.id].emit('comeback');
+  });
+
+  //Updates username on reconnection
+  socket.on('return', function(username) {
+    users[socket.id] = username;
+    io.sockets.connected[socket.id].emit('setUser', username);
+    io.sockets.connected[socket.id].emit('setId', socket.id);
+    io.emit('chatMessage', {username: "", message: users[socket.id] + " has reconnected"});
+    io.emit('usersOnline', users);
+  })
 
   //Receives upvote from client and updates vote information; emitting to all clients
   socket.on('upVote', function() {
