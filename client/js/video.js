@@ -28,9 +28,8 @@ angular.module('app', ['chat', 'search'])
     });
 
     $window.socket.on('pong', function() {
-      setTimeout(function() {
-       $window.socket.emit('ping');
-      }, 1000);
+      console.log('pong');
+      $window.socket.emit('ping');
     })
   });
 })
