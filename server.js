@@ -39,8 +39,12 @@ var reset = function() {
 
 io.on('connection', function(socket) {
 
-  socket.on('ping', function() {
+  setInterval(function() {
     io.sockets.connected[socket.id].emit('pong', socket.id);
+  }, 1000);
+
+  socket.on('ping', function() {
+    console.log('ping');
   })
   
   //Receives username from client and emits username, socket id, users online back to client
@@ -54,7 +58,6 @@ io.on('connection', function(socket) {
 
   //Sends queue information to client
   socket.on('getQueue', function() {
-    io.sockets.connected[socket.id].emit('pong', socket.id);
     if (queue.length) {
       io.sockets.connected[socket.id].emit('setQueue', queue);
     }
