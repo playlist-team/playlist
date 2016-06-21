@@ -25,11 +25,10 @@ angular.module('app', ['chat', 'search'])
 
     $window.socket.on('connect', function() {
        $window.socket.emit('getQueue');
-       $window.socket.emit('ping');
     });
 
     $window.socket.on('pong', function() {
-      setTimeout(function(id) {
+      setTimeout(function() {
        $window.socket.emit('ping');
       }, 1000);
     })
