@@ -185,12 +185,12 @@ header {
 #search-submit {
   position: relative;
   right: 30.5px;
-  bottom: 14.5px;
+  bottom: 15.5px;
 }
 
 #soundcloud-button {
   position: absolute;
-  right: 310px;
+  right: 230px;
   bottom: 32.6px;
 }
 
