@@ -182,9 +182,9 @@ header {
 }
 
 #search-submit {
-  position: fixed;
-  right: 340px;
-  bottom: 681px;
+  position: absolute;
+      top: 32.35px;
+      left: 829px;
 }
 
 #soundcloud-submit {
