@@ -35,6 +35,12 @@ angular.module('search', [])
     });
   }
 
+  $scope.getSound = function() {
+    SearchFactory.fetchSound($scope.field, function(results) {
+      $scope.searchList = results.data.items;
+    });
+  }
+
   //Sends video information to server
   $scope.enqueue = function(thumbnail) {
     SearchFactory.fetchResource(thumbnail.id.videoId, function(result) {
@@ -60,7 +66,7 @@ angular.module('search', [])
 }])
 
 //Search query from YouTube Data API
-.factory('SearchFactory', ['$http', function($http) {
+.factory('SearchFactory', ['$http', '$window', function($http, $window) {
 
   var fetchSearch = function(query, callback, token) {
     return $http.get('https://www.googleapis.com/youtube/v3/search', {
@@ -79,6 +85,16 @@ angular.module('search', [])
     })
   };
 
+  var fetchSound = function(query, callback) {
+    console.log(query);
+    console.log(SC);
+    SC.get('/tracks', {
+      q: query
+    }, function(results) {
+      console.log(results);
+    })
+  }
+
   var fetchResource = function(videoId, callback) {
     return $http({
       method: 'GET',
@@ -89,14 +105,8 @@ angular.module('search', [])
   }
   return {
     fetchSearch: fetchSearch,
+    fetchSound: fetchSound,
     fetchResource: fetchResource
   }
 
-}])
-
-.factory('SoundCloud', ['http', function($http) {
-
-  var fetchSearch = function(query, callback) {
-    return $http.get('')
-  }
 }])
