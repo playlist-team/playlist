@@ -18,7 +18,6 @@ body {
 }
 
 header {
-  position: relative;
   color: white;
   background-color: #22242A;
 }
@@ -80,9 +79,9 @@ header {
 }
 
 #volume {
-  position: absolute;
-  top: 42%;
-  left: 80%;
+  position: relative;
+  left: 15px;
+  bottom: 27.25px;
 }
 
 #skip {
@@ -182,16 +181,10 @@ header {
   outline: none;
 }
 
-#search-submit {
+#search-submit{
   position: relative;
   right: 30.5px;
-  bottom: 15.5px;
-}
-
-#soundcloud-button {
-  position: absolute;
-  right: 230px;
-  bottom: 32.6px;
+  bottom: 14.5px;
 }
 
 #search-submit:focus {
