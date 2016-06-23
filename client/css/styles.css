@@ -159,7 +159,7 @@ header {
 }
 #search-input {
   position: relative;
-  bottom: -16.5px;
+  bottom: -2.5px;
   left: 10px;
   background: #616573;
   width: 640px;
@@ -173,7 +173,6 @@ header {
 }
 
 #search {
-  position: relative;
   height: 0;
   bottom: 17.25px;
   display: inline-block;
@@ -187,13 +186,14 @@ header {
 #search-submit{
   position: relative;
   right: 30.5px;
-  bottom: -25.5px
+  bottom: -12.25px;
 }
 
 #soundcloud-button {
   position: relative;
-  left: 66.5%;
-  top: 4.7%;
+  left: 600px;
+  top: -26px;
+  width: 25px;
 }
 
 #search-submit:focus {
