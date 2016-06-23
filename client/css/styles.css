@@ -20,6 +20,8 @@ body {
 header {
   color: white;
   background-color: #22242A;
+  width: 1060px;
+  height: 83px;
 }
 
 #default-playlist-message {
@@ -157,7 +159,7 @@ header {
 }
 #search-input {
   position: relative;
-  bottom: 25.5px;
+  bottom: -16.5px;
   left: 10px;
   background: #616573;
   width: 640px;
@@ -171,7 +173,8 @@ header {
 }
 
 #search {
-  height: auto;
+  position: relative;
+  height: 0;
   bottom: 17.25px;
   display: inline-block;
   background-color: #22242A;
@@ -184,11 +187,11 @@ header {
 #search-submit{
   position: relative;
   right: 30.5px;
-  bottom: 15.5px;
+  bottom: -25.5px
 }
 
 #soundcloud-button {
-  position: absolute;
+  position: relative;
   left: 66.5%;
   top: 4.7%;
 }
