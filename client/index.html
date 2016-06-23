@@ -12,14 +12,15 @@
     <base href="/"></base>
   </head>
   <body ng-controller="YouTubeController">
+  <div id="playlist-container">
     <header>
       <img src="./img/logo.png" id="logo-image">
       <form id="search" ng-submit="getSearch(); toggleResults()" ng-controller="SearchController">
         <input id="search-input" ng-model="field" type="text" placeholder="Search for and add YouTube videos to the playlist" autocomplete="off">
         <input id="search-submit" type="image" src="./img/search.png">
-        <div id="soundcloud-button">
+<!--         <div id="soundcloud-button">
           <button id="soundcloud-submit" ng-click="getSearch(); toggleResults()" ng-controller="SearchController">></button>
-        </div>
+        </div> -->
         <search-directive show='showResults' width='750px' height='62%'>
           <div id="results" ng-if="showResults">
             <div class="video" ng-cloak ng-repeat="result in searchList track by $index" ng-click="item.clicked || enqueue(result); item.clicked = true">
@@ -113,6 +114,7 @@
           <form id="chat-submit" ng-submit="send(message)">
             <input id="chat-input" ng-model="message" type="text" placeholder="Enter Message" autocomplete="off" required/>
           </form>
+      </div>
       </div>
       
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular.min.js"></script>
