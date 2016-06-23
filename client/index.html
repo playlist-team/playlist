@@ -17,7 +17,9 @@
       <form id="search" ng-submit="getSearch(); toggleResults()" ng-controller="SearchController">
         <input id="search-input" ng-model="field" type="text" placeholder="Search for and add YouTube videos to the playlist" autocomplete="off">
         <input id="search-submit" type="image" src="./img/search.png">
-        <button id="soundcloud-submit" ng-click="getSearch(); toggleResults()" ng-controller="SearchController">></button>
+        <div id="soundcloud-button">
+          <button id="soundcloud-submit" ng-click="getSearch(); toggleResults()" ng-controller="SearchController">></button>
+        </div>
         <search-directive show='showResults' width='750px' height='62%'>
           <div id="results" ng-if="showResults">
             <div class="video" ng-cloak ng-repeat="result in searchList track by $index" ng-click="item.clicked || enqueue(result); item.clicked = true">
