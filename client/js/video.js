@@ -11,6 +11,10 @@ angular.module('app', ['chat', 'search'])
 
   $window.socket = io.connect();
 
+  SC.initialize({
+    client_id: "3b9e9785e6f45e6574389e7699ccdcf8"
+  });
+  
   swal({
     title: 'Welcome to Playlist',
     text: 'Enter your username',

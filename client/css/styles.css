@@ -181,10 +181,16 @@ header {
   outline: none;
 }
 
-#search-submit{
+#search-submit {
+  position: fixed;
+  right: 340px;
+  bottom: 681px;
+}
+
+#soundcloud-submit {
   position: relative;
-  right: 30.5px;
-  bottom: 14.5px;
+  right: 52.5px;
+  bottom: 26.5px;
 }
 
 #search-submit:focus {

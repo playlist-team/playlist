@@ -1,5 +1,5 @@
 angular.module('search', [])
-//:oad YouTube search results in a modal
+//Load YouTube search results in a modal
 .directive('searchDirective', function() {
   return {
     restrict: 'E',
@@ -92,4 +92,11 @@ angular.module('search', [])
     fetchResource: fetchResource
   }
 
+}])
+
+.factory('SoundCloud', ['http', function($http) {
+
+  var fetchSearch = function(query, callback) {
+    return $http.get('')
+  }
 }])
