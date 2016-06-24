@@ -36,8 +36,8 @@ angular.module('search', [])
   }
 
   $scope.getSound = function() {
-    SearchFactory.fetchSound($scope.field, function(results) {
-      $scope.searchList = results.data.items;
+    SearchFactory.fetchSound($scope.field).then(function(results) {
+      $scope.searchList = results;
     });
   }
 
@@ -66,7 +66,9 @@ angular.module('search', [])
 }])
 
 //Search query from YouTube Data API
-.factory('SearchFactory', ['$http', '$window', function($http, $window) {
+.factory('SearchFactory', ['$http', '$window', '$q', function($http, $window, $q) {
+
+  var deferred = $q.defer();
 
   var fetchSearch = function(query, callback, token) {
     return $http.get('https://www.googleapis.com/youtube/v3/search', {
@@ -85,14 +87,14 @@ angular.module('search', [])
     })
   };
 
-  var fetchSound = function(query, callback) {
-    console.log(query);
-    console.log(SC);
+  var fetchSound = function(query) {
+    deferred = $q.defer();
     SC.get('/tracks', {
       q: query
-    }, function(results) {
-      console.log(results);
-    })
+    }, function(results){
+      deferred.resolve(results);
+    });
+    return deferred.promise;
   }
 
   var fetchResource = function(videoId, callback) {

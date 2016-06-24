@@ -464,6 +464,57 @@ header {
   color: white;
 }
 
+.audio {
+  position: relative;
+  padding: 10px;
+}
+
+.audio-block {
+  padding-left: 5px;
+}
+
+.audio-thumb {
+  float: left;
+  padding-right: 10px;
+  position: relative;
+}
+
+.audio-thumb-check {
+  position: absolute;
+  left: 4%;
+  top: 20%;
+}
+
+.audio:nth-child(2n-1) {
+  background-color: #f5f5f9;
+}
+
+.audio-title {
+  padding-top: 5px;
+  font-size: 18px;
+  display: block;
+}
+
+.audio-author {
+  color: #616573;
+  font-size: 14px;
+  font-weight: 900;
+  padding: 5px 0;
+  display: block;
+}
+
+.audio-description {
+  font-size: 12px;
+  line-height: 1;
+  height:38px;
+  display:block;
+}
+
+.audio:hover {
+  background: #1FA0DF;
+  color: white;
+}
+
 .time {
   color: #DBDBDC;
   font-size: 11px;
