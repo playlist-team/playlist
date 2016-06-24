@@ -75,42 +75,6 @@ angular.module('app', ['chat', 'search'])
     $window.socket.emit('ended');
   })
 
-  widget.bind(SC.Widget.Events.READY, function() {
-    $window.socket.emit('getCurrent');
-    //Receives current video from server
-    $window.socket.on('setCurrent', function(video) {
-      context.current = video;
-      $window.socket.emit('getTime');
-      $rootScope.$emit('changeQueue');
-      if (video.soundcloud === true) {
-        console.log("STEPPED");
-        $rootScope.$emit('showCloud');
-        widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, callback: function() {
-          widget.setVolume(context.volume);
-          console.log("CALLEDBACK");
-          console.log(widget, context.time);
-          $window.socket.emit('getTime');
-          widget.seekTo(context.time);
-        }});
-      } else {
-        $rootScope.$emit('showTube');
-        player.loadVideoById(video.id);
-      }
-    });
-    //Receives event from server to initalize volume to 50
-    $window.socket.on('setVolume', function() {
-      context.volume = .5;
-      widget.setVolume(.5);
-      player.setVolume(50);
-    });
-    //Listens for volumeChange from Controller and sets the volume
-    $rootScope.$on('volumeChange', function(event, volume) {
-      context.volume = volume/100;
-      player.setVolume(volume);
-      widget.setVolume(volume/100);
-    });
-  })
-
   widget.bind(SC.Widget.Events.PLAY, function() {
     var total;
     var current;
@@ -157,6 +121,7 @@ angular.module('app', ['chat', 'search'])
           console.log(widget, context.time);
           $window.socket.emit('getTime');
           widget.seekTo(context.time);
+          $window.socket.emit('getSync');
         }});
       } else {
         $rootScope.$emit('showTube');
