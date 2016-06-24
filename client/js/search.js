@@ -44,7 +44,7 @@ angular.module('search', [])
 
   //Sends video information to server
   $scope.enqueue = function(thumbnail) {
-    if (thumbnail.data) {
+    if (thumbnail.id.videoId) {
       SearchFactory.fetchResource(thumbnail.id.videoId, function(result) {
         var video = result.data.items[0];
         var length = video.contentDetails.duration.split(/[A-Za-z]/);
