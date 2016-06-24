@@ -357,6 +357,11 @@ header {
   margin-top: 0px
 }
 
+#sc-player {
+  margin-left: 0px;
+  margin-top: 0px
+}
+
 .thumbs{
   width:192;
   height:110

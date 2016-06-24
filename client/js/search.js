@@ -63,7 +63,7 @@ angular.module('search', [])
         thumbnail: thumbnail.artwork_url,
         username: $window.username,
         socket: socket.id,
-        duration: null
+        duration: 'soundcloud'
       });
     };
   };

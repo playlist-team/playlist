@@ -37,12 +37,13 @@ angular.module('app', ['chat', 'search'])
   $locationProvider.html5Mode(true);
 })
 
-.service('VideoService', ['$window', '$rootScope', function($window, $rootScope) {
+.service('VideoService', ['$window', '$rootScope', '$q', function($window, $rootScope, $q) {
   var context = this;
 
   this.current = null;
   this.player;
   this.queue = [];
+  this.sound = false;
 
   //Instantiate new YouTube player after iFrame API has loaded
   $window.onYouTubeIframeAPIReady = function() {
@@ -65,6 +66,13 @@ angular.module('app', ['chat', 'search'])
       }
     });
   }
+
+  // $window.widget = SC.oEmbed('', {auto_play: true, show_comments: false, iframe: false, maxheigth: 166}, document.getElementById('sc-player'));
+
+  var widgetElement = document.getElementById('sc-player');
+  var widget = SC.Widget(widgetElement);
+
+  var deferred = $q.defer();
 
   //Event listener for when YouTube player finished loading
   function onPlayerReady(event) {
@@ -114,17 +122,39 @@ angular.module('app', ['chat', 'search'])
   //Recieve first video from server, plays it and emits queue to controller and time to server
   $window.socket.on('firstVideo', function(video) {
     context.current = video;
-    player.loadVideoById(video.id);
-    $rootScope.$emit('changeQueue');
-    socket.emit('setDuration', video.duration);
+    if (video.duration === 'soundcloud') {
+      SC.oEmbed(video.id, {autoplay:true}, document.getElementById('player'));
+    } else {
+      player.loadVideoById(video.id);
+      $rootScope.$emit('changeQueue');
+      socket.emit('setDuration', video.duration);
+    }
   });
 
   //Recieve next video from server, plays it and emits queue to controller and time to server
   $window.socket.on('nextVideo', function(video) {
     context.current = video;
-    $window.socket.emit('setDuration', video.duration);
-    player.loadVideoById(video.id);
-    $rootScope.$emit('changeQueue'); 
+    if (video.duration === 'soundcloud') {
+      $rootScope.$emit('showCloud');
+
+      // SC.stream(video.id, function(track) {
+      //   deferred.resolve(track);
+      // })
+
+      // deferred.promise.then(function(track) {
+      //   console.log(track);
+      //   $window.track = track;
+      //   track.setVolume(1);
+      //   track.play();
+      // })
+      widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false});
+      // $window.widget = SC.oEmbed(video.id, {auto_play: true, show_comments: false, heigth: 357, sharing: false, liking: false, download: false}, document.getElementById('sc-player'));
+    } else {
+      $rootScope.$emit('showTube');
+      player.loadVideoById(video.id);
+      $rootScope.$emit('changeQueue');
+      socket.emit('setDuration', video.duration);
+    }
   });
 
   $window.socket.on('stopVideo', function() {
@@ -168,6 +198,8 @@ angular.module('app', ['chat', 'search'])
   $scope.playlist;
   $scope.upvotes = 0;
   $scope.downvotes = 0;
+  $scope.widget = false;
+  $scope.tube = false;
 
   //Recieve client socket id from server
   $window.socket.on('setId',function(socketId) {
@@ -177,6 +209,21 @@ angular.module('app', ['chat', 'search'])
   //Stops the interval on the timer on a pause event from service
   $rootScope.$on('paused', function(event, time) {
     clearInterval($scope.timer);
+  });
+
+  $rootScope.$on('showTube', function() {
+    $scope.$apply(function() {
+      $scope.widget = false;
+      $scope.tube = true;
+    });
+  });
+
+  $rootScope.$on('showCloud', function() {
+    console.log('CLOUD');
+    $scope.$apply(function() {
+      $scope.widget = true;
+      $scope.tube = false;
+    });
   });
 
   //Receives time remaining from service, creates a clock interval and update duration in scope
