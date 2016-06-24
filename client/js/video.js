@@ -94,7 +94,7 @@ angular.module('app', ['chat', 'search'])
         widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, callback: function() {
           $window.socket.emit('getTime');
           widget.pause();
-          widget.seekTo(time);
+          widget.seekTo(context.time);
           widget.play();
         }});
       } else {
