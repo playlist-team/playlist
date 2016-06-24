@@ -43,7 +43,7 @@ angular.module('app', ['chat', 'search'])
   this.current = null;
   this.player;
   this.queue = [];
-  this.sound = false;
+  this.time= null;
 
   var widgetElement = document.getElementById('sc-player');
   var widget = SC.Widget(widgetElement);
@@ -93,6 +93,9 @@ angular.module('app', ['chat', 'search'])
         $rootScope.$emit('showCloud');
         widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, callback: function() {
           $window.socket.emit('getTime');
+          widget.pause();
+          widget.seekTo(time);
+          widget.play();
         }});
       } else {
         $rootScope.$emit('showTube');
@@ -132,7 +135,7 @@ angular.module('app', ['chat', 'search'])
 
   //Receive remaining time from server and seeks video to that time
   $window.socket.on('setTime', function(time) {
-    console.log(time);
+    this.time = time * 1000;
     player.seekTo(time, false);
     widget.seekTo(time * 1000);
   });
@@ -232,7 +235,6 @@ angular.module('app', ['chat', 'search'])
   });
 
   $rootScope.$on('showCloud', function() {
-    console.log('CLOUD');
     $scope.$apply(function() {
       $scope.widget = true;
       $scope.tube = false;
