@@ -52,6 +52,10 @@ angular.module('app', ['chat', 'search'])
     $window.socket.emit('ended');
   })
 
+  widget.bind(SC.Widget.Events.READY, function() {
+
+  })
+
   //Instantiate new YouTube player after iFrame API has loaded
   $window.onYouTubeIframeAPIReady = function() {
     this.player = new YT.Player('player', {
@@ -88,6 +92,7 @@ angular.module('app', ['chat', 'search'])
       if (video.soundcloud === true) {
         $rootScope.$emit('showCloud');
         widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false});
+        $window.socket.emit('getTime');
       } else {
         $rootScope.$emit('showTube');
         player.loadVideoById(video.id);
