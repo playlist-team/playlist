@@ -44,6 +44,7 @@ angular.module('app', ['chat', 'search'])
   this.player;
   this.queue = [];
   this.time= null;
+  this.volume = null;
 
   //Instantiate new YouTube player after iFrame API has loaded
   $window.onYouTubeIframeAPIReady = function() {
@@ -135,6 +136,7 @@ angular.module('app', ['chat', 'search'])
     });
     //Listens for volumeChange from Controller and sets the volume
     $rootScope.$on('volumeChange', function(event, volume) {
+      context.volume = volume/100;
       player.setVolume(volume);
       widget.setVolume(volume/100);
     });
@@ -185,6 +187,7 @@ angular.module('app', ['chat', 'search'])
     context.current = video;
     if (video.soundcloud === true) {
       $rootScope.$emit('showCloud');
+      widget.setVolume(context.volume);
       widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false});
       $rootScope.$emit('changeQueue');
       socket.emit('setDuration', {duration: video.duration, sc: video.soundcloud});
