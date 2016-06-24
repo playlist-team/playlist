@@ -37,6 +37,7 @@ angular.module('search', [])
 
   $scope.getSound = function() {
     SearchFactory.fetchSound($scope.field).then(function(results) {
+      console.log(results);
       $scope.searchList = results;
     });
   }
