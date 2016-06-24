@@ -27,13 +27,13 @@
               <img class="video-thumb" id="thumb-{{result.snippet.title}}" src={{result.snippet.thumbnails.default.url}}>
               <img class="video-thumb-check" id="check-{{res.snippet.title}}" src="./img/check.png" ng-show="item.clicked">
               <span class="video-title">
-                {{result.snippet.title| limitTo: 75 }}{{result.snippet.description.length > 75 ? '...' : ''}}
+                {{result.snippet.title || result.title| limitTo: 75 }}{{result.snippet.description.length > 75 ? '...' : ''}}
               </span>
               <span class="video-author">
-                {{result.snippet.channelTitle}}
+                {{result.snippet.channelTitle || result.user.username}}
               </span>
               <span class="video-description">
-                {{result.snippet.description | limitTo: 160 }}{{result.snippet.description.length > 160 ? '...' : ''}}
+                {{result.snippet.description || result.description | limitTo: 160 }}{{result.snippet.description.length > 160 ? '...' : ''}}
               </span>
             </div>
           </div>
