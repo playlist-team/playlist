@@ -87,6 +87,19 @@ angular.module('app', ['chat', 'search'])
     });
   })
 
+  widget.bind(SC.Widget.Events.SEEK, function() {
+    var total;
+    var current;
+    widget.getDuration(function(duration) {
+      total = duration;
+      widget.getPosition(function(position) {
+        current = position;
+        var timeLeft = (total - current)/1000;
+        $rootScope.$emit('setTimer', timeLeft);
+      })
+    });
+  })
+
   widget.bind(SC.Widget.Events.READY, function() {
     widget.seekTo(context.time);
   })
