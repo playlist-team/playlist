@@ -45,6 +45,13 @@ angular.module('app', ['chat', 'search'])
   this.queue = [];
   this.sound = false;
 
+  var widgetElement = document.getElementById('sc-player');
+  var widget = SC.Widget(widgetElement);
+
+  widget.bind(SC.Widget.Events.FINISH, function() {
+    $window.socket.emit('ended');
+  })
+  
   //Instantiate new YouTube player after iFrame API has loaded
   $window.onYouTubeIframeAPIReady = function() {
     this.player = new YT.Player('player', {
@@ -68,9 +75,6 @@ angular.module('app', ['chat', 'search'])
   }
 
   // $window.widget = SC.oEmbed('', {auto_play: true, show_comments: false, iframe: false, maxheigth: 166}, document.getElementById('sc-player'));
-
-  var widgetElement = document.getElementById('sc-player');
-  var widget = SC.Widget(widgetElement);
 
   var deferred = $q.defer();
 
