@@ -51,7 +51,7 @@ angular.module('app', ['chat', 'search'])
   widget.bind(SC.Widget.Events.FINISH, function() {
     $window.socket.emit('ended');
   })
-  
+
   //Instantiate new YouTube player after iFrame API has loaded
   $window.onYouTubeIframeAPIReady = function() {
     this.player = new YT.Player('player', {
@@ -76,8 +76,6 @@ angular.module('app', ['chat', 'search'])
 
   // $window.widget = SC.oEmbed('', {auto_play: true, show_comments: false, iframe: false, maxheigth: 166}, document.getElementById('sc-player'));
 
-  var deferred = $q.defer();
-
   //Event listener for when YouTube player finished loading
   function onPlayerReady(event) {
     //Emits request to server to get current video
@@ -92,10 +90,12 @@ angular.module('app', ['chat', 'search'])
     //Receives event from server to initalize volume to 50
     $window.socket.on('setVolume', function() {
       player.setVolume(50);
+      widget.setVolume(50);
     });
     //Listens for volumeChange from Controller and sets the volume
     $rootScope.$on('volumeChange', function(event, volume) {
       player.setVolume(volume);
+      widget.setVolume(volume)
     });
   }
 
@@ -141,16 +141,6 @@ angular.module('app', ['chat', 'search'])
     if (video.duration === 'soundcloud') {
       $rootScope.$emit('showCloud');
 
-      // SC.stream(video.id, function(track) {
-      //   deferred.resolve(track);
-      // })
-
-      // deferred.promise.then(function(track) {
-      //   console.log(track);
-      //   $window.track = track;
-      //   track.setVolume(1);
-      //   track.play();
-      // })
       widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false});
       // $window.widget = SC.oEmbed(video.id, {auto_play: true, show_comments: false, heigth: 357, sharing: false, liking: false, download: false}, document.getElementById('sc-player'));
     } else {
