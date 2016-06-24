@@ -44,18 +44,29 @@ angular.module('search', [])
 
   //Sends video information to server
   $scope.enqueue = function(thumbnail) {
-    SearchFactory.fetchResource(thumbnail.id.videoId, function(result) {
-      var video = result.data.items[0];
-      var length = video.contentDetails.duration.split(/[A-Za-z]/);
-      var seconds = (Number(length[2]) * 60) + Number(length[3]);
-      socket.emit('enqueue', { id: video.id,
-                               title: video.snippet.title,
-                               thumbnail: video.snippet.thumbnails.default.url,
-                               username: $window.username,
-                               socket: socket.id, 
-                               duration: seconds });
-    });
-  }
+    if (thumbnail.data) {
+      SearchFactory.fetchResource(thumbnail.id.videoId, function(result) {
+        var video = result.data.items[0];
+        var length = video.contentDetails.duration.split(/[A-Za-z]/);
+        var seconds = (Number(length[2]) * 60) + Number(length[3]);
+        socket.emit('enqueue', { id: video.id,
+                                 title: video.snippet.title,
+                                 thumbnail: video.snippet.thumbnails.default.url,
+                                 username: $window.username,
+                                 socket: socket.id, 
+                                 duration: seconds });
+      });
+    } else {
+      socket.emit('enqueue', {
+        id: thumbnail.uri,
+        title: thumbnail.title,
+        thumbnail: thumbnail.artwork_url,
+        username: $window.username,
+        socket: socket.id,
+        duration: null
+      });
+    };
+  };
 
   $scope.showResults = false;
 
