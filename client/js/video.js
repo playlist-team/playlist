@@ -85,7 +85,11 @@ angular.module('app', ['chat', 'search'])
       context.current = video;
       $window.socket.emit('getTime');
       $rootScope.$emit('changeQueue');
-      player.loadVideoById(video.id);
+      if (video.soundcloud === true) {
+        widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false});
+      } else {
+        player.loadVideoById(video.id);
+      }
     });
     //Receives event from server to initalize volume to 50
     $window.socket.on('setVolume', function() {
@@ -124,21 +128,23 @@ angular.module('app', ['chat', 'search'])
   });
 
   //Recieve first video from server, plays it and emits queue to controller and time to server
-  $window.socket.on('firstVideo', function(video) {
-    context.current = video;
-    if (video.duration === 'soundcloud') {
-      SC.oEmbed(video.id, {autoplay:true}, document.getElementById('player'));
-    } else {
-      player.loadVideoById(video.id);
-      $rootScope.$emit('changeQueue');
-      socket.emit('setDuration', video.duration);
-    }
-  });
+  // $window.socket.on('firstVideo', function(video) {
+  //   context.current = video;
+  //   if (video.duration === 'soundcloud') {
+  //     SC.oEmbed(video.id, {autoplay:true}, document.getElementById('player'));
+  //   } else {
+  //     player.loadVideoById(video.id);
+  //     $rootScope.$emit('changeQueue');
+  //     socket.emit('setDuration', video.duration);
+  //   }
+  // });
 
   //Recieve next video from server, plays it and emits queue to controller and time to server
   $window.socket.on('nextVideo', function(video) {
+    player.stopVideo();
+    widget.pause();
     context.current = video;
-    if (video.duration === 'soundcloud') {
+    if (video.soundcloud === true) {
       $rootScope.$emit('showCloud');
 
       widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false});
@@ -153,6 +159,7 @@ angular.module('app', ['chat', 'search'])
 
   $window.socket.on('stopVideo', function() {
     player.stopVideo();
+    widget.toggle();
   });
 
   $window.socket.on('addVideo', function(video) {

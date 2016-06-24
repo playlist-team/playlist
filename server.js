@@ -147,7 +147,7 @@ io.on('connection', function(socket) {
         current = queue.shift();
         reset();
       } else {
-        set= false;
+        set = false;
         current = null;
         reset();
         io.emit('stopVideo');
