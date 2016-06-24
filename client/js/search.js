@@ -104,7 +104,8 @@ angular.module('search', [])
   var fetchSound = function(query) {
     deferred = $q.defer();
     SC.get('/tracks', {
-      q: query
+      q: query,
+      limit: 200
     }, function(results){
       deferred.resolve(results);
     });
