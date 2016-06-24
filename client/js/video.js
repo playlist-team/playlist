@@ -174,7 +174,7 @@ angular.module('app', ['chat', 'search'])
 
   $window.socket.on('stopVideo', function() {
     player.stopVideo();
-    widget.toggle();
+    widget.pause();
   });
 
   $window.socket.on('addVideo', function(video) {
