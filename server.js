@@ -156,11 +156,14 @@ io.on('connection', function(socket) {
   });
 
   //Start the video sync clock
-  socket.on('setDuration', function(duration) {
+  socket.on('setDuration', function(video) {
+    if (video.sc === true) {
+      video.duration = video.duration/1000;
+    }
     if (!set) {
       set = true;
-      timeTotal = duration;
-      timeLeft = duration;
+      timeTotal = video.duration;
+      timeLeft = video.duration;
       clearInterval(sync);
       sync = setInterval(function() {
         timeLeft--;

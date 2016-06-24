@@ -86,8 +86,10 @@ angular.module('app', ['chat', 'search'])
       $window.socket.emit('getTime');
       $rootScope.$emit('changeQueue');
       if (video.soundcloud === true) {
+        $rootScope.$emit('showCloud');
         widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false});
       } else {
+        $rootScope.$emit('showTube');
         player.loadVideoById(video.id);
       }
     });
@@ -125,6 +127,7 @@ angular.module('app', ['chat', 'search'])
   //Receive remaining time from server and seeks video to that time
   $window.socket.on('setTime', function(time) {
     player.seekTo(time, false);
+    widget.seekTo(time * 1000);
   });
 
   //Recieve first video from server, plays it and emits queue to controller and time to server
@@ -148,12 +151,14 @@ angular.module('app', ['chat', 'search'])
       $rootScope.$emit('showCloud');
 
       widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false});
+      $rootScope.$emit('changeQueue');
+      socket.emit('setDuration', {duration: video.duration, sc: video.soundcloud});
       // $window.widget = SC.oEmbed(video.id, {auto_play: true, show_comments: false, heigth: 357, sharing: false, liking: false, download: false}, document.getElementById('sc-player'));
     } else {
       $rootScope.$emit('showTube');
       player.loadVideoById(video.id);
       $rootScope.$emit('changeQueue');
-      socket.emit('setDuration', video.duration);
+      socket.emit('setDuration', {duration: video.duration, sc: video.soundcloud});
     }
   });
 
