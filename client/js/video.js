@@ -115,11 +115,8 @@ angular.module('app', ['chat', 'search'])
       $window.socket.emit('getTime');
       $rootScope.$emit('changeQueue');
       if (video.soundcloud === true) {
-        console.log("STEPPED")
         $rootScope.$emit('showCloud');
         widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, callback: function() {
-          console.log("CALLEDBACK")
-          console.log(widget, context.time);
           $window.socket.emit('getTime');
           widget.seekTo(context.time);
         }});
