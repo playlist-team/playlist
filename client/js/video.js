@@ -85,6 +85,7 @@ angular.module('app', ['chat', 'search'])
         $rootScope.$emit('setTimer', timeLeft);
       })
     });
+    $window.socket.emit('getSync');
   })
 
   widget.bind(SC.Widget.Events.SEEK, function() {
