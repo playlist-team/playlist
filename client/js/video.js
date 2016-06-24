@@ -15,6 +15,9 @@ angular.module('app', ['chat', 'search'])
     client_id: "3b9e9785e6f45e6574389e7699ccdcf8"
   });
 
+  $window.widgetElement = document.getElementById('sc-player');
+  $window.widget = SC.Widget(widgetElement);
+
   swal({
     title: 'Welcome to Playlist',
     text: 'Enter your username',
@@ -44,9 +47,6 @@ angular.module('app', ['chat', 'search'])
   this.player;
   this.queue = [];
   this.time= null;
-
-  var widgetElement = document.getElementById('sc-player');
-  var widget = SC.Widget(widgetElement);
 
   widget.bind(SC.Widget.Events.FINISH, function() {
     $window.socket.emit('ended');
