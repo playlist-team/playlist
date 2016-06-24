@@ -75,7 +75,6 @@ angular.module('app', ['chat', 'search'])
   })
 
   widget.bind(SC.Widget.Events.READY, function() {
-    widget.seekTo(context.time);
   })
 
   widget.bind(SC.Widget.Events.PLAY, function() {
@@ -89,7 +88,6 @@ angular.module('app', ['chat', 'search'])
         $rootScope.$emit('setTimer', timeLeft);
       })
     });
-    widget.seekTo(context.time);
   })
 
   widget.bind(SC.Widget.Events.SEEK, function() {
