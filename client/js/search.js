@@ -54,7 +54,8 @@ angular.module('search', [])
                                  thumbnail: video.snippet.thumbnails.default.url,
                                  username: $window.username,
                                  socket: socket.id, 
-                                 duration: seconds });
+                                 duration: seconds,
+                                 soundcloud: false });
       });
     } else {
       socket.emit('enqueue', {
@@ -63,7 +64,8 @@ angular.module('search', [])
         thumbnail: thumbnail.artwork_url,
         username: $window.username,
         socket: socket.id,
-        duration: 'soundcloud'
+        duration: thumbnail.duration,
+        soundcloud: true
       });
     };
   };
