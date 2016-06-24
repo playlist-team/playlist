@@ -53,8 +53,35 @@ angular.module('app', ['chat', 'search'])
   })
 
   widget.bind(SC.Widget.Events.READY, function() {
+    //Emits request to server to get current video
+    $window.socket.emit('getCurrent');
+    //Receives current video from server
+    $window.socket.on('setCurrent', function(video) {
+      if(video.soundcloud === true) {
+        context.current = video;
+        $window.socket.emit('getTime');
+        $rootScope.$emit('changeQueue');
+        $rootScope.$emit('showCloud');
+        widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, callback: function() {
+          $window.socket.emit('getTime');
+          widget.pause();
+          widget.seekTo(context.time);
+          widget.play();
+        }});
+      }
+    });
 
-  })
+    //Receives event from server to initalize volume to 50
+    $window.socket.on('setVolume', function() {
+      widget.setVolume(.5);
+    });
+
+    //Listens for volumeChange from Controller and sets the volume
+    $rootScope.$on('volumeChange', function(event, volume) {
+      widget.setVolume(volume/100);
+    });
+
+  });
 
   //Instantiate new YouTube player after iFrame API has loaded
   $window.onYouTubeIframeAPIReady = function() {
@@ -86,31 +113,21 @@ angular.module('app', ['chat', 'search'])
     $window.socket.emit('getCurrent');
     //Receives current video from server
     $window.socket.on('setCurrent', function(video) {
-      context.current = video;
-      $window.socket.emit('getTime');
-      $rootScope.$emit('changeQueue');
-      if (video.soundcloud === true) {
-        $rootScope.$emit('showCloud');
-        widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, callback: function() {
-          $window.socket.emit('getTime');
-          widget.pause();
-          widget.seekTo(context.time);
-          widget.play();
-        }});
-      } else {
+      if (video.soundcloud === false) {
+        context.current = video;
+        $window.socket.emit('getTime');
+        $rootScope.$emit('changeQueue');
         $rootScope.$emit('showTube');
         player.loadVideoById(video.id);
       }
     });
     //Receives event from server to initalize volume to 50
     $window.socket.on('setVolume', function() {
-      widget.setVolume(.5);
       player.setVolume(50);
     });
     //Listens for volumeChange from Controller and sets the volume
     $rootScope.$on('volumeChange', function(event, volume) {
       player.setVolume(volume);
-      widget.setVolume(volume/100);
     });
   }
 
