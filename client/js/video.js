@@ -74,6 +74,10 @@ angular.module('app', ['chat', 'search'])
     $window.socket.emit('ended');
   })
 
+  widget.bind(SC.Widget.Events.READY, function() {
+    widget.seekTo(context.time);
+  })
+
   widget.bind(SC.Widget.Events.PLAY, function() {
     var total;
     var current;
@@ -85,6 +89,7 @@ angular.module('app', ['chat', 'search'])
         $rootScope.$emit('setTimer', timeLeft);
       })
     });
+    widget.seekTo(context.time);
   })
 
   widget.bind(SC.Widget.Events.SEEK, function() {
@@ -100,9 +105,6 @@ angular.module('app', ['chat', 'search'])
     });
   })
 
-  widget.bind(SC.Widget.Events.READY, function() {
-    widget.seekTo(context.time);
-  })
   // $window.widget = SC.oEmbed('', {auto_play: true, show_comments: false, iframe: false, maxheigth: 166}, document.getElementById('sc-player'));
 
   //Event listener for when YouTube player finished loading
