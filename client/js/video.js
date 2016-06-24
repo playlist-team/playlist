@@ -89,13 +89,13 @@ angular.module('app', ['chat', 'search'])
     });
     //Receives event from server to initalize volume to 50
     $window.socket.on('setVolume', function() {
+      widget.setVolume(.5);
       player.setVolume(50);
-      widget.setVolume(50);
     });
     //Listens for volumeChange from Controller and sets the volume
     $rootScope.$on('volumeChange', function(event, volume) {
       player.setVolume(volume);
-      widget.setVolume(volume)
+      widget.setVolume(volume/100);
     });
   }
 
