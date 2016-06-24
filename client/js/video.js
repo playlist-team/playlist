@@ -119,6 +119,7 @@ angular.module('app', ['chat', 'search'])
         console.log("STEPPED");
         $rootScope.$emit('showCloud');
         widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, callback: function() {
+          widget.setVolume(context.volume);
           console.log("CALLEDBACK");
           console.log(widget, context.time);
           $window.socket.emit('getTime');
@@ -187,8 +188,9 @@ angular.module('app', ['chat', 'search'])
     context.current = video;
     if (video.soundcloud === true) {
       $rootScope.$emit('showCloud');
-      widget.setVolume(context.volume);
-      widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false});
+      widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, callback: function() {
+        widget.setVolume(context.volume);
+      }});
       $rootScope.$emit('changeQueue');
       socket.emit('setDuration', {duration: video.duration, sc: video.soundcloud});
       // $window.widget = SC.oEmbed(video.id, {auto_play: true, show_comments: false, heigth: 357, sharing: false, liking: false, download: false}, document.getElementById('sc-player'));
