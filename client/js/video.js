@@ -91,8 +91,9 @@ angular.module('app', ['chat', 'search'])
       $rootScope.$emit('changeQueue');
       if (video.soundcloud === true) {
         $rootScope.$emit('showCloud');
-        widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false});
-        $window.socket.emit('getTime');
+        widget.load(video.id, {auto_play: true, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, callback: function() {
+          $window.socket.emit('getTime');
+        }});
       } else {
         $rootScope.$emit('showTube');
         player.loadVideoById(video.id);
@@ -131,6 +132,7 @@ angular.module('app', ['chat', 'search'])
 
   //Receive remaining time from server and seeks video to that time
   $window.socket.on('setTime', function(time) {
+    console.log(time);
     player.seekTo(time, false);
     widget.seekTo(time * 1000);
   });
