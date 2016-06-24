@@ -52,8 +52,17 @@ angular.module('app', ['chat', 'search'])
     $window.socket.emit('ended');
   })
 
-  widget.bind(SC.Widget.Events.READY, function() {
-
+  widget.bind(SC.Widget.Events.PLAY, function() {
+    var total;
+    var current;
+    widget.getDuration(function(duration) {
+      total = duration;
+      widget.getPosition(function(position) {
+        current = position;
+        var timeLeft = (total - current)/1000;
+        $rootScope.$emit('setTimer', timeLeft);
+      })
+    });
   })
 
   //Instantiate new YouTube player after iFrame API has loaded
