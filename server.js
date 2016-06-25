@@ -25,7 +25,7 @@ var timeTotal;
 var timeLeft;
 var sync;
 var set;
-var switched;
+var switched = false;
 
 //Helper function to reset the state of clients connected
 var reset = function() {
@@ -124,7 +124,7 @@ io.on('connection', function(socket) {
   });
 
   //Receives video ended from client and sets current to next in queue
-  //Jerry-rigged so that the fastest client emits the switch and locks other clients out for 5 seconds
+  //Jerry-rigged so that the fastest client emits the switch and locks other clients out for 7 seconds
   socket.on('ended', function() {
     if (!switched) {
       switched = true;
@@ -133,7 +133,7 @@ io.on('connection', function(socket) {
       reset();
       setTimeout(function() {
         switched = false;
-      }, 5000);
+      }, 7000);
     }
   });
 
