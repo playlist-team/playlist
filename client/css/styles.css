@@ -82,8 +82,8 @@ header {
 
 #volume {
   position: relative;
-  left: 15px;
-  bottom: 27.25px;
+  left: 79.25%;
+  bottom: 52.5%;
 }
 
 #skip {
@@ -162,10 +162,10 @@ header {
   bottom: -10.5px;
   left: 10px;
   background: #616573;
-  width: 640px;
+  width: 600px;
   line-height: 30px;
   height: 15px;
-  padding: 10px;
+  padding: 10px 40px 10px 40px;
   color: white;
   font-size: 14px;
   border-radius: 20px;
@@ -185,8 +185,8 @@ header {
 
 #search-submit{
   position: relative;
-  right: 30.5px;
-  bottom: -20.5px;
+  right: 667.5px;
+  bottom: -20.75px;
 }
 
 #soundcloud-button {
@@ -197,6 +197,8 @@ header {
 }
 
 #soundcloud-submit {
+  position: relative;
+  left: 40px;
   width: 40px;
   height: auto;
 }
