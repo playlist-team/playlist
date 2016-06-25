@@ -37,8 +37,11 @@ angular.module('search', [])
 
   $scope.getSound = function() {
     SearchFactory.fetchSound($scope.field).then(function(results) {
-      console.log(results);
-      $scope.searchList = results;
+      if (Array.isArray(results)) {
+        $scope.searchList = results;
+      } else {
+        $scope.searchList = [results];
+      }
     });
   }
 
@@ -102,13 +105,19 @@ angular.module('search', [])
   };
 
   var fetchSound = function(query) {
-    deferred = $q.defer();
-    SC.get('/tracks', {
-      q: query,
-      limit: 200
-    }, function(results){
-      deferred.resolve(results);
-    });
+    if (query.indexOf('soundcloud.com') !== -1) {
+      SC.get('/resolve/?url=' + query, {limit: 1}, function(result) {
+        deferred.resolve(result);
+      })
+    } else {
+      deferred = $q.defer();
+      SC.get('/tracks', {
+        q: query,
+        limit: 200
+      }, function(results){
+        deferred.resolve(results);
+      });
+    }
     return deferred.promise;
   }
 
