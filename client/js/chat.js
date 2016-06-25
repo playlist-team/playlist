@@ -10,6 +10,8 @@ angular.module('chat', ['ngSanitize'])
         if (newValue) {
           $(element).scrollTop($(element)[0].scrollHeight);
         }
+        var scrollHeight = $(element).prop('scrollHeight');
+        $(element).animate({scrollTop: scrollHeight}, 500);
       });
 
       $rootScope.$on('scrollDown', function() {
