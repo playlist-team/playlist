@@ -72,7 +72,9 @@ angular.module('app', ['chat', 'search'])
   var widget = SC.Widget(widgetElement);
 
   widget.bind(SC.Widget.Events.FINISH, function() {
-    $window.socket.emit('ended');
+    setTimeout(function() {
+      $window.socket.emit('ended');
+    }, 2000);
   })
 
   // widget.bind(SC.Widget.Events.READY, function() {
@@ -149,8 +151,11 @@ angular.module('app', ['chat', 'search'])
   function onPlayerStateChange(event) {
     //Emit event notifying server that player has ended video
     if (event.data === YT.PlayerState.ENDED) {
-      $window.socket.emit('ended');
+      setTimeout(function() {
+        $window.socket.emit('ended');
+      }, 2000);
     }
+
     //Calculate remaining time of video playing and emit to controller
     if (event.data === YT.PlayerState.PLAYING) {
       var total = player.getDuration();
