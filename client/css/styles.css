@@ -159,15 +159,15 @@ header {
 }
 #search-input {
   position: relative;
-  bottom: -10.5px;
+  bottom: 23.75px;
   left: 10px;
   background: #616573;
   width: 600px;
-  line-height: 30px;
-  height: 15px;
-  padding: 10px 40px 10px 40px;
+  line-height: 60px;
+  height: 18.25px;
+  padding: 6.75px 40px 10px 40px;
   color: white;
-  font-size: 14px;
+  font-size: 15px;
   border-radius: 20px;
   border: none;
 }
@@ -186,7 +186,7 @@ header {
 #search-submit{
   position: relative;
   right: 667.5px;
-  bottom: -20.75px;
+  bottom: 12.75px;
 }
 
 #soundcloud-button {
@@ -198,10 +198,10 @@ header {
 
 #engine-icon {
   position: relative;
-  left: 10%;
+  left: -85px;
   width: 40px;
   height: auto;
-  top: 5%;
+  top: -15.75px;
 }
 
 #search-submit:focus {
@@ -595,12 +595,4 @@ input[type=range]::-moz-range-thumb {
   background: #fff;
   border-radius: 100%;
   box-shadow: 0 0 1px 0px rgba(0,0,0,0.1);
-}
-
-#engine-button {
-  bottom: 19.5px;
-  position: relative;
-  width: 50px;
-  height: 25px;
-  left: 625px;
 }
