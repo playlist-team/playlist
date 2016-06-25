@@ -191,7 +191,6 @@ angular.module('app', ['chat', 'search'])
       }});
       $rootScope.$emit('changeQueue');
       socket.emit('setDuration', {duration: video.duration, sc: video.soundcloud});
-      // $window.widget = SC.oEmbed(video.id, {auto_play: true, show_comments: false, heigth: 357, sharing: false, liking: false, download: false}, document.getElementById('sc-player'));
     } else {
       $rootScope.$emit('showTube');
       player.loadVideoById(video.id);
