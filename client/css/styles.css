@@ -22,6 +22,8 @@ header {
   background-color: #22242A;
   width: 1060px;
   height: 83px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
 #default-playlist-message {
@@ -237,6 +239,7 @@ header {
 
 #player-queue {
   background-color: #22242A;
+  border-bottom-left-radius: 10px;
   width:640px;
   height:600px;
   float: left;
@@ -301,6 +304,7 @@ header {
   background-color: #616573;
   opacity: 50%;
   background-image: url("../img/chat-background.png");
+  border-bottom-right-radius: 10px;
 }
 
 #chat-container {
@@ -319,11 +323,20 @@ header {
 
 .user-name {
   width: 75px;
+  padding-left: 5px;
+  font-size: 17px;
 }
 
 #user-name {
   padding-left: 5px;
   font-size: 17px;
+}
+
+#username {
+  padding-left: 1px;
+  display: inline-block;
+  font-size: 19px;
+  color: #DBDBDC;
 }
 
 #user-message {
@@ -335,6 +348,14 @@ header {
   padding-left: 5px;
   padding-right: 5px;
 }
+
+#listeduser {
+  padding-left: 7px;
+  display: inline-block;
+  font-size: 19px;
+  color: #DBDBDC;
+}
+
 .user-message {
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -357,16 +378,14 @@ header {
 }
 
 #chat-submit{
- position: relative;
- /* width: 305px; */
- position: relative;
- bottom: 86px;
- width: 414px;
+  position: relative;
+  position: relative;
+  bottom: 86px;
+  width: 414px;
 }
 
 #chat-input{
   position: relative;
-  /* bottom: 25px; */
   width: 414px;
   opacity: 0.85;
   height: 54px;
@@ -374,9 +393,8 @@ header {
   font-size: 14px;
   background-color: rgba(42, 45, 58, .40);
   border: none;
-  /* margin-top: -20px; */
-  /* margin-left: 0px; */
   padding-left: 6px;
+  border-bottom-right-radius: 10px;
 }
 
 #chat-input:focus {
@@ -554,9 +572,13 @@ header {
 }
 
 .time {
+  padding-right: 5px;
+  display: inline-block;
+  position: relative;
   color: #DBDBDC;
-  /* font-size: 11px; */
-  /* bottom: 1111.55px; */
+  float: right;
+  top: 4px;
+  font-size: 12px;
 }
 
 #duration {
