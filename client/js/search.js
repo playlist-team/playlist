@@ -27,6 +27,23 @@ angular.module('search', [])
 .controller('SearchController', ['$scope', '$window', 'SearchFactory', function($scope, $window, SearchFactory){
 
   $scope.searchList;
+  $scope.image = './img/soundcloud.png'
+
+  $scope.toggleIcon = function() {
+    if ($scope.image === './img/soundcloud.png') {
+      $scope.image = './img/youtube.png'
+    } else {
+      $scope.image = './img/soundcloud.png'
+    }
+  }
+
+  $scope.searchQuery = function() {
+    if ($scope.image === './img/soundcloud.png') {
+      $scope.getSound();
+    } else {
+      $scope.getSearch();
+    }
+  }
 
   //Retrieve and populate scope with YouTube search results
   $scope.getSearch = function() {
