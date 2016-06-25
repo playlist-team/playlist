@@ -119,7 +119,6 @@ angular.module('app', ['chat', 'search'])
           $window.socket.emit('getTime');
           widget.play();
           widget.seekTo(context.time);
-          $window.socket.emit('getSync');
         }});
       } else {
         $rootScope.$emit('showTube');
@@ -180,10 +179,9 @@ angular.module('app', ['chat', 'search'])
 
   //Recieve next video from server, plays it and emits queue to controller and time to server
   $window.socket.on('nextVideo', function(video) {
-    player.stopVideo();
-    widget.pause();
     context.current = video;
     if (video.soundcloud === true) {
+      player.stopVideo();
       $rootScope.$emit('showCloud');
       widget.load(video.id, {auto_play: false, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, visual: true, callback: function() {
         widget.setVolume(context.volume);
@@ -192,6 +190,7 @@ angular.module('app', ['chat', 'search'])
       $rootScope.$emit('changeQueue');
       socket.emit('setDuration', {duration: video.duration, sc: video.soundcloud});
     } else {
+      widget.pause();
       $rootScope.$emit('showTube');
       player.loadVideoById(video.id);
       $rootScope.$emit('changeQueue');
@@ -225,10 +224,13 @@ angular.module('app', ['chat', 'search'])
   });
 
   $window.socket.on('setSync', function(time) {
-    player.stopVideo();
-    player.seekTo(time, false);
-    widget.seekTo(time * 1000);
-    player.playVideo();
+    if (context.current.soundcloud === false) {
+      player.pauseVideo();
+      player.seekTo(time, true);
+      player.playVideo();
+    } else {
+      widget.seekTo(time * 1000);
+    }
   });
 
 }])
