@@ -137,9 +137,16 @@ header {
   width: 210px;
   text-align: center;
   cursor: pointer;
-  height: 25px; 
-  line-height: 25px; 
-  position: absolute;
+  height: 40px;
+  line-height: 40px;
+  font-size: 20px;
+  position: relative;
+}
+
+#chat-icon {
+  position: relative;
+  top: 4px;
+  width: 12%;
 }
 
 #users-tab {
@@ -152,11 +159,22 @@ header {
   width: 210px;
   text-align: center;
   cursor: pointer;
-  height: 25px; 
-  line-height: 25px; 
+  height: 40px;
+  line-height: 40px;
   position: relative;
   left: 50%;
+  bottom: 40px;
+  font-size: 20px;
 }
+
+#users-icon {
+  display: inline-block;
+  position: relative;
+  width: 12%;
+  top: 4px;
+  right: 6px;
+}
+
 #search-input {
   position: relative;
   bottom: 23.75px;
@@ -275,6 +293,7 @@ header {
 }
 
 #chat {
+  position: relative;
   width:420px;
   height: 600px;
   float: right;
@@ -285,6 +304,8 @@ header {
 }
 
 #chat-container {
+  position: relative;
+  bottom: 35px;
   height: 535px;
   overflow-x: hidden;
   width: 430px;
@@ -302,10 +323,11 @@ header {
 
 #user-name {
   padding-left: 5px;
+  font-size: 17px;
 }
 
 #user-message {
-  padding-left: 5px;
+  padding-left: 6px;
   padding-right: 5px;
 }
 
@@ -328,27 +350,33 @@ header {
 #users-connected {
   display: inline-block;
   position: relative;
-  font-size: 12.5px;
+  font-size: 20px;
   font-weight: 900;
-  bottom: 1.425px;
+  bottom: 1.5px;
+  color: #DBDBDB;
 }
 
 #chat-submit{
- float:bottom;
- width: 305px;
+ position: relative;
+ /* width: 305px; */
+ position: relative;
+ bottom: 86px;
+ width: 414px;
 }
 
 #chat-input{
-  width: 413px;
+  position: relative;
+  /* bottom: 25px; */
+  width: 414px;
   opacity: 0.85;
-  height: 27px;
+  height: 54px;
   color: white;
   font-size: 14px;
   background-color: rgba(42, 45, 58, .40);
   border: none;
-  margin-top: -20px;
-  margin-left: 0px;
-  padding-left: 5px;
+  /* margin-top: -20px; */
+  /* margin-left: 0px; */
+  padding-left: 6px;
 }
 
 #chat-input:focus {
@@ -373,6 +401,7 @@ header {
 
 .user-message {
   font-weight: 450;
+  font-size: 17px;
 }
 
 .ng-modal {
@@ -526,8 +555,8 @@ header {
 
 .time {
   color: #DBDBDC;
-  font-size: 11px;
-  bottom: 1.55px;
+  /* font-size: 11px; */
+  /* bottom: 1111.55px; */
 }
 
 #duration {

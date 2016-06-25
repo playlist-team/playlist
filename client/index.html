@@ -85,10 +85,10 @@
       </div>
       <div id="chat" ng-controller="ChatController">
         <div ng-style="chatStyle" id="chat-tab" ng-click="changeTab('chat')">
-          <strong>chat</strong>
+          <img id="chat-icon" src="./img/chat.png">
         </div>
         <div ng-style="userStyle" id="users-tab" ng-click="changeTab('users')">
-          <strong>users </strong><div id="users-connected">({{usersConnected}})</div>
+          <img id="users-icon" src="./img/users.png"><div id="users-connected">{{usersConnected}}</div>
         </div>
         <div id="chat-container" scroll-directive="messages" ng-model="messages">
           <table class="chat-table">
