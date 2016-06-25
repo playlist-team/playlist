@@ -165,18 +165,6 @@ angular.module('app', ['chat', 'search'])
     widget.seekTo(time * 1000);
   });
 
-  //Recieve first video from server, plays it and emits queue to controller and time to server
-  // $window.socket.on('firstVideo', function(video) {
-  //   context.current = video;
-  //   if (video.duration === 'soundcloud') {
-  //     SC.oEmbed(video.id, {autoplay:true}, document.getElementById('player'));
-  //   } else {
-  //     player.loadVideoById(video.id);
-  //     $rootScope.$emit('changeQueue');
-  //     socket.emit('setDuration', video.duration);
-  //   }
-  // });
-
   //Recieve next video from server, plays it and emits queue to controller and time to server
   $window.socket.on('nextVideo', function(video) {
     context.current = video;
@@ -188,13 +176,13 @@ angular.module('app', ['chat', 'search'])
         widget.play();
       }});
       $rootScope.$emit('changeQueue');
-      socket.emit('setDuration', {duration: video.duration, sc: video.soundcloud});
+      socket.emit('setDuration', {duration: video.duration, sc: true});
     } else {
       widget.pause();
       $rootScope.$emit('showTube');
       player.loadVideoById(video.id);
       $rootScope.$emit('changeQueue');
-      socket.emit('setDuration', {duration: video.duration, sc: video.soundcloud});
+      socket.emit('setDuration', {duration: video.duration, sc: false});
     }
   });
 
@@ -229,6 +217,7 @@ angular.module('app', ['chat', 'search'])
       player.seekTo(time, true);
       player.playVideo();
     } else {
+      console.log(time);
       widget.seekTo(time * 1000);
     }
   });
