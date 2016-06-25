@@ -361,6 +361,7 @@ header {
 }
 
 #sc-player {
+  pointer-events: none;
   margin-left: 0px;
   margin-top: 0px
 }
