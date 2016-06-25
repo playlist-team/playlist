@@ -114,7 +114,7 @@ angular.module('app', ['chat', 'search'])
       $rootScope.$emit('changeQueue');
       if (video.soundcloud === true) {
         $rootScope.$emit('showCloud');
-        widget.load(video.id, {auto_play: false, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, callback: function() {
+        widget.load(video.id, {auto_play: false, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, visual: true, callback: function() {
           widget.setVolume(context.volume);
           $window.socket.emit('getTime');
           widget.play();
@@ -185,7 +185,7 @@ angular.module('app', ['chat', 'search'])
     context.current = video;
     if (video.soundcloud === true) {
       $rootScope.$emit('showCloud');
-      widget.load(video.id, {auto_play: false, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, callback: function() {
+      widget.load(video.id, {auto_play: false, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, visual: true, callback: function() {
         widget.setVolume(context.volume);
         widget.play();
       }});
