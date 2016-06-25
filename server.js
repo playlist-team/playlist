@@ -165,12 +165,14 @@ io.on('connection', function(socket) {
       timeTotal = video.duration;
       timeLeft = video.duration;
       clearInterval(sync);
-      sync = setInterval(function() {
-        timeLeft--;
-        if (timeLeft === 0) {
-          clearInterval(sync);
-        }
-      }, 1000);
+      setTimeout(function() {
+        sync = setInterval(function() {
+          timeLeft--;
+          if (timeLeft === 0) {
+            clearInterval(sync);
+          }
+        }, 1000);
+      }, 2000)
     }
   });
 
