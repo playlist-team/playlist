@@ -310,17 +310,14 @@ header {
 #chat-container {
   position: relative;
   bottom: 35px;
-  height: 535px;
+  height: 500px;
   overflow-x: hidden;
-  width: 430px;
-  padding-bottom: 10px;
-  margin-bottom: 5px;
+  width: 420px;
 }
 
 .chat-table {
   position: relative;
   width: 420px;
-  bottom: 40px;
 }
 
 .user-name {
@@ -379,14 +376,13 @@ header {
   color: #DBDBDB;
 }
 
-#chat-submit{
+#chat-submit {
   position: relative;
-  position: relative;
-  bottom: 86px;
-  width: 414px;
+  bottom: 36px;
+  border-bottom-right-radius: 10px;
 }
 
-#chat-input{
+#chat-input {
   position: relative;
   width: 414px;
   opacity: 0.85;
