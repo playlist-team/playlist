@@ -105,12 +105,12 @@ angular.module('search', [])
   };
 
   var fetchSound = function(query) {
+    deferred = $q.defer();
     if (query.indexOf('soundcloud.com') !== -1) {
       SC.get('/resolve/?url=' + query, {limit: 1}, function(result) {
         deferred.resolve(result);
       })
     } else {
-      deferred = $q.defer();
       SC.get('/tracks', {
         q: query,
         limit: 200
