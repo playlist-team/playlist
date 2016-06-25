@@ -75,6 +75,10 @@ angular.module('app', ['chat', 'search'])
     $window.socket.emit('ended');
   })
 
+  // widget.bind(SC.Widget.Events.READY, function() {
+  //   $window.socket.emit('getSync');
+  // })
+
   widget.bind(SC.Widget.Events.PLAY, function() {
     var total;
     var current;
@@ -115,10 +119,12 @@ angular.module('app', ['chat', 'search'])
       if (video.soundcloud === true) {
         $rootScope.$emit('showCloud');
         widget.load(video.id, {auto_play: false, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, visual: true, callback: function() {
-          widget.setVolume(context.volume);
-          $window.socket.emit('getTime');
+          widget.setVolume(0);
           widget.play();
-          widget.seekTo(context.time);
+          setTimeout(function() {
+            $window.socket.emit('getSync');
+            widget.setVolume(.5);
+          }, 2000);
         }});
       } else {
         $rootScope.$emit('showTube');
