@@ -318,7 +318,9 @@ header {
 }
 
 .chat-table {
+  position: relative;
   width: 420px;
+  bottom: 40px;
 }
 
 .user-name {
