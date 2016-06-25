@@ -15,11 +15,11 @@
   <body ng-controller="YouTubeController">
     <header>
       <img src="./img/logo.png" id="logo-image">
-      <div id="search" ng-controller="SearchController">
+      <form id="search" ng-submit="searchQuery(); toggleResults()" ng-controller="SearchController">
         <input id="search-input" ng-model="field" type="text" placeholder="Search for and add YouTube videos to the playlist" autocomplete="off">
-        <input id="search-submit" type="image" src="./img/search.png" ng-click="getSearch(); toggleResults()"> 
-        <div id="soundcloud-button">
-        <input id="soundcloud-submit" type="image" src="./img/soundcloud.png" ng-click="getSound(); toggleResults()">
+        <input id="search-submit" type="image" src="./img/search.png"> 
+        <div id="engine-button">
+        <img id="engine-icon" ng-src={{image}} ng-click="toggleIcon()">
         </div>
         <search-directive show='showResults' width='750px' height='62%'>
           <div id="results" ng-if="showResults">
@@ -38,7 +38,7 @@
             </div>
           </div>
         </search-directive>
-      </div>
+      </form>
       <h1 id="skip" ng-click="skip()">skip</h1>
       <h1 id="sync" ng-click="sync()">sync</h1>
       <input id="volume" min ="0" max="100" step="1" type="range" ng-model="volume" value="50"></input>
