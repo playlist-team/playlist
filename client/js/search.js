@@ -35,7 +35,7 @@ angular.module('search', [])
     } else {
       $scope.image = './img/soundcloud.png'
     }
-  }
+  };
 
   $scope.searchQuery = function() {
     if ($scope.image === './img/soundcloud.png') {
@@ -43,14 +43,14 @@ angular.module('search', [])
     } else {
       $scope.getSearch();
     }
-  }
+  };
 
   //Retrieve and populate scope with YouTube search results
   $scope.getSearch = function() {
     SearchFactory.fetchSearch($scope.field, function(results) {
       $scope.searchList = results.data.items;
     });
-  }
+  };
 
   $scope.getSound = function() {
     SearchFactory.fetchSound($scope.field).then(function(results) {
@@ -60,7 +60,7 @@ angular.module('search', [])
         $scope.searchList = [results];
       }
     });
-  }
+  };
 
   //Sends video information to server
   $scope.enqueue = function(thumbnail) {
@@ -97,7 +97,7 @@ angular.module('search', [])
     $scope.showResults = !$scope.showResults;
   };
 
-}])
+}]);
 
 //Search query from YouTube Data API
 .factory('SearchFactory', ['$http', '$window', '$q', function($http, $window, $q) {
@@ -152,4 +152,4 @@ angular.module('search', [])
     fetchResource: fetchResource
   }
 
-}])
+}]);
