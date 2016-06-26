@@ -334,8 +334,17 @@ header {
 #username {
   padding-left: 1px;
   display: inline-block;
+  float: left;
   font-size: 19px;
   color: #DBDBDC;
+}
+
+#usermessage {
+  padding-left: 1px;
+  display: inline-block;
+  float: left;
+  font-size: 19px;
+  color: #111111;
 }
 
 #user-message {
@@ -356,6 +365,9 @@ header {
 }
 
 .user-message {
+  width: 75px;
+  padding-left: 5px;
+  font-size: 17px;
   overflow-wrap: break-word;
   word-wrap: break-word;
   -ms-word-break: break-all;
@@ -570,12 +582,11 @@ header {
 }
 
 .time {
-  padding-right: 5px;
+  padding-left: 5px;
   display: inline-block;
   position: relative;
   color: #DBDBDC;
-  float: right;
-  top: 4px;
+  top: .06em;
   font-size: 12px;
 }
 
