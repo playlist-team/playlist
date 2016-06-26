@@ -339,6 +339,24 @@ header {
   color: #DBDBDC;
 }
 
+#joined {
+  font-weight: 600;
+  padding-left: 1px;
+  display: inline-block;
+  float: left;
+  font-size: 19px;
+  color: #003E6F;
+}
+
+#left {
+  font-weight: 600;
+  padding-left: 1px;
+  display: inline-block;
+  float: left;
+  font-size: 19px;
+  color: #790000;
+}
+
 #usermessage {
   padding-left: 1px;
   display: inline-block;
@@ -400,7 +418,7 @@ header {
   opacity: 0.85;
   height: 54px;
   color: white;
-  font-size: 14px;
+  font-size: 15px;
   background-color: rgba(42, 45, 58, .40);
   border: none;
   padding-left: 6px;
@@ -460,7 +478,7 @@ header {
   -moz-transform: translate(-50%, -50%);
   color: black;
   background-color: #fff;
-  box-shadow: 4px 4px 80px #000;
+  box-shadow: 4px 4px 80px ##22242A;
   overflow-y:auto;
 }
 .ng-modal-dialog {
@@ -475,7 +493,7 @@ header {
   -moz-transform: translate(-50%, -50%);
   color: black;
   background-color: #fff;
-  box-shadow: 4px 4px 80px #000;
+  box-shadow: 4px 4px 80px ##22242A;
   overflow-y:auto;
 }
 

@@ -24,7 +24,6 @@ angular.module('chat', ['ngSanitize'])
 })
 
 .controller('ChatController', function ($scope, $window, $rootScope){
-
   //Receives and assigns username from server
   socket.on('setUser',function(username) {
     $scope.username = username;

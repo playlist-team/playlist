@@ -83,7 +83,7 @@
           </div>
         </div>
       </div>
-      <div id="chat" ng-controller="ChatController">
+      <div ng-cloak id="chat" ng-controller="ChatController">
         <div ng-style="chatStyle" id="chat-tab" ng-click="changeTab('chat')">
           <img id="chat-icon" src="./img/chat.png">
         </div>
@@ -94,8 +94,13 @@
           <table class="chat-table">
             <tbody ng-show="tab =='chat'" id="messages" ng-repeat="message in messages track by $index">
               <tr class="user-name">
+                <td ng-cloak id="user-name" ng-show="message.joined || message.left">
+                  <div id="joined">{{message.joined}}</div>
+                  <div id="left">{{message.left}}</div>
+                </td>
                 <td ng-cloak id="user-name" ng-show="messages[{{$index-1}}].username !== message.username">
-                  <div id="username">{{message.username}}</div><span ng-show="message.time" class="time">{{message.time}}</span>
+                  <div id="username">{{message.username}}</div>
+                  <span ng-show="message.time" class="time">{{message.time}}</span>
                 </td>
               </tr>
               <tr class="user-message" ng-show="message.message">
