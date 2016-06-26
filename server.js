@@ -41,7 +41,6 @@ io.on('connection', function(socket) {
   
   //Receives username from client and emits username, socket id, users online back to client
   socket.on('username', function(username) {
-    console.log('username received: ', username);
     users[socket.id] = username;
     io.sockets.connected[socket.id].emit('setUser', username);
     io.sockets.connected[socket.id].emit('setId', socket.id);
@@ -53,8 +52,6 @@ io.on('connection', function(socket) {
   //Sends queue information to client
   socket.on('getQueue', function() {
     if (queue.length) {
-      console.log('getQueue received');
-      console.log('sending this queue: ', queue);
       io.sockets.connected[socket.id].emit('setQueue', queue);
     }
   });
