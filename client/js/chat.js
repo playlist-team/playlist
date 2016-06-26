@@ -23,15 +23,15 @@ angular.module('chat', ['ngSanitize'])
   }
 })
 
-.controller('ChatController', function ($scope, $window, $rootScope){
+.controller('ChatController', function ($scope, $rootScope){
   //Receives and assigns username from server
-  socket.on('setUser',function(username) {
+  $rootScope.socket.on('setUser',function(username) {
     $scope.username = username;
   });
 
   //Re-establish username handshake with server
-  socket.on('comeback', function() {
-    socket.emit('return', $scope.username);
+  $rootScope.socket.on('comeback', function() {
+    $rootScope.socket.emit('return', $scope.username);
   });
 
   $scope.messages = [];
@@ -83,32 +83,32 @@ angular.module('chat', ['ngSanitize'])
   $scope.easterEgg = function () {
 
     setTimeout(function() { 
-      socket.emit('sendMessage', { message: 'EASTER EGG DETECTED', 
+      $rootScope.socket.emit('sendMessage', { message: 'EASTER EGG DETECTED', 
                                    username: 'easterbot', 
                                    time: $scope.time });
     }, 1000);
 
     setTimeout(function() {
-      socket.emit('sendMessage', { message: 'PREPARING MEOW MODE', 
+      $rootScope.socket.emit('sendMessage', { message: 'PREPARING MEOW MODE', 
                                    username: 'easterbot', 
                                    time: $scope.time });
     }, 3000);
 
     setTimeout(function() {
-      socket.emit('sendMessage', { message: 'MEOW MODE INITIALIZED', 
+      $rootScope.socket.emit('sendMessage', { message: 'MEOW MODE INITIALIZED', 
                                    username: 'easterbot', 
                                    time: $scope.time })
     }, 5000)
 
     setTimeout(function() {
-      socket.emit('easterEgg');
+      $rootScope.socket.emit('easterEgg');
     }, 6000);
   }
 
   //Send message to server
   $scope.send = function(message) {
     $scope.getCurrentTime();
-    socket.emit('sendMessage', { message: message, 
+    $rootScope.socket.emit('sendMessage', { message: message, 
                                  username: $scope.username, 
                                  time: $scope.time });
 
@@ -120,7 +120,7 @@ angular.module('chat', ['ngSanitize'])
   }
 
   //Recieve new messages from server
-  socket.on('chatMessage', function(data) {
+  $rootScope.socket.on('chatMessage', function(data) {
     $scope.getCurrentTime();
     $scope.$apply(function() {
       data.time = $scope.time;
@@ -128,14 +128,14 @@ angular.module('chat', ['ngSanitize'])
     })
   });
 
-  socket.on('joinMessage', function(data) {
+  $rootScope.socket.on('joinMessage', function(data) {
     $scope.$apply(function() {
       $scope.messages.push(data);
     })
   });
 
   //Receive users currently connected from server
-  socket.on('usersOnline', function(users) {
+  $rootScope.socket.on('usersOnline', function(users) {
     $scope.$apply(function(){
       $scope.usernameList = users;
       $scope.usersConnected = Object.keys(users).length;
