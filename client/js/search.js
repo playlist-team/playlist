@@ -24,7 +24,7 @@ angular.module('search', ['ngAnimate'])
   }
 })
 
-.controller('SearchController', ['$scope', '$window', 'SearchFactory', function($scope, $window, SearchFactory){
+.controller('SearchController', ['$scope', '$window', 'SearchFactory', '$rootScope', function($scope, $window, SearchFactory, $rootScope){
 
   $scope.searchList;
   $scope.image = './img/soundcloud.png';
@@ -71,21 +71,21 @@ angular.module('search', ['ngAnimate'])
         var video = result.data.items[0];
         var length = video.contentDetails.duration.split(/[A-Za-z]/);
         var seconds = (Number(length[2]) * 60) + Number(length[3]);
-        socket.emit('enqueue', { id: video.id,
+        $rootScope.socket.emit('enqueue', { id: video.id,
                                  title: video.snippet.title,
                                  thumbnail: video.snippet.thumbnails.default.url,
                                  username: $window.username,
-                                 socket: socket.id, 
+                                 socket: $rootScope.socket.id, 
                                  duration: seconds,
                                  soundcloud: false });
       });
     } else {
-      socket.emit('enqueue', {
+      $rootScope.socket.emit('enqueue', {
         id: thumbnail.uri,
         title: thumbnail.title,
         thumbnail: thumbnail.artwork_url,
         username: $window.username,
-        socket: socket.id,
+        socket: $rootScope.socket.id,
         duration: thumbnail.duration,
         soundcloud: true
       });
@@ -134,7 +134,6 @@ angular.module('search', ['ngAnimate'])
         q: query,
         limit: 50
       }, function(results){
-        console.log(results);
         deferred.resolve(results);
       });
     }
