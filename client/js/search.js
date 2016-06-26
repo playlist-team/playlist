@@ -113,7 +113,7 @@ angular.module('search', [])
         type: "video",
         videoType: "any",
         q: query,
-        maxResults: 25,
+        maxResults: 50,
         safeSearch: "none"
       }
     }).then(function(results) {
@@ -130,8 +130,9 @@ angular.module('search', [])
     } else {
       SC.get('/tracks', {
         q: query,
-        limit: 200
+        limit: 50
       }, function(results){
+        console.log(results);
         deferred.resolve(results);
       });
     }
