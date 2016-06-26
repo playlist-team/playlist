@@ -24,7 +24,7 @@ angular.module('app', ['chat', 'search'])
     closeOnConfirm: true,
     confirmButtonColor: '#1171A2'
   }, function(username) {
-    $window.username = username || 'anonymous';
+    $window.username = username.toLowerCase() || 'anonymous';
     $window.socket.emit('username', $window.username);
 
     $window.socket.on('connect', function() {

@@ -83,20 +83,20 @@ angular.module('chat', ['ngSanitize'])
   $scope.easterEgg = function () {
 
     setTimeout(function() { 
-      socket.emit('sendMessage', { message: 'Easter egg detected.', 
-                                   username: 'Easter bot', 
+      socket.emit('sendMessage', { message: 'EASTER EGG DETECTED', 
+                                   username: 'easterbot', 
                                    time: $scope.time });
     }, 1000);
 
     setTimeout(function() {
-      socket.emit('sendMessage', { message: 'Preparing meow mode.', 
-                                   username: 'Easter bot', 
+      socket.emit('sendMessage', { message: 'PREPARING MEOW MODE', 
+                                   username: 'easterbot', 
                                    time: $scope.time });
     }, 3000);
 
     setTimeout(function() {
       socket.emit('sendMessage', { message: 'MEOW MODE INITIALIZED', 
-                                   username: 'Easter bot', 
+                                   username: 'easterbot', 
                                    time: $scope.time })
     }, 5000)
 
