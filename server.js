@@ -179,6 +179,9 @@ io.on('connection', function(socket) {
 
   //Removes client vote information and delete client on client disconnect
   socket.on('disconnect', function() {
+
+    var name = users[socket.id] || 'someone';
+
     if (votes[socket.id] === 'up') {
       upvotes--;
     }
@@ -189,7 +192,7 @@ io.on('connection', function(socket) {
 
     io.emit('changeVotes', {up: upvotes, down: downvotes});
 
-    io.emit('joinMessage', {left: "›› " + users[socket.id] + " has left ››"});
+    io.emit('joinMessage', {left: "›› " + name + " has left ››"});
 
     delete users[socket.id];
 
