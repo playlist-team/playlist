@@ -15,6 +15,8 @@ angular.module('app', ['chat', 'search'])
     client_id: "376f225bf427445fc4bfb6b99b72e0bf"
   });
 
+  $window.socket.emit('getQueue');
+
   swal({
     title: 'Welcome to Playlist',
     text: 'Enter your username',
@@ -26,6 +28,8 @@ angular.module('app', ['chat', 'search'])
   }, function(username) {
     $window.username = username.toLowerCase() || 'anonymous';
     $window.socket.emit('username', $window.username);
+
+    $window.socket.emit('getQueue');
 
     $window.socket.on('connect', function() {
        $window.socket.emit('getQueue');
@@ -219,6 +223,8 @@ angular.module('app', ['chat', 'search'])
 
   $window.socket.on('setQueue', function(queue) {
     context.queue = queue;
+    console.log('setQueue received: ', queue);
+    console.log('context dot queue:', context.queue);
     $rootScope.$emit('changeQueue');
   });
 
@@ -310,6 +316,7 @@ angular.module('app', ['chat', 'search'])
 
   $rootScope.$on('changeQueue', function() {
     $scope.$apply(function() {
+      console.log('changeQueue receieved:', VideoService.queue);
       $scope.current = VideoService.current;
       $scope.playlist = VideoService.queue;
     });
