@@ -22,7 +22,7 @@
         <search-directive show='showResults' width='750px' height='62%'>
           <div id="results" ng-if="showResults">
             <div class="video" ng-cloak ng-repeat="result in searchList track by $index" ng-click="item.clicked || enqueue(result); item.clicked = true">
-              <img class="video-thumb" ng-show="result.snippet" id="thumb-{{result.snippet.title}}" src="{{result.snippet.thumbnails.default.url || ./img/yt.jpg}}">
+              <img class="video-thumb" ng-show="result.snippet" id="thumb-{{result.snippet.title}}" src="{{result.snippet.thumbnails.default.url || './img/yt.jpg'}}">
               <img class="sound-thumb" ng-show="result.title" id="thumb-{{result.title}}" src="{{result.artwork_url || (result.artwork_url).replace('-large', '-t500x500') || (result.artwork_url).replace('-large', '-crop') || (result.artwork_url).replace('-large', '-t300x300') || './img/sc.jpg'}}">
               <img class="video-thumb-check" id="check-{{res.snippet.title || res.title}}" src="./img/check.png" ng-show="item.clicked">
               <span class="video-title">
