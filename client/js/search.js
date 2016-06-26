@@ -1,4 +1,4 @@
-angular.module('search', [])
+angular.module('search', ['ngAnimate'])
 //Load YouTube search results in a modal
 .directive('searchDirective', function() {
   return {
