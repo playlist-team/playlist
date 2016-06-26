@@ -507,7 +507,18 @@ header {
 }
 
 .video-thumb {
+  width: 120px;
+  height: 90px;
   float: left;
+  padding-right: 10px;
+  position: relative;
+}
+
+.sound-thumb {
+  width: 100px;
+  height: 100px;
+  float: left;
+  bottom: 5px;
   padding-right: 10px;
   position: relative;
 }
