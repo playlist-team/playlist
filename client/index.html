@@ -17,10 +17,10 @@
   </head>
   <body ng-controller="YouTubeController">
     <header>
-      <img src="./img/logo.png" id="logo-image">
+      <img src="./img/logo.png" id="logo-image" ng-cloak>
       <form id="search" ng-submit="searchQuery(); toggleResults()" ng-controller="SearchController">
-        <input id="search-input" ng-model="field" type="text" placeholder="Search" autocomplete="off">
-        <input id="search-submit" type="image" src="./img/search.png"> 
+        <input id="search-input" ng-model="field" type="text" placeholder="Search" autocomplete="off" ng-cloak>
+        <input id="search-submit" type="image" src="./img/search.png" ng-cloak> 
         <img id="engine-icon" ng-src={{image}} ng-click="toggleIcon()">
         <search-directive show='showResults' width='750px' height='62%'>
           <div id="results" ng-if="showResults">
@@ -42,14 +42,14 @@
       </form>
       <h1 id="skip" ng-click="skip()">skip</h1>
       <h1 id="sync" ng-click="sync()">sync</h1>
-      <input id="volume" min ="0" max="100" step="1" type="range" ng-model="volume" value="50">
+      <input id="volume" min ="0" max="100" step="1" type="range" ng-model="volume" value="50" ng-cloak>
     </header>
       <div id="player-queue">
         <div ng-show="tube">
           <div id="player"></div>
         </div>
         <iframe id="sc-player" ng-show="widget" height="357" width="640" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url='https://soundcloud.com/jdilla/the-introduction'"></iframe>
-        <div id="current-song">
+        <div id="current-song" ng-cloak>
           <span id="default-playlist-message" ng-cloak ng-show="!current.title">
             Playlist is currently empty
           </span>
@@ -60,7 +60,7 @@
             {{duration}}
           </span>
         </div>
-        <div class="votes" ng-show="current.title">
+        <div class="votes" ng-show="current.title" ng-cloak>
           <p id="added-by" ng-cloak ng-show="current.title">
             — added by {{ current.username }}
           </p>
@@ -76,7 +76,7 @@
           </p>
         </div>
         <div id="queue">
-          <div class="pending-songs" ng-repeat="song in playlist track by $index">
+          <div class="pending-songs" ng-repeat="song in playlist track by $index" ng-cloak>
             <p id="queue-title">
               {{ song.title | limitTo: 74 }}{{song.title.length > 74 ? '...' : ''}}
             </p>
@@ -86,11 +86,11 @@
           </div>
         </div>
       </div>
-      <div ng-cloak id="chat" ng-controller="ChatController">
-        <div ng-style="chatStyle" id="chat-tab" ng-click="changeTab('chat')">
+      <div id="chat" ng-controller="ChatController">
+        <div ng-style="chatStyle" id="chat-tab" ng-click="changeTab('chat')" ng-cloak>
           <img id="chat-icon" src="./img/chat.png">
         </div>
-        <div ng-style="userStyle" id="users-tab" ng-click="changeTab('users')">
+        <div ng-style="userStyle" id="users-tab" ng-click="changeTab('users')" ng-cloak>
           <img id="users-icon" src="./img/users.png"><div id="users-connected">{{usersConnected}}</div>
         </div>
         <div id="chat-container" scroll-directive="messages" ng-model="messages">
@@ -121,7 +121,7 @@
             </tbody>
           </table>
         </div>
-          <form id="chat-submit" ng-submit="send(message)">
+          <form id="chat-submit" ng-submit="send(message)" ng-cloak>
             <input id="chat-input" ng-model="message" type="text" placeholder="Say something..." autocomplete="off" required/>
           </form>
       </div>
