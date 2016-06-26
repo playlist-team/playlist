@@ -44,7 +44,7 @@ io.on('connection', function(socket) {
     users[socket.id] = username;
     io.sockets.connected[socket.id].emit('setUser', username);
     io.sockets.connected[socket.id].emit('setId', socket.id);
-    io.emit('chatMessage', {username: "", message: users[socket.id] + " has joined"});
+    io.emit('joinMessage', {username: "›› " + users[socket.id] + " has joined ››"});
     io.emit('usersOnline', users);
   });
 
@@ -188,7 +188,7 @@ io.on('connection', function(socket) {
 
     io.emit('changeVotes', {up: upvotes, down: downvotes});
 
-    io.emit('chatMessage', {username: "", message: users[socket.id] + " has left"});
+    io.emit('joinMessage', {username: "›› " + users[socket.id] + " has left ››"});
 
     delete users[socket.id];
 

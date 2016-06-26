@@ -95,11 +95,12 @@
             <tbody ng-show="tab =='chat'" id="messages" ng-repeat="message in messages track by $index">
               <tr class="user-name">
                 <td ng-cloak id="user-name" ng-show="messages[{{$index-1}}].username !== message.username">
-                  <div id="username">{{message.username}}</div> <span class="time">{{message.time}}</span>
+                  <div id="username">{{message.username}}</div><span ng-show="message.time" class="time">{{message.time}}</span>
                 </td>
               </tr>
-              <tr class="user-message">
-                <td id="user-message" ng-cloak ng-bind-html="message.message | linky:'_blank'">
+              <tr class="user-message" ng-show="message.message">
+                <td id="user-name" ng-cloak>
+                  <div id="usermessage" ng-bind-html="message.message | linky:'_blank'"></div>
                 </td>
               </tr>
             </tbody>

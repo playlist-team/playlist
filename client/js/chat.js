@@ -129,6 +129,12 @@ angular.module('chat', ['ngSanitize'])
     })
   });
 
+  socket.on('joinMessage', function(data) {
+    $scope.$apply(function() {
+      $scope.messages.push(data);
+    })
+  });
+
   //Receive users currently connected from server
   socket.on('usersOnline', function(users) {
     $scope.$apply(function(){
