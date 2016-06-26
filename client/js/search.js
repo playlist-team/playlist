@@ -27,7 +27,9 @@ angular.module('search', ['ngAnimate'])
 .controller('SearchController', ['$scope', '$window', 'SearchFactory', function($scope, $window, SearchFactory){
 
   $scope.searchList;
-  $scope.image = './img/soundcloud.png'
+  $scope.image = './img/soundcloud.png';
+  $scope.yt = './img/yt.jpg';
+  $scope.sc = '/img/sc.jpg';
 
   $scope.toggleIcon = function() {
     if ($scope.image === './img/soundcloud.png') {
