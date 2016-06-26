@@ -502,6 +502,19 @@ header {
   padding: 10px;
 }
 
+.fade {
+  transition: all linear .5s;
+  opacity: 1;
+}
+
+.fade.ng-hide {
+  opacity: 0;
+}
+
+.fade.ng-hide-add, .fade.ng-hide-remove {
+  display: block !important;
+}
+
 .video-block {
   padding-left: 5px;
 }

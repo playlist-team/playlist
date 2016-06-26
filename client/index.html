@@ -21,19 +21,18 @@
         <img id="engine-icon" ng-src={{image}} ng-click="toggleIcon()">
         <search-directive show='showResults' width='750px' height='62%'>
           <div id="results" ng-if="showResults">
-            <div class="video" ng-cloak ng-repeat="result in searchList track by $index" ng-click="item.clicked || enqueue(result); item.clicked = true">
-              <img class="video-thumb" ng-show="result.snippet" id="thumb-{{result.snippet.title}}" src="{{result.snippet.thumbnails.default.url || './img/yt.jpg'}}">
-              <img class="sound-thumb" ng-show="result.title" id="thumb-{{result.title}}" src="{{result.artwork_url || (result.artwork_url).replace('-large', '-t500x500') || (result.artwork_url).replace('-large', '-crop') || (result.artwork_url).replace('-large', '-t300x300') || './img/sc.jpg'}}">
-              <img class="video-thumb-check" id="check-{{res.snippet.title || res.title}}" src="./img/check.png" ng-show="item.clicked">
-              <span class="video-title">
-                {{result.snippet.title || result.title | limitTo: 70 }}{{result.snippet.title.length > 70 ? '...' : ''}}
-              </span>
-              <span class="video-author">
-                {{result.snippet.channelTitle || result.user.username}}
-              </span>
-              <span class="video-description">
-                {{result.snippet.description || result.description | limitTo: 180 }}{{result.snippet.description.length > 180 ? '...' : ''}}
-              </span>
+            <div class="video fade" ng-hide="item.clicked" ng-cloak ng-repeat="result in searchList track by $index" ng-click="item.clicked || enqueue(result); item.clicked = true">
+                <img class="video-thumb" ng-show="result.snippet" id="thumb-{{result.snippet.title}}" src="{{result.snippet.thumbnails.default.url || './img/yt.jpg'}}">
+                <img class="sound-thumb" ng-show="result.title" id="thumb-{{result.title}}" src="{{result.artwork_url || (result.artwork_url).replace('-large', '-t500x500') || (result.artwork_url).replace('-large', '-crop') || (result.artwork_url).replace('-large', '-t300x300') || './img/sc.jpg'}}">
+                <span class="video-title">
+                  {{result.snippet.title || result.title | limitTo: 70 }}{{result.snippet.title.length > 70 ? '...' : ''}}
+                </span>
+                <span class="video-author">
+                  {{result.snippet.channelTitle || result.user.username}}
+                </span>
+                <span class="video-description">
+                  {{result.snippet.description || result.description | limitTo: 180 }}{{result.snippet.description.length > 180 ? '...' : ''}}
+                </span>
             </div>
           </div>
         </search-directive>
@@ -125,6 +124,7 @@
       </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular-animate.js"></script>
     <script src="./js/volume.js"></script>
     <script src="./js/chat.js"></script>
     <script src="./js/search.js"></script>
