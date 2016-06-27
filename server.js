@@ -138,6 +138,11 @@ io.on('connection', function(socket) {
         }, 7000);
       } else {
         io.emit('stopVideo');
+        votes = {};
+        upvotes = 0;
+        downvotes = 0;
+        io.emit('clearVotes');
+        io.emit('setQueue', queue);
       }
     }
   });
