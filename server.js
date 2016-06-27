@@ -242,6 +242,7 @@ io.on('connection', function(socket) {
           switched = false;
         }, timer);
       } else {
+        switched = false;
         set = false;
         current = null;
         reset();
