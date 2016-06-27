@@ -15,21 +15,19 @@ angular.module('app', ['chat', 'search'])
     client_id: "376f225bf427445fc4bfb6b99b72e0bf"
   });
 
-  swal({
-    title: 'Welcome to Playlist',
-    text: 'Enter your username',
-    type: 'input',
-    inputType: 'text',
-    showCancelButton: true,
-    closeOnConfirm: true,
-    confirmButtonColor: '#1171A2'
-  }, function(username) {
-    $rootScope.username = username.toLowerCase() || 'anonymous';
-    $rootScope.socket.emit('username', $rootScope.username);
-
-    $rootScope.socket.on('connect', function() {
-       $rootScope.socket.emit('getQueue');
-    });
+  $rootScope.socket.on('connect', function() {
+     swal({
+       title: 'Welcome to Playlist',
+       text: 'Enter your username',
+       type: 'input',
+       inputType: 'text',
+       showCancelButton: true,
+       closeOnConfirm: true,
+       confirmButtonColor: '#1171A2'
+     }, function(username) {
+       $rootScope.username = username.toLowerCase() || 'anonymous';
+       $rootScope.socket.emit('username', $rootScope.username);
+     });
   });
 })
 
