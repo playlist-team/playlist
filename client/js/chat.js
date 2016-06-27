@@ -23,9 +23,10 @@ angular.module('chat', ['ngSanitize'])
   }
 })
 
-.controller('ChatController', function ($scope, $rootScope){
+.controller('ChatController', function ($scope, $rootScope, GifFactory){
   //Receives and assigns username from server
   $rootScope.socket.on('setUser',function(username) {
+    $rootScope.username = username;
     $scope.username = username;
   });
 
@@ -105,8 +106,16 @@ angular.module('chat', ['ngSanitize'])
     }, 6000);
   }
 
+  $scope.getGif = function(tag) {
+    GifFactory.fetchGif(tag)
+  }
+
   //Send message to server
   $scope.send = function(message) {
+    if (message[0] === '/' && message.indexOf('/gif') !== -1) {
+      $scope.getGif()
+    }
+
     $scope.getCurrentTime();
     $rootScope.socket.emit('sendMessage', { message: message, 
                                  username: $scope.username, 
@@ -142,4 +151,27 @@ angular.module('chat', ['ngSanitize'])
     });
   });
 
-});
+})
+
+.factory('GifFactory', ['$http', '$q', '$scope', function($http, $q, $scope) {
+
+  var deferred = $q.defer();
+
+  var buildParameter= function(tags) {
+    
+  };
+  
+  var fetchGif = function(query, callback) {
+    return $http({
+      method: 'GET',
+      url: 'http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag='
+    }).then(function(result) {
+      callback(results)
+    })
+  }
+
+  return {
+    fetchGif : fetchGif
+  }
+
+}]);

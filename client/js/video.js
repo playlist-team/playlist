@@ -1,7 +1,7 @@
 angular.module('app', ['chat', 'search'])
 
 //Load YouTube iFrame API, connect socket to server, prompt for username on initialize
-.run(function($rootScope, $window) {
+.run(function($rootScope) {
   var tag = document.createElement('script');
 
   tag.src = 'https://www.youtube.com/iframe_api';
@@ -24,8 +24,8 @@ angular.module('app', ['chat', 'search'])
     closeOnConfirm: true,
     confirmButtonColor: '#1171A2'
   }, function(username) {
-    $window.username = username.toLowerCase() || 'anonymous';
-    $rootScope.socket.emit('username', $window.username);
+    $rootScope.username = username.toLowerCase() || 'anonymous';
+    $rootScope.socket.emit('username', $rootScope.username);
 
     $rootScope.socket.on('connect', function() {
        $rootScope.socket.emit('getQueue');
