@@ -725,3 +725,14 @@ input[type=range]::-moz-range-thumb {
   opacity: 0.5;
   background-color: #23242b;
 }
+
+#gif {
+  width: 377px;
+  margin-bottom: 15px;
+}
+
+#gif-message {
+  padding-left: 10px;
+  height: auto;
+  max-width: 100%;
+}

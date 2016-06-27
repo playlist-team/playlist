@@ -106,9 +106,9 @@ angular.module('chat', ['ngSanitize'])
     }, 6000);
   }
 
-  $scope.getGif = function(tags) {
+  $scope.getGif = function(tags, callback) {
     GifFactory.fetchGif(tags, function(result) {
-      console.log(result);
+      callback(result.data.data.image_original_url, result.data.data.image_width);
     })
   }
 
@@ -117,13 +117,24 @@ angular.module('chat', ['ngSanitize'])
     if (message[0] === '/' && message.indexOf('/gif') !== -1) {
       var tags = message.split(' ');
       tags.shift();
-      $scope.getGif(tags)
-    }
+      $scope.getGif(tags, function(url) {
+        $scope.getCurrentTime();
+        $rootScope.socket.emit('sendMessage', {
+          message: message + ' ▽',
+          username: $scope.username,
+          url: url,
+          time: $scope.time
+        })
+      })
+    } else {
+      $scope.getCurrentTime();
 
-    $scope.getCurrentTime();
-    $rootScope.socket.emit('sendMessage', { message: message, 
-                                 username: $scope.username, 
-                                 time: $scope.time });
+      $rootScope.socket.emit('sendMessage', { 
+        message: message, 
+        username: $scope.username, 
+        time: $scope.time 
+      });
+    }
 
     if (message === "meow") {
       $scope.easterEgg();

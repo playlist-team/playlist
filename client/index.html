@@ -113,6 +113,13 @@
                   <div id="usermessage" ng-bind-html="message.message | linky:'_blank'"></div>
                 </td>
               </tr>
+              <tr class="user-message" ng-show="message.url">
+                <td id="user-name" ng-cloak>
+                  <div id="gif">
+                    <img id="gif-message" src="{{message.url}}">
+                  </div>
+                </td>
+              </tr>
             </tbody>
             <tbody id="messages" ng-show="tab == 'users'">
               <tr ng-repeat="user in usernameList">
