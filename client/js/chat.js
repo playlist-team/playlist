@@ -23,7 +23,7 @@ angular.module('chat', ['ngSanitize'])
   }
 })
 
-.controller('ChatController', function ($scope, $rootScope, GifFactory){
+.controller('ChatController', ['$scope', '$rootScope', 'GifFactory', function ($scope, $rootScope, GifFactory) {
   //Receives and assigns username from server
   $rootScope.socket.on('setUser',function(username) {
     $rootScope.username = username;
@@ -155,9 +155,9 @@ angular.module('chat', ['ngSanitize'])
     });
   });
 
-})
+}])
 
-.factory('GifFactory', ['$http', '$q', '$scope', function($http, $q, $scope) {
+.factory('GifFactory', ['$http', '$q', function($http, $q) {
 
   var deferred = $q.defer();
 
@@ -174,7 +174,7 @@ angular.module('chat', ['ngSanitize'])
     var tag = buildParameter(query);
     return $http({
       method: 'GET',
-      url: 'http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=' + tag;
+      url: 'http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=' + tag
     }).then(function(result) {
       callback(result)
     })
