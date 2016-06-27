@@ -185,7 +185,7 @@ angular.module('chat', ['ngSanitize'])
     var tag = buildParameter(query);
     return $http({
       method: 'GET',
-      url: 'http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=' + tag
+      url: 'https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=' + tag
     }).then(function(result) {
       callback(result)
     })
