@@ -704,3 +704,18 @@ input[type=range]::-moz-range-thumb {
   border-radius: 100%;
   box-shadow: 0 0 1px 0px rgba(0,0,0,0.1);
 }
+
+#place-holder {
+  height: 360px;
+  width: 640px;
+  background-image: url("../img/placeholder.gif");
+  background-size: cover;
+}
+
+#place-overlay {
+  position: absolute;
+  height: 360px;
+  width: 640px;
+  opacity: 0.5;
+  background-color: #23242b;
+}

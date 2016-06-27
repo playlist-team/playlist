@@ -45,6 +45,8 @@
       <input id="volume" min ="0" max="100" step="1" type="range" ng-model="volume" value="50" ng-cloak>
     </header>
       <div id="player-queue">
+        <div id="place-overlay" ng-show="!widget === !tube"></div>
+        <div id="place-holder" ng-show="!widget === !tube"></div>
         <div ng-show="tube">
           <div id="player"></div>
         </div>
