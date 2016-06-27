@@ -108,7 +108,13 @@ angular.module('chat', ['ngSanitize'])
 
   $scope.getGif = function(tags, callback) {
     GifFactory.fetchGif(tags, function(result) {
-      callback(result.data.data.image_original_url, result.data.data.image_width);
+      callback(result.data.data.image_original_url);
+    })
+  }
+
+  $scope.getSticker = function(tags, callback) {
+    GifFactory.fetchSticker(tags, function(result) {
+      callback(result.data.data.image_original_url);
     })
   }
 
@@ -127,6 +133,18 @@ angular.module('chat', ['ngSanitize'])
             time: $scope.time
           })
         })
+      } else if (message.indexOf('/peel') !== -1) {
+        var tags = message.split(' ');
+        tags.shift();
+        $scope.getSticker(tags, function(url) {
+          $scope.getCurrentTime();
+          $rootScope.socket.emit('sendMessage', {
+            message: message + ' ▽',
+            username: $scope.username,
+            url: url,
+            time: $scope.time
+          })
+        })
       } else if (message.indexOf('/help') !== -1) {
 
         var lines = [
@@ -134,7 +152,9 @@ angular.module('chat', ['ngSanitize'])
           "›› /help : displays the list of commands",
           "›› /clear : clears messages from the chat window",
           "›› /gif [tags] : displays a random gif",
-          "›››› i.e.  /gif wu tang clan"
+          "›››› i.e.  /gif wu tang clan",
+          "›› /peel [tags] : displays a random sticker",
+          "›››› i.e.  /peel banana",
         ]
 
         $scope.getCurrentTime();
@@ -223,8 +243,18 @@ angular.module('chat', ['ngSanitize'])
     })
   }
 
+  var fetchSticker = function(query, callback) {
+    var tag = buildParameter(query);
+    return $http({
+      method: 'GET',
+      url: 'https://api.giphy.com/v1/stickers/random?api_key=dc6zaTOxFJmzC&tag=' + tag
+    }).then(function(result) {
+      callback(result);
+    })
+  }
   return {
-    fetchGif : fetchGif
+    fetchGif : fetchGif,
+    fetchSticker : fetchSticker
   }
 
 }]);
