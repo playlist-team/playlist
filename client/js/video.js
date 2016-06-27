@@ -221,6 +221,7 @@ angular.module('app', ['chat', 'search'])
   });
 
   $rootScope.socket.on('setSync', function(time) {
+    console.log("TIME: ", time);
     if (context.current.soundcloud === false) {
       player.pauseVideo();
       player.seekTo(time, true);
@@ -269,13 +270,10 @@ angular.module('app', ['chat', 'search'])
   });
 
   $rootScope.$on('placeHodor', function() {
-    $scope.$apply(function() {
-      setTimeout(function() {
-        $scope.widget = false;
-        $scope.tube = false;
-      }, 1000);
-    });
-  })
+    console.log("STEPPED");
+    $scope.widget = false;
+    $scope.tube = false;
+  });
 
   //Receives time remaining from service, creates a clock interval and update duration in scope
   $rootScope.$on('setTimer', function(event, time) {
