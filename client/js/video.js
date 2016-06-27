@@ -270,8 +270,10 @@ angular.module('app', ['chat', 'search'])
 
   $rootScope.$on('placeHodor', function() {
     $scope.$apply(function() {
-      $scope.widget = false;
-      $scope.tube = false;
+      setTimeout(function() {
+        $scope.widget = false;
+        $scope.tube = false;
+      }, 1000);
     });
   })
 
