@@ -242,9 +242,10 @@ io.on('connection', function(socket) {
           switched = false;
         }, timer);
       } else {
+        set = false;
         current = null;
-        io.emit('stopVideo');
         reset();
+        io.emit('stopVideo');
       }
     }
   });
