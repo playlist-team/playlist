@@ -131,10 +131,14 @@ io.on('connection', function(socket) {
       switched = true;
       set = false;
       current = queue.shift();
-      reset();
-      setTimeout(function() {
-        switched = false;
-      }, 7000);
+      if (current) {
+        reset();
+        setTimeout(function() {
+          switched = false;
+        }, 7000);
+      } else {
+        io.emit('stopVideo');
+      }
     }
   });
 

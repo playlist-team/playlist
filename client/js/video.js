@@ -195,6 +195,7 @@ angular.module('app', ['chat', 'search'])
   });
 
   $rootScope.socket.on('stopVideo', function() {
+    $rootScope.$emit('placeHodor');
     player.stopVideo();
     widget.pause();
   });
@@ -266,6 +267,13 @@ angular.module('app', ['chat', 'search'])
       $scope.tube = false;
     });
   });
+
+  $rootScope.$on('placeHodor', function() {
+    $scope.$apply(function() {
+      $scope.widget = false;
+      $scope.tube = false;
+    });
+  })
 
   //Receives time remaining from service, creates a clock interval and update duration in scope
   $rootScope.$on('setTimer', function(event, time) {
