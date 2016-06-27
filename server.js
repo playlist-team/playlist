@@ -224,21 +224,27 @@ io.on('connection', function(socket) {
   });
 
   //Receives video ended from client and sets current to next in queue
-  //Jerry-rigged so that the fastest client emits the switch and locks other clients out for 5 seconds
+  //Jerry-rigged so that the fastest client emits the switch and locks other clients out for half of video duration
   socket.on('ended', function() {
     if (!switched) {
       switched = true;
       set = false;
       if (queue.length) {
         current = queue.shift();
+        var timer;
+        if (current.soundcloud === true) {
+          timer = current.duration/2;
+        } else {
+          timer = ((current.duration/60) * 1000)/2;
+        }
         reset();
         setTimeout(function() {
           switched = false;
-        }, 5000);
+        }, timer);
       } else {
         current = null;
-        reset();
         io.emit('stopVideo');
+        reset();
       }
     }
   });
