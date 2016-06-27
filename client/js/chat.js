@@ -137,13 +137,21 @@ angular.module('chat', ['ngSanitize'])
         var tags = message.split(' ');
         tags.shift();
         $scope.getSticker(tags, function(url) {
-          $scope.getCurrentTime();
-          $rootScope.socket.emit('sendMessage', {
-            message: message + ' ▽',
-            username: $scope.username,
-            url: url,
-            time: $scope.time
-          })
+          if (url === undefined) {
+            $scope.getCurrentTime();
+            $rootScope.socket.emit('sendMessage', {
+              message: 'Sticker not found, try again.',
+              username: 'playbot',
+              time: $scope.time
+          } else {
+            $scope.getCurrentTime();
+            $rootScope.socket.emit('sendMessage', {
+              message: message + ' ▽',
+              username: $scope.username,
+              url: url,
+              time: $scope.time
+            })
+          }
         })
       } else if (message.indexOf('/help') !== -1) {
 
