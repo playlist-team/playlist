@@ -139,7 +139,11 @@ io.on('connection', function(socket) {
     users[socket.id] = username;
     io.sockets.connected[socket.id].emit('setUser', username);
     io.sockets.connected[socket.id].emit('setId', socket.id);
-    io.emit('joinMessage', {joined: "›› " + users[socket.id] + " has joined ››"});
+    socket.broadcast.emit('joinMessage', {joined: "›› " + users[socket.id] + " has joined ››"});
+    io.sockets.connected[socket.id].emit('chatMessage', {
+      username: "playbot",
+      message: "Hi, " + users[socket.id] + "! " + "To get started, search for videos or sounds to add to the playlist or type '/help' to see a list of commands."
+    });
     io.emit('usersOnline', users);
     io.sockets.connected[socket.id].emit('setQueue', queue);
   });
