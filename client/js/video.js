@@ -136,7 +136,6 @@ angular.module('app', ['chat', 'search'])
     });
     //Listens for volumeChange from Controller and sets the volume
     $rootScope.$on('volumeChange', function(event, volume) {
-      context.volume = volume/100;
       player.setVolume(volume);
       widget.setVolume(volume/100);
     });
