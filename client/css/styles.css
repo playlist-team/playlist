@@ -121,9 +121,11 @@ header {
 }
 
 .up-arrow {
+  cursor: pointer;
 }
 
 .down-arrow {
+  cursor: pointer;
   position: relative;
   top: 2px;
   width: 26.75%;
@@ -222,6 +224,10 @@ header {
   width: 40px;
   height: auto;
   top: -15.75px;
+}
+
+#engine-icon:hover {
+  cursor: pointer;
 }
 
 #search-submit:focus {
