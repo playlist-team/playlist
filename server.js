@@ -37,7 +37,7 @@ var adjectives = [
   "hidden",
   "discreet",
   "concealed",
-  "obscure",
+  "obscured",
   "masked",
   "veiled",
   "shrouded",
