@@ -107,6 +107,12 @@ angular.module('search', ['ngAnimate'])
   var deferred = $q.defer();
 
   var fetchSearch = function(query, callback, token) {
+    var index = query.indexOf('&');
+
+    if(index !== -1) {
+      query = query.slice(0, index);
+    }
+
     return $http.get('https://www.googleapis.com/youtube/v3/search', {
       params: {
         pageToken: token || "",
