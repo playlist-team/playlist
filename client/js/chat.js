@@ -114,18 +114,50 @@ angular.module('chat', ['ngSanitize'])
 
   //Send message to server
   $scope.send = function(message) {
-    if (message[0] === '/' && message.indexOf('/gif') !== -1) {
-      var tags = message.split(' ');
-      tags.shift();
-      $scope.getGif(tags, function(url) {
-        $scope.getCurrentTime();
-        $rootScope.socket.emit('sendMessage', {
-          message: message + ' ▽',
-          username: $scope.username,
-          url: url,
-          time: $scope.time
+    if (message[0] === '/') {
+      if (message.indexOf('/gif') !== -1) {
+        var tags = message.split(' ');
+        tags.shift();
+        $scope.getGif(tags, function(url) {
+          $scope.getCurrentTime();
+          $rootScope.socket.emit('sendMessage', {
+            message: message + ' ▽',
+            username: $scope.username,
+            url: url,
+            time: $scope.time
+          })
         })
-      })
+      } else if (message.indexOf('/help') !== -1) {
+
+        var lines = [
+          "OPTIONS:",
+          "›› /help : displays the list of commands",
+          "›› /clear : clears messages from the chat window",
+          "›› /gif [tags] : displays a random gif",
+          "›››› i.e.  /gif wu tang clan"
+        ]
+
+        $scope.getCurrentTime();
+
+        for (var i = 0; i < lines.length; i++) {
+          var helpMessage = {
+            username: 'playbot',
+            time: $scope.time,
+            message: lines[i]
+          }
+          $scope.messages.push(helpMessage);
+        }
+
+      } else if (message.indexOf('/clear') !== -1) {
+        $scope.messages = [];
+      } else {
+        var helpMessage = {
+          username: 'playbot',
+          time: $scope.time,
+          message: message + " is not a valid command. Type /help to see a list of commands."
+        }
+        $scope.messages.push(helpMessage);
+      }
     } else {
       $scope.getCurrentTime();
 
