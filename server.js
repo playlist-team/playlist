@@ -224,18 +224,19 @@ io.on('connection', function(socket) {
   });
 
   //Receives video ended from client and sets current to next in queue
-  //Jerry-rigged so that the fastest client emits the switch and locks other clients out for 7 seconds
+  //Jerry-rigged so that the fastest client emits the switch and locks other clients out for 5 seconds
   socket.on('ended', function() {
     if (!switched) {
       switched = true;
       set = false;
-      current = queue.shift();
-      if (current) {
+      if (queue.length) {
+        current = queue.shift();
         reset();
         setTimeout(function() {
           switched = false;
-        }, 7000);
+        }, 5000);
       } else {
+        current = null;
         reset();
         io.emit('stopVideo');
       }
