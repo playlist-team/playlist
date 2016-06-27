@@ -147,26 +147,26 @@ angular.module('chat', ['ngSanitize'])
         })
       } else if (message.indexOf('/help') !== -1) {
 
-        var lines = [
-          "OPTIONS:",
-          "›› /help : displays the list of commands",
-          "›› /clear : clears messages from the chat window",
-          "›› /gif [tags] : displays a random gif",
-          "›››› i.e.  /gif wu tang clan",
-          "›› /peel [tags] : displays a random sticker",
-          "›››› i.e.  /peel banana",
-        ]
+        var lines =
+          "OPTIONS: \n" +
+          "›› /help : display  the list of commands \n" +
+          "›› /clear : clear the chat window \n" +
+          "›› /gif [tags] : display a random gif \n" +
+          "     i.e.  /gif wu tang clan \n" +
+          "›› /peel [tags] : display a random sticker \n" +
+          "     i.e.  /peel banana";
 
         $scope.getCurrentTime();
 
-        for (var i = 0; i < lines.length; i++) {
-          var helpMessage = {
+
+        var helpMessage = {
             username: 'playbot',
             time: $scope.time,
-            message: lines[i]
-          }
-          $scope.messages.push(helpMessage);
+            message: lines,
+            notification: true
         }
+
+        $scope.messages.push(helpMessage);
 
       } else if (message.indexOf('/clear') !== -1) {
         $scope.messages = [];
