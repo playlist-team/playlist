@@ -106,14 +106,18 @@ angular.module('chat', ['ngSanitize'])
     }, 6000);
   }
 
-  $scope.getGif = function(tag) {
-    GifFactory.fetchGif(tag)
+  $scope.getGif = function(tags) {
+    GifFactory.fetchGif(tags, function(result) {
+      console.log(result);
+    })
   }
 
   //Send message to server
   $scope.send = function(message) {
     if (message[0] === '/' && message.indexOf('/gif') !== -1) {
-      $scope.getGif()
+      var tags = message.split(' ');
+      tags.shift();
+      $scope.getGif(tags)
     }
 
     $scope.getCurrentTime();
@@ -158,15 +162,21 @@ angular.module('chat', ['ngSanitize'])
   var deferred = $q.defer();
 
   var buildParameter= function(tags) {
-    
+    var parameter = "";
+    for (var i = 0; i < tags.length - 1; i++) {
+      parameter += tags[i] + '+';
+    }
+    parameter += tags[tags.length - 1];
+    return parameter;
   };
-  
+
   var fetchGif = function(query, callback) {
+    var tag = buildParameter(query);
     return $http({
       method: 'GET',
-      url: 'http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag='
+      url: 'http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=' + tag;
     }).then(function(result) {
-      callback(results)
+      callback(result)
     })
   }
 
