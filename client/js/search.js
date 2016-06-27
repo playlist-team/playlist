@@ -24,7 +24,7 @@ angular.module('search', ['ngAnimate'])
   }
 })
 
-.controller('SearchController', ['$scope', '$window', 'SearchFactory', '$rootScope', function($scope, $window, SearchFactory, $rootScope){
+.controller('SearchController', ['$scope', 'SearchFactory', '$rootScope', function($scope, SearchFactory, $rootScope){
 
   $scope.searchList;
   $scope.image = './img/soundcloud.png';
@@ -74,7 +74,7 @@ angular.module('search', ['ngAnimate'])
         $rootScope.socket.emit('enqueue', { id: video.id,
                                  title: video.snippet.title,
                                  thumbnail: video.snippet.thumbnails.default.url,
-                                 username: $window.username,
+                                 username: $rootScope.username,
                                  socket: $rootScope.socket.id, 
                                  duration: seconds,
                                  soundcloud: false });
@@ -84,7 +84,7 @@ angular.module('search', ['ngAnimate'])
         id: thumbnail.uri,
         title: thumbnail.title,
         thumbnail: thumbnail.artwork_url,
-        username: $window.username,
+        username: $rootScope.username,
         socket: $rootScope.socket.id,
         duration: thumbnail.duration,
         soundcloud: true
@@ -102,7 +102,7 @@ angular.module('search', ['ngAnimate'])
 }])
 
 //Search query from YouTube Data API
-.factory('SearchFactory', ['$http', '$window', '$q', function($http, $window, $q) {
+.factory('SearchFactory', ['$http', '$q', function($http, $q) {
 
   var deferred = $q.defer();
 
