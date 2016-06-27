@@ -236,8 +236,8 @@ io.on('connection', function(socket) {
           switched = false;
         }, 7000);
       } else {
-        io.emit('stopVideo');
         reset();
+        io.emit('stopVideo');
       }
     }
   });
