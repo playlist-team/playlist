@@ -374,6 +374,7 @@ header {
   float: left;
   font-size: 19px;
   color: #181818;
+  white-space: pre-wrap;
 }
 
 #user-message {
