@@ -27,6 +27,98 @@ var sync;
 var set;
 var switched = false;
 
+var adjectives = [
+  "nameless",
+  "undisclosed",
+  "unidentified",
+  "unnamed",
+  "incognito",
+  "secret",
+  "hidden",
+  "discreet",
+  "concealed",
+  "obscure",
+  "masked",
+  "veiled",
+  "shrouded",
+  "disguised",
+  "repressed",
+  "shy",
+  "anonymous",
+  "unknown",
+  "sly",
+  "sneaky",
+  "stealthy",
+  "furtive",
+  "covert",
+  "shady",
+  "clandestine",
+  "hushed",
+  "closeted",
+  "surreptitious",
+  "unauthorized",
+  "cloaked",
+  "invisible",
+  "undercover"
+]
+
+var creatures = [
+  "oyster",
+  "impala",
+  "mackerel",
+  "roedeer",
+  "greyhound",
+  "wasp",
+  "magpie",
+  "polecat",
+  "zebra",
+  "clam",
+  "pidgeon",
+  "rattlesnake",
+  "pheasant",
+  "ptarmigan",
+  "gnat",
+  "quail",
+  "heron",
+  "elk",
+  "camel",
+  "panda",
+  "turtledove",
+  "wombat",
+  "bullfinche",
+  "lapwing",
+  "dolphin",
+  "moth",
+  "wildebeest",
+  "lemur",
+  "sheldrake",
+  "woodchuck",
+  "otter",
+  "bobolink",
+  "smelt",
+  "raccoon",
+  "ostrich",
+  "rhinoceros",
+  "pelican",
+  "gibbon",
+  "dingo",
+  "mandrill",
+  "weasel",
+  "penguin",
+  "guillemot",
+  "walrus",
+  "opossum",
+  "bongo",
+  "yak",
+  "goosander",
+  "gorilla"
+]
+
+var getRandom = function(words) {
+  var index = Math.floor(Math.random() * words.length);
+  return words[index];
+}
+
 //Helper function to reset the state of clients connected
 var reset = function() {
   votes = {};
@@ -41,6 +133,9 @@ io.on('connection', function(socket) {
   
   //Receives username from client and emits username, socket id, users online back to client
   socket.on('username', function(username) {
+    if (username === 'anonymous') {
+      username = getRandom(adjectives) + "_" + getRandom(creatures);
+    }
     users[socket.id] = username;
     io.sockets.connected[socket.id].emit('setUser', username);
     io.sockets.connected[socket.id].emit('setId', socket.id);
