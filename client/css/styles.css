@@ -220,10 +220,10 @@ header {
 
 #engine-icon {
   position: relative;
-  left: -85px;
-  width: 40px;
+  left: -90px;
+  width: 50px;
   height: auto;
-  top: -15.75px;
+  top: -3px;
 }
 
 #engine-icon:hover {
