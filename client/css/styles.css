@@ -23,7 +23,7 @@ header {
   color: white;
   background-color: #22242A;
   width: 1060px;
-  height: 83px;
+  height: 90px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
@@ -81,13 +81,13 @@ header {
 #logo-image {
   padding-left: 25px;
   padding-right: 15px;
-  padding-top: 10px;
+  padding-top: 14px;
 }
 
 #volume {
   position: relative;
-  left: 79.25%;
-  bottom: 52.5%;
+  left: 79.75%;
+  bottom: 50.5%;
 }
 
 #skip {
@@ -112,7 +112,7 @@ header {
   float: right;
   font-size: 14px;
   display: inline-block;
-  top: 45px;
+  top: 52.5px;
   left: 49px;
 }
 
@@ -318,7 +318,7 @@ header {
 #chat-container {
   position: relative;
   bottom: 35px;
-  height: 500px;
+  height: 490px;
   overflow-x: hidden;
   width: 420px;
   padding-left: 4px;
@@ -422,7 +422,7 @@ header {
 
 #chat-submit {
   position: relative;
-  bottom: 36px;
+  bottom: 26px;
   border-bottom-right-radius: 10px;
 }
 
