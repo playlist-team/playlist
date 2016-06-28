@@ -20,6 +20,10 @@ body {
 header {
   color: white;
   background-color: #22242A;
+  width: 1060px;
+  height: 83px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
 #default-playlist-message {
@@ -80,8 +84,8 @@ header {
 
 #volume {
   position: relative;
-  left: 15px;
-  bottom: 27.25px;
+  left: 79.25%;
+  bottom: 52.5%;
 }
 
 #skip {
@@ -117,9 +121,11 @@ header {
 }
 
 .up-arrow {
+  cursor: pointer;
 }
 
 .down-arrow {
+  cursor: pointer;
   position: relative;
   top: 2px;
   width: 26.75%;
@@ -135,9 +141,16 @@ header {
   width: 210px;
   text-align: center;
   cursor: pointer;
-  height: 25px; 
-  line-height: 25px; 
-  position: absolute;
+  height: 40px;
+  line-height: 40px;
+  font-size: 20px;
+  position: relative;
+}
+
+#chat-icon {
+  position: relative;
+  top: 4px;
+  width: 12%;
 }
 
 #users-tab {
@@ -150,28 +163,39 @@ header {
   width: 210px;
   text-align: center;
   cursor: pointer;
-  height: 25px; 
-  line-height: 25px; 
+  height: 40px;
+  line-height: 40px;
   position: relative;
   left: 50%;
+  bottom: 40px;
+  font-size: 20px;
 }
+
+#users-icon {
+  display: inline-block;
+  position: relative;
+  width: 12%;
+  top: 4px;
+  right: 6px;
+}
+
 #search-input {
   position: relative;
-  bottom: 25.5px;
+  bottom: 23.75px;
   left: 10px;
   background: #616573;
-  width: 640px;
-  line-height: 30px;
-  height: 15px;
-  padding: 10px;
+  width: 600px;
+  line-height: 60px;
+  height: 18.25px;
+  padding: 6.75px 40px 10px 40px;
   color: white;
-  font-size: 14px;
+  font-size: 15px;
   border-radius: 20px;
   border: none;
 }
 
 #search {
-  height: auto;
+  height: 0;
   bottom: 17.25px;
   display: inline-block;
   background-color: #22242A;
@@ -183,8 +207,27 @@ header {
 
 #search-submit{
   position: relative;
-  right: 30.5px;
-  bottom: 14.5px;
+  right: 667.5px;
+  bottom: 12.75px;
+}
+
+#soundcloud-button {
+  position: relative;
+  left: 590px;
+  top: -17.75px;
+  width: 25px;
+}
+
+#engine-icon {
+  position: relative;
+  left: -90px;
+  width: 50px;
+  height: auto;
+  top: -3px;
+}
+
+#engine-icon:hover {
+  cursor: pointer;
 }
 
 #search-submit:focus {
@@ -202,6 +245,7 @@ header {
 
 #player-queue {
   background-color: #22242A;
+  border-bottom-left-radius: 10px;
   width:640px;
   height:600px;
   float: left;
@@ -258,6 +302,7 @@ header {
 }
 
 #chat {
+  position: relative;
   width:420px;
   height: 600px;
   float: right;
@@ -265,30 +310,75 @@ header {
   background-color: #616573;
   opacity: 50%;
   background-image: url("../img/chat-background.png");
+  border-bottom-right-radius: 10px;
 }
 
 #chat-container {
-  height: 535px;
+  position: relative;
+  bottom: 35px;
+  height: 500px;
   overflow-x: hidden;
-  width: 430px;
-  padding-bottom: 10px;
-  margin-bottom: 5px;
+  width: 420px;
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
 .chat-table {
+  position: relative;
   width: 420px;
 }
 
 .user-name {
   width: 75px;
+  padding-left: 5px;
+  font-size: 17px;
 }
 
 #user-name {
   padding-left: 5px;
+  font-size: 17px;
+}
+
+#username {
+  padding-left: 1px;
+  margin-bottom: 2px;
+  display: inline-block;
+  float: left;
+  font-size: 19px;
+  color: #DBDBDC;
+}
+
+#joined {
+  font-weight: 600;
+  padding-left: 1px;
+  display: inline-block;
+  float: left;
+  font-size: 19px;
+  color: #003E6F;
+}
+
+#left {
+  font-weight: 600;
+  padding-left: 1px;
+  display: inline-block;
+  float: left;
+  font-size: 19px;
+  color: #790000;
+}
+
+#usermessage {
+  width: 397px;
+  padding-left: 1px;
+  margin-bottom: 3px;
+  display: inline-block;
+  float: left;
+  font-size: 19px;
+  color: #181818;
+  white-space: pre-wrap;
 }
 
 #user-message {
-  padding-left: 5px;
+  padding-left: 6px;
   padding-right: 5px;
 }
 
@@ -296,7 +386,18 @@ header {
   padding-left: 5px;
   padding-right: 5px;
 }
+
+#listeduser {
+  padding-left: 7px;
+  display: inline-block;
+  font-size: 19px;
+  color: #DBDBDC;
+}
+
 .user-message {
+  width: 75px;
+  padding-left: 5px;
+  font-size: 17px;
   overflow-wrap: break-word;
   word-wrap: break-word;
   -ms-word-break: break-all;
@@ -311,27 +412,29 @@ header {
 #users-connected {
   display: inline-block;
   position: relative;
-  font-size: 12.5px;
+  font-size: 20px;
   font-weight: 900;
-  bottom: 1.425px;
+  bottom: 1.5px;
+  color: #DBDBDB;
 }
 
-#chat-submit{
- float:bottom;
- width: 305px;
+#chat-submit {
+  position: relative;
+  bottom: 36px;
+  border-bottom-right-radius: 10px;
 }
 
-#chat-input{
-  width: 413px;
+#chat-input {
+  position: relative;
+  width: 407px;
   opacity: 0.85;
-  height: 27px;
+  height: 54px;
   color: white;
-  font-size: 14px;
+  font-size: 15px;
   background-color: rgba(42, 45, 58, .40);
   border: none;
-  margin-top: -20px;
-  margin-left: 0px;
-  padding-left: 5px;
+  padding-left: 12px;
+  border-bottom-right-radius: 10px;
 }
 
 #chat-input:focus {
@@ -343,6 +446,12 @@ header {
   margin-top: 0px
 }
 
+#sc-player {
+  pointer-events: none;
+  margin-left: 0px;
+  margin-top: 0px
+}
+
 .thumbs{
   width:192;
   height:110
@@ -350,6 +459,7 @@ header {
 
 .user-message {
   font-weight: 450;
+  font-size: 17px;
 }
 
 .ng-modal {
@@ -368,6 +478,21 @@ header {
   opacity: 0.8;
 }
 
+.selector {
+    z-index:10000;
+  position: absolute;
+  width: 100%;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  color: black;
+  background-color: #fff;
+  box-shadow: 4px 4px 80px ##22242A;
+  overflow-y:auto;
+}
 .ng-modal-dialog {
   z-index:10000;
   position: absolute;
@@ -380,7 +505,7 @@ header {
   -moz-transform: translate(-50%, -50%);
   color: black;
   background-color: #fff;
-  box-shadow: 4px 4px 80px #000;
+  box-shadow: 4px 4px 80px ##22242A;
   overflow-y:auto;
 }
 
@@ -389,12 +514,36 @@ header {
   padding: 10px;
 }
 
+.fade {
+  transition: all linear .5s;
+  opacity: 1;
+}
+
+.fade.ng-hide {
+  opacity: 0;
+}
+
+.fade.ng-hide-add, .fade.ng-hide-remove {
+  display: block !important;
+}
+
 .video-block {
   padding-left: 5px;
 }
 
 .video-thumb {
+  width: 120px;
+  height: 90px;
   float: left;
+  padding-right: 10px;
+  position: relative;
+}
+
+.sound-thumb {
+  width: 100px;
+  height: 100px;
+  float: left;
+  bottom: 5px;
   padding-right: 10px;
   position: relative;
 }
@@ -435,10 +584,64 @@ header {
   color: white;
 }
 
+.audio {
+  position: relative;
+  padding: 10px;
+}
+
+.audio-block {
+  padding-left: 5px;
+}
+
+.audio-thumb {
+  float: left;
+  padding-right: 10px;
+  position: relative;
+}
+
+.audio-thumb-check {
+  position: absolute;
+  left: 4%;
+  top: 20%;
+}
+
+.audio:nth-child(2n-1) {
+  background-color: #f5f5f9;
+}
+
+.audio-title {
+  padding-top: 5px;
+  font-size: 18px;
+  display: block;
+}
+
+.audio-author {
+  color: #616573;
+  font-size: 14px;
+  font-weight: 900;
+  padding: 5px 0;
+  display: block;
+}
+
+.audio-description {
+  font-size: 12px;
+  line-height: 1;
+  height:38px;
+  display:block;
+}
+
+.audio:hover {
+  background: #1FA0DF;
+  color: white;
+}
+
 .time {
+  padding-left: 5px;
+  display: inline-block;
+  position: relative;
   color: #DBDBDC;
-  font-size: 11px;
-  bottom: 1.55px;
+  top: .06em;
+  font-size: 12px;
 }
 
 #duration {
@@ -509,3 +712,28 @@ input[type=range]::-moz-range-thumb {
   box-shadow: 0 0 1px 0px rgba(0,0,0,0.1);
 }
 
+#place-holder {
+  height: 360px;
+  width: 640px;
+  background-image: url("../img/placeholder.gif");
+  background-size: cover;
+}
+
+#place-overlay {
+  position: absolute;
+  height: 360px;
+  width: 640px;
+  opacity: 0.5;
+  background-color: #23242b;
+}
+
+#gif {
+  width: 377px;
+  margin-bottom: 15px;
+}
+
+#gif-message {
+  padding-left: 10px;
+  height: auto;
+  max-width: 100%;
+}

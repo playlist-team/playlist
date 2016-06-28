@@ -10,7 +10,9 @@ var server = app.listen(port);
 
 var io = require('socket.io')({
   transports: ["xhr-polling"],
-  'polling duration': 10
+  'polling duration': 10,
+  'pingInterval': 100,
+  'pingTimeout': Infinity
 }).listen(server);
 
 var users = {};
@@ -23,7 +25,99 @@ var timeTotal;
 var timeLeft;
 var sync;
 var set;
-var switched;
+var switched = false;
+
+var adjectives = [
+  "nameless",
+  "undisclosed",
+  "unidentified",
+  "unnamed",
+  "incognito",
+  "secret",
+  "hidden",
+  "discreet",
+  "concealed",
+  "obscured",
+  "masked",
+  "veiled",
+  "shrouded",
+  "disguised",
+  "repressed",
+  "shy",
+  "anonymous",
+  "unknown",
+  "sly",
+  "sneaky",
+  "stealthy",
+  "furtive",
+  "covert",
+  "shady",
+  "clandestine",
+  "hushed",
+  "closeted",
+  "surreptitious",
+  "unauthorized",
+  "cloaked",
+  "invisible",
+  "undercover"
+]
+
+var creatures = [
+  "oyster",
+  "impala",
+  "mackerel",
+  "roedeer",
+  "greyhound",
+  "wasp",
+  "magpie",
+  "polecat",
+  "zebra",
+  "clam",
+  "pidgeon",
+  "rattlesnake",
+  "pheasant",
+  "ptarmigan",
+  "gnat",
+  "quail",
+  "heron",
+  "elk",
+  "camel",
+  "panda",
+  "turtledove",
+  "wombat",
+  "bullfinche",
+  "lapwing",
+  "dolphin",
+  "moth",
+  "wildebeest",
+  "lemur",
+  "sheldrake",
+  "woodchuck",
+  "otter",
+  "bobolink",
+  "smelt",
+  "raccoon",
+  "ostrich",
+  "rhinoceros",
+  "pelican",
+  "gibbon",
+  "dingo",
+  "mandrill",
+  "weasel",
+  "penguin",
+  "guillemot",
+  "walrus",
+  "opossum",
+  "bongo",
+  "yak",
+  "goosander",
+  "gorilla"
+]
+
+var getRandom = function(words) {
+  var index = Math.floor(Math.random() * words.length);
+  return words[index];
+}
 
 //Helper function to reset the state of clients connected
 var reset = function() {
@@ -36,14 +130,22 @@ var reset = function() {
 }
 
 io.on('connection', function(socket) {
-
+  
   //Receives username from client and emits username, socket id, users online back to client
   socket.on('username', function(username) {
+    if (username === 'anonymous') {
+      username = getRandom(adjectives) + "_" + getRandom(creatures);
+    }
     users[socket.id] = username;
     io.sockets.connected[socket.id].emit('setUser', username);
     io.sockets.connected[socket.id].emit('setId', socket.id);
-    io.emit('chatMessage', {username: "", message: users[socket.id] + " has joined"});
+    socket.broadcast.emit('joinMessage', {joined: "›› " + users[socket.id] + " has joined ››"});
+    io.sockets.connected[socket.id].emit('chatMessage', {
+      username: "playbot",
+      message: "Hello, " + users[socket.id] + "! " + "To get started, search for videos or sounds to add to the playlist. You can also type '/help' to see a list of commands."
+    });
     io.emit('usersOnline', users);
+    io.sockets.connected[socket.id].emit('setQueue', queue);
   });
 
   //Sends queue information to client
@@ -122,16 +224,30 @@ io.on('connection', function(socket) {
   });
 
   //Receives video ended from client and sets current to next in queue
-  //Jerry-rigged so that the fastest client emits the switch and locks other clients out for 5 seconds
+  //Jerry-rigged so that the fastest client emits the switch and locks other clients out for half of video duration
   socket.on('ended', function() {
     if (!switched) {
       switched = true;
       set = false;
-      current = queue.shift();
-      reset();
-      setTimeout(function() {
+      if (queue.length) {
+        current = queue.shift();
+        var timer;
+        if (current.soundcloud === true) {
+          timer = current.duration/2;
+        } else {
+          timer = ((current.duration/60) * 1000)/2;
+        }
+        reset();
+        setTimeout(function() {
+          switched = false;
+        }, timer);
+      } else {
         switched = false;
-      }, 5000);
+        set = false;
+        current = null;
+        reset();
+        io.emit('stopVideo');
+      }
     }
   });
 
@@ -145,7 +261,7 @@ io.on('connection', function(socket) {
         current = queue.shift();
         reset();
       } else {
-        set= false;
+        set = false;
         current = null;
         reset();
         io.emit('stopVideo');
@@ -154,23 +270,31 @@ io.on('connection', function(socket) {
   });
 
   //Start the video sync clock
-  socket.on('setDuration', function(duration) {
+  socket.on('setDuration', function(video) {
+    if (video.sc === true) {
+      video.duration = video.duration/1000;
+    }
     if (!set) {
       set = true;
-      timeTotal = duration;
-      timeLeft = duration;
+      timeTotal = video.duration;
+      timeLeft = video.duration;
       clearInterval(sync);
-      sync = setInterval(function() {
-        timeLeft--;
-        if (timeLeft === 0) {
-          clearInterval(sync);
-        }
-      }, 1000);
+      setTimeout(function() {
+        sync = setInterval(function() {
+          timeLeft--;
+          if (timeLeft === 0) {
+            clearInterval(sync);
+          }
+        }, 1000);
+      }, 2000)
     }
   });
 
   //Removes client vote information and delete client on client disconnect
   socket.on('disconnect', function() {
+
+    var name = users[socket.id] || 'someone';
+
     if (votes[socket.id] === 'up') {
       upvotes--;
     }
@@ -181,12 +305,26 @@ io.on('connection', function(socket) {
 
     io.emit('changeVotes', {up: upvotes, down: downvotes});
 
-    io.emit('chatMessage', {username: "", message: users[socket.id] + " has left"});
+    io.emit('joinMessage', {left: "›› " + name + " has left ››"});
 
     delete users[socket.id];
 
     io.emit('usersOnline', users);
   });
+
+  //Handles socket reconnect event with client
+  socket.on('reconnect', function() {
+    io.sockets.connected[socket.id].emit('comeback');
+  });
+
+  //Updates username on reconnection
+  socket.on('return', function(username) {
+    users[socket.id] = username;
+    io.sockets.connected[socket.id].emit('setUser', username);
+    io.sockets.connected[socket.id].emit('setId', socket.id);
+    io.emit('chatMessage', {username: "", message: users[socket.id] + " has reconnected"});
+    io.emit('usersOnline', users);
+  })
 
   //Receives upvote from client and updates vote information; emitting to all clients
   socket.on('upVote', function() {
@@ -241,5 +379,3 @@ io.on('connection', function(socket) {
   });
 
 });
-
-

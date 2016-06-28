@@ -2,195 +2,142 @@
 <html ng-app="app">
 
   <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular-animate.js"></script>
+    <script src="//connect.soundcloud.com/sdk.js"></script>
+    <script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert-dev.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,900' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="./css/styles.css">
-
-    <!-- Remove # from url -->
     <base href="/"></base>
-
   </head>
-
   <body ng-controller="YouTubeController">
-
     <header>
-
-      <img src="./img/logo.png" id="logo-image">
-      <!-- YouTube search box -->
-      <form id="search" ng-submit="getSearch(); toggleResults()" ng-controller="SearchController">
-
-        <input id="search-input" ng-model="field" type="text" placeholder="Search for and add YouTube videos to the playlist" autocomplete="off">
-
-        <input id="search-submit" type="image" src="./img/search.png">
-        <!-- Angular directive to load search results modal on submit -->
+      <img src="./img/logo.png" id="logo-image" ng-cloak>
+      <form id="search" ng-submit="searchQuery(); toggleResults()" ng-controller="SearchController">
+        <input id="search-input" ng-model="field" type="text" placeholder="Search" autocomplete="off" ng-cloak>
+        <input id="search-submit" type="image" src="./img/search.png" ng-cloak> 
+        <img id="engine-icon" ng-src={{image}} ng-click="toggleIcon()">
         <search-directive show='showResults' width='750px' height='62%'>
-
           <div id="results" ng-if="showResults">
-
-            <div class="video" ng-cloak ng-repeat="result in searchList track by $index" ng-click="item.clicked || enqueue(result); item.clicked = true">
-
-              <img class="video-thumb" id="thumb-{{result.snippet.title}}" src={{result.snippet.thumbnails.default.url}}>
-              <img class="video-thumb-check" id="check-{{res.snippet.title}}" src="./img/check.png" ng-show="item.clicked">
-
-              <span class="video-title">
-                {{result.snippet.title| limitTo: 75 }}{{result.snippet.description.length > 75 ? '...' : ''}}
-              </span>
-
-              <span class="video-author">
-                {{result.snippet.channelTitle}}
-              </span>
-
-              <span class="video-description">
-                {{result.snippet.description | limitTo: 160 }}{{result.snippet.description.length > 160 ? '...' : ''}}
-              </span>
-
+            <div class="video fade" ng-hide="item.clicked" ng-cloak ng-repeat="result in searchList track by $index" ng-click="item.clicked || enqueue(result); item.clicked = true">
+                <img class="video-thumb" ng-show="result.snippet" id="thumb-{{result.snippet.title}}" src="{{result.snippet.thumbnails.default.url || yt}}">
+                <img class="sound-thumb" ng-show="result.title" id="thumb-{{result.title}}" src="{{result.artwork_url || (result.artwork_url).replace('-large', '-t500x500') || (result.artwork_url).replace('-large', '-crop') || (result.artwork_url).replace('-large', '-t300x300') || sc}}">
+                <span class="video-title">
+                  {{result.snippet.title || result.title | limitTo: 70 }}{{result.snippet.title.length > 70 ? '...' : ''}}
+                </span>
+                <span class="video-author">
+                  {{result.snippet.channelTitle || result.user.username}}
+                </span>
+                <span class="video-description">
+                  {{result.snippet.description || result.description | limitTo: 180 }}{{result.snippet.description.length > 180 ? '...' : ''}}
+                </span>
             </div>
-
           </div>
-
         </search-directive>
-
       </form>
-      <!-- Controls to skip and sync current video being played -->
       <h1 id="skip" ng-click="skip()">skip</h1>
       <h1 id="sync" ng-click="sync()">sync</h1>
-      <!-- Volume control slider -->
-      <input id="volume" min ="0" max="100" step="1" type="range" ng-model="volume" value="50"></input>
-
+      <input id="volume" min ="0" max="100" step="1" type="range" ng-model="volume" value="50" ng-cloak>
     </header>
-      <!-- container holds video screen, playlist queue and chat -->
-      <!-- <div class="container"> -->
-      <!-- this div contains the video screen and playlist queue -->
       <div id="player-queue">
-        <!-- YouTube API adds the video player in the player div -->
-        <div id="player"></div>
-        <!-- to display the current video being played -->
-        <div id="current-song">
-
-            <span id="default-playlist-message" ng-cloak ng-show="!current.title">
-              Playlist is currently empty
-            </span>
-            <!-- we set a limit on title character length -->
-            <span ng-cloak ng-show="current.title">
-              {{ current.title | limitTo: 58 }}{{current.title.length > 60 ? '...' : ''}}
-            </span>
-            <span id="duration" ng-cloak ng-show="current.title">
-              {{duration}}
-            </span>
-
+        <div id="place-overlay" ng-show="!widget === !tube"></div>
+        <div id="place-holder" ng-show="!widget === !tube"></div>
+        <div ng-show="tube">
+          <div id="player"></div>
         </div>
-        <!-- to display our up and down arrows and vote counter -->
-        <div class="votes" ng-show="current.title">
-
+        <iframe id="sc-player" ng-show="widget" height="357" width="640" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url='https://soundcloud.com/jdilla/the-introduction'"></iframe>
+        <div id="current-song" ng-cloak>
+          <span id="default-playlist-message" ng-cloak ng-show="!current.title">
+            Playlist is currently empty
+          </span>
+          <span ng-cloak ng-show="current.title">
+            {{ current.title | limitTo: 58 }}{{current.title.length > 60 ? '...' : ''}}
+          </span>
+          <span id="duration" ng-cloak ng-show="current.title">
+            {{duration}}
+          </span>
+        </div>
+        <div class="votes" ng-show="current.title" ng-cloak>
           <p id="added-by" ng-cloak ng-show="current.title">
             — added by {{ current.username }}
           </p>
-
           <p id="arrows">
-            <!-- up green arrow -->
-            <img src="./img/upvote.svg" onmouseover="this.src='./img/uphover.svg';" onmouseout="this.src='./img/upvote.svg';" class="up-arrow" ng-click="upVote()"></img>
-
+            <img src="./img/upvote.svg" onmouseover="this.src='./img/uphover.svg';" onmouseout="this.src='./img/upvote.svg';" class="up-arrow" ng-click="upVote()">
             <span class="vote-count" ng-cloak>
               {{upvotes}}
             </span>
-            <!-- down red arrow -->
-            <img src="./img/downvote.svg" onmouseover="this.src='./img/downhover.svg';" onmouseout="this.src='./img/downvote.svg';" class="down-arrow" ng-click="downVote()"></img>
-
+            <img src="./img/downvote.svg" onmouseover="this.src='./img/downhover.svg';" onmouseout="this.src='./img/downvote.svg';" class="down-arrow" ng-click="downVote()">
             <span class="vote-count" ng-cloak>
               {{downvotes}}
             </span>
-
           </p>
         </div>
-        <!-- to display videos in playlist -->
         <div id="queue">
-
-          <div class="pending-songs" ng-cloak ng-repeat="song in playlist track by $index">
-
-            <p id="queue-title" ng-cloak>
+          <div class="pending-songs" ng-repeat="song in playlist track by $index" ng-cloak>
+            <p id="queue-title">
               {{ song.title | limitTo: 74 }}{{song.title.length > 74 ? '...' : ''}}
             </p>
-            <!-- to remove a video from playlist -->
             <p ng-show="song.socket===socketId" id="queue-remove" ng-cloak type="button" ng-click="dequeue(song)">
               Remove
             </p>
-
           </div>
-
         </div>
-
       </div>
-      <!-- to display chat window -->
       <div id="chat" ng-controller="ChatController">
-        <!-- tabs to display messages or users online -->
-        <div ng-style="chatStyle" id="chat-tab" ng-click="changeTab('chat')">
-          <strong>chat</strong>
+        <div ng-style="chatStyle" id="chat-tab" ng-click="changeTab('chat')" ng-cloak>
+          <img id="chat-icon" src="./img/chat.png">
         </div>
-
-        <div ng-style="userStyle" id="users-tab" ng-click="changeTab('users')">
-          <strong>users </strong><div id="users-connected">({{usersConnected}})</div>
+        <div ng-style="userStyle" id="users-tab" ng-click="changeTab('users')" ng-cloak>
+          <img id="users-icon" src="./img/users.png"><div id="users-connected">{{usersConnected}}</div>
         </div>
-
         <div id="chat-container" scroll-directive="messages" ng-model="messages">
-
           <table class="chat-table">
-
             <tbody ng-show="tab =='chat'" id="messages" ng-repeat="message in messages track by $index">
-
               <tr class="user-name">
-                <!-- to display user name and time stamp of message -->
+                <td ng-cloak id="user-name" ng-show="message.joined || message.left">
+                  <div id="joined">{{message.joined}}</div>
+                  <div id="left">{{message.left}}</div>
+                </td>
                 <td ng-cloak id="user-name" ng-show="messages[{{$index-1}}].username !== message.username">
-
-                  <strong>{{ message.username }}</strong> <span class="time">{{message.time}}</span>
-
+                  <div id="username">{{message.username}}</div>
+                  <span ng-show="message.time" class="time">{{message.time}}</span>
                 </td>
-
               </tr>
-
-              <tr class="user-message">
-                <!-- to display all messages -->
-                <td id="user-message" ng-cloak ng-bind-html="message.message | linky:'_blank'">
+              <tr class="user-message" ng-show="message.message">
+                <td id="user-name" ng-cloak>
+                  <div id="usermessage" ng-bind-html="message.message | linky:'_blank'"></div>
                 </td>
-
               </tr>
-
+              <tr class="user-message" ng-show="message.url">
+                <td id="user-name" ng-cloak>
+                  <div id="gif">
+                    <img id="gif-message" src="{{message.url}}">
+                  </div>
+                </td>
+              </tr>
             </tbody>
-            <!-- functionality to display chat messages or online users -->
             <tbody id="messages" ng-show="tab == 'users'">
-
               <tr ng-repeat="user in usernameList">
-
                 <td ng-cloak id="user-playlist">
-
-                  <strong>{{user}}</strong>
-
+                  <div id="listeduser">{{user}}</div>
                 </td>
-
               </tr>
-
             </tbody>
-
           </table>
-
         </div>
-          <!-- to display area to type messages and submit -->
-          <form id="chat-submit" ng-submit="send(message)">
-
-            <input id="chat-input" ng-model="message" type="text" placeholder="Enter Message" autocomplete="off" required/>
-
+          <form id="chat-submit" ng-submit="send(message)" ng-cloak>
+            <input id="chat-input" ng-model="message" type="text" placeholder="Say something..." autocomplete="off" required/>
           </form>
       </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.2/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
     <script src="./js/volume.js"></script>
     <script src="./js/chat.js"></script>
     <script src="./js/search.js"></script>
     <script src="./js/video.js"></script>
-    
   </body>
 </html>
 

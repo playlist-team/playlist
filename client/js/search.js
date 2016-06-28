@@ -1,5 +1,5 @@
-angular.module('search', [])
-//:oad YouTube search results in a modal
+angular.module('search', ['ngAnimate'])
+//Load YouTube search results in a modal
 .directive('searchDirective', function() {
   return {
     restrict: 'E',
@@ -24,9 +24,28 @@ angular.module('search', [])
   }
 })
 
-.controller('SearchController', ['$scope', '$window', 'SearchFactory', function($scope, $window, SearchFactory){
+.controller('SearchController', ['$scope', 'SearchFactory', '$rootScope', function($scope, SearchFactory, $rootScope){
 
   $scope.searchList;
+  $scope.image = './img/soundcloud.png';
+  $scope.yt = './img/yt.jpg';
+  $scope.sc = '/img/sc.jpg';
+
+  $scope.toggleIcon = function() {
+    if ($scope.image === './img/soundcloud.png') {
+      $scope.image = './img/youtube.png'
+    } else {
+      $scope.image = './img/soundcloud.png'
+    }
+  }
+
+  $scope.searchQuery = function() {
+    if ($scope.image === './img/soundcloud.png') {
+      $scope.getSound();
+    } else {
+      $scope.getSearch();
+    }
+  }
 
   //Retrieve and populate scope with YouTube search results
   $scope.getSearch = function() {
@@ -35,20 +54,43 @@ angular.module('search', [])
     });
   }
 
-  //Sends video information to server
-  $scope.enqueue = function(thumbnail) {
-    SearchFactory.fetchResource(thumbnail.id.videoId, function(result) {
-      var video = result.data.items[0];
-      var length = video.contentDetails.duration.split(/[A-Za-z]/);
-      var seconds = (Number(length[2]) * 60) + Number(length[3]);
-      socket.emit('enqueue', { id: video.id,
-                               title: video.snippet.title,
-                               thumbnail: video.snippet.thumbnails.default.url,
-                               username: $window.username,
-                               socket: socket.id, 
-                               duration: seconds });
+  $scope.getSound = function() {
+    SearchFactory.fetchSound($scope.field).then(function(results) {
+      if (Array.isArray(results)) {
+        $scope.searchList = results;
+      } else {
+        $scope.searchList = [results];
+      }
     });
   }
+
+  //Sends video information to server
+  $scope.enqueue = function(thumbnail) {
+    if (thumbnail.id.videoId) {
+      SearchFactory.fetchResource(thumbnail.id.videoId, function(result) {
+        var video = result.data.items[0];
+        var length = video.contentDetails.duration.split(/[A-Za-z]/);
+        var seconds = (Number(length[2]) * 60) + Number(length[3]);
+        $rootScope.socket.emit('enqueue', { id: video.id,
+                                 title: video.snippet.title,
+                                 thumbnail: video.snippet.thumbnails.default.url,
+                                 username: $rootScope.username,
+                                 socket: $rootScope.socket.id, 
+                                 duration: seconds,
+                                 soundcloud: false });
+      });
+    } else {
+      $rootScope.socket.emit('enqueue', {
+        id: thumbnail.uri,
+        title: thumbnail.title,
+        thumbnail: thumbnail.artwork_url,
+        username: $rootScope.username,
+        socket: $rootScope.socket.id,
+        duration: thumbnail.duration,
+        soundcloud: true
+      });
+    };
+  };
 
   $scope.showResults = false;
 
@@ -60,9 +102,17 @@ angular.module('search', [])
 }])
 
 //Search query from YouTube Data API
-.factory('SearchFactory', ['$http', function($http) {
+.factory('SearchFactory', ['$http', '$q', function($http, $q) {
+
+  var deferred = $q.defer();
 
   var fetchSearch = function(query, callback, token) {
+    var index = query.indexOf('&');
+
+    if(index !== -1) {
+      query = query.slice(0, index);
+    }
+
     return $http.get('https://www.googleapis.com/youtube/v3/search', {
       params: {
         pageToken: token || "",
@@ -71,13 +121,30 @@ angular.module('search', [])
         type: "video",
         videoType: "any",
         q: query,
-        maxResults: 25,
+        maxResults: 50,
         safeSearch: "none"
       }
     }).then(function(results) {
         callback(results);
     })
   };
+
+  var fetchSound = function(query) {
+    deferred = $q.defer();
+    if (query.indexOf('soundcloud.com') !== -1) {
+      SC.get('/resolve/?url=' + query, {limit: 1}, function(result) {
+        deferred.resolve(result);
+      })
+    } else {
+      SC.get('/tracks', {
+        q: query,
+        limit: 50
+      }, function(results){
+        deferred.resolve(results);
+      });
+    }
+    return deferred.promise;
+  }
 
   var fetchResource = function(videoId, callback) {
     return $http({
@@ -89,6 +156,7 @@ angular.module('search', [])
   }
   return {
     fetchSearch: fetchSearch,
+    fetchSound: fetchSound,
     fetchResource: fetchResource
   }
 
