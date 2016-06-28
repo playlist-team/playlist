@@ -143,6 +143,7 @@ angular.module('chat', ['ngSanitize'])
               message: 'Sticker not found, try again.',
               username: 'playbot',
               time: $scope.time
+            });
           } else {
             $scope.getCurrentTime();
             $rootScope.socket.emit('sendMessage', {
