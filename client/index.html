@@ -16,6 +16,7 @@
     <base href="/"></base>
   </head>
   <body ng-controller="YouTubeController">
+    <div id="interface">
     <header>
       <img src="./img/logo.png" id="logo-image" ng-cloak>
       <form id="search" ng-submit="searchQuery(); toggleResults()" ng-controller="SearchController">
@@ -133,6 +134,7 @@
           <form id="chat-submit" ng-submit="send(message)" ng-cloak>
             <input id="chat-input" ng-model="message" type="text" placeholder="Say something..." autocomplete="off" required/>
           </form>
+      </div>
       </div>
     <script src="./js/volume.js"></script>
     <script src="./js/chat.js"></script>

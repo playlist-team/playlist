@@ -1,4 +1,5 @@
-html{
+html {
+  height: 100%;
   overflow: hidden;
 }
 
@@ -8,8 +9,9 @@ body {
   background-size: 100%;
   background-color: white;
   width: 1060px;
-  margin-right: auto;
-  margin-left: auto;
+  height: 100%;
+  display: table;
+  margin: 0 auto;
 }
 
 ::-webkit-scrollbar {
@@ -736,4 +738,10 @@ input[type=range]::-moz-range-thumb {
   padding-left: 10px;
   height: auto;
   max-width: 100%;
+}
+
+#interface {
+  height: 100%;
+  display: table-cell;
+  vertical-align: middle;
 }
