@@ -192,6 +192,7 @@ angular.module('app', ['chat', 'search'])
             context.source.buffer = decoded;
             context.source.connect(context.gain);
             context.source.start(context.audio.currentTime, duration);
+            $rootScope.$emit('setTimer', duration);
           })
           context.source.onended = function() {
             setTimeout(function() {
@@ -285,6 +286,7 @@ angular.module('app', ['chat', 'search'])
         context.source.buffer = decoded;
         context.source.connect(context.gain);
         context.source.start();
+        $rootScope.$emit('setTimer', decoded.duration);
         context.source.onended = function() {
           setTimeout(function() {
             $rootScope.socket.emit('ended');
