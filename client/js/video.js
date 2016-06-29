@@ -35,6 +35,8 @@ angular.module('app', ['chat', 'search'])
 
   var lastTarget = null;
 
+  var uploadHistory = {};
+
   window.addEventListener('dragenter', function(event) {
     lastTarget = event.target;
     document.getElementById('dropzone').style.visibility = 'visible';
@@ -53,42 +55,33 @@ angular.module('app', ['chat', 'search'])
 
   document.getElementById('dropzone').addEventListener('drop', function(event) {
     event.preventDefault();
-    event.stopPropagation();
 
     if(event.target === lastTarget) {
       document.getElementById('dropzone').style.visibility = 'hidden';
     }
-
     var file = event.dataTransfer.files[0];
 
+    var key = file.name + $rootScope.socket.id;
 
-    $rootScope.socket.emit('enload', { 
-      id: $rootScope.socket.id,
-      title: file.name,
-      thumbnail: null,
-      username: $rootScope.username,
-      socket: $rootScope.socket.id, 
-      duration: null,
-      soundcloud: false,
-      upload: true 
-    });
+    $rootScope.socket.emit('upload', {key: key, file: file});
 
-    console.log(event.dataTransfer.files[0]);
+    $rootScope.socket.on('uploaded', function() {
+      if (!uploadHistory[file.name + $rootScope.socket.id]) {
+        $rootScope.socket.emit('enqueue', { 
+          id: file.name + $rootScope.socket.id,
+          title: file.name,
+          thumbnail: null,
+          username: $rootScope.username,
+          socket: $rootScope.socket.id, 
+          duration: null,
+          type: 'upload',
+          file: null
+        });
 
-    $rootScope.socket.emit('upload', {key: file.name + $rootScope.socket.id, file: file});
+        uploadHistory[file.name + $rootScope.socket.id] = true;
+      }
+    })
   })
-
-  // $rootScope.socket.on('backatya', function(file) {
-    // var sound = new AudioContext();
-    // var source = sound.createBufferSource();
-    // sound.decodeAudioData(file, function(decoded) {
-    //   console.log('DECODED', decoded);
-    //   source.buffer = decoded;
-    //   source.connect(sound.destination);
-    //   source.start();
-    // })
-    // console.log("COMING BACK AT YOU: ", file);
-  // })
 })
 
 .config(function($locationProvider){
@@ -103,6 +96,7 @@ angular.module('app', ['chat', 'search'])
   this.queue = [];
   this.time= null;
   this.volume = null;
+  this.source = null;
 
   //Instantiate new YouTube player after iFrame API has loaded
   $window.onYouTubeIframeAPIReady = function() {
@@ -173,7 +167,7 @@ angular.module('app', ['chat', 'search'])
       context.current = video;
       $rootScope.socket.emit('getTime');
       $rootScope.$emit('changeQueue');
-      if (video.soundcloud === true) {
+      if (video.type === 'soundcloud') {
         $rootScope.$emit('showCloud');
         widget.load(video.id, {auto_play: false, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, visual: true, callback: function() {
           widget.setVolume(0);
@@ -183,21 +177,42 @@ angular.module('app', ['chat', 'search'])
             widget.setVolume(.5);
           }, 2000);
         }});
-      } else {
+      } else if (video.type === 'youtube') {
         $rootScope.$emit('showTube');
         player.loadVideoById(video.id);
+      } else if (video.type === 'upload') {
+        var sound = new AudioContext();
+        context.source = sound.createBufferSource();
+        sound.decodeAudioData(video.file, function(decoded) {
+          $rootScope.socket.emit('getDuration')
+          $rootScope.socket.on('uploadDuration', function(duration) {
+            context.source.buffer = decoded;
+            context.source.connect(sound.destination);
+            context.source.start(sound.currentTime, duration);
+          })
+          source.onended = function() {
+            setTimeout(function() {
+              $rootScope.socket.emit('ended');
+            }, 1750);
+          }
+        })
+      } else {
+        console.log('ERROR');
       }
     });
+
     //Receives event from server to initalize volume to 50
     $rootScope.socket.on('setVolume', function() {
       context.volume = .5;
       widget.setVolume(.5);
       player.setVolume(50);
     });
+
     //Listens for volumeChange from Controller and sets the volume
     $rootScope.$on('volumeChange', function(event, volume) {
+      context.volume = volume/100;
       player.setVolume(volume);
-      widget.setVolume(volume/100);
+      widget.setVolume(context.volume);
     });
   }
 
@@ -233,7 +248,8 @@ angular.module('app', ['chat', 'search'])
   //Recieve next video from server, plays it and emits queue to controller and time to server
   $rootScope.socket.on('nextVideo', function(video) {
     context.current = video;
-    if (video.soundcloud === true) {
+    if (video.type === 'soundcloud') {
+      context.source.stop();
       player.stopVideo();
       $rootScope.$emit('showCloud');
       widget.load(video.id, {auto_play: false, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, visual: true, callback: function() {
@@ -242,12 +258,32 @@ angular.module('app', ['chat', 'search'])
       }});
       $rootScope.$emit('changeQueue');
       $rootScope.socket.emit('setDuration', {duration: video.duration, sc: true});
-    } else {
+    } else if (video.type === 'youtube') {
       widget.pause();
+      context.source.stop();
       $rootScope.$emit('showTube');
       player.loadVideoById(video.id);
       $rootScope.$emit('changeQueue');
       $rootScope.socket.emit('setDuration', {duration: video.duration, sc: false});
+    } else if (video.type === 'upload') {
+      player.stopVideo();
+      widget.pause();
+      context.source.stop();
+      var sound = new AudioContext();
+      context.source = sound.createBufferSource();
+      sound.decodeAudioData(video.file, function(decoded) {
+        $rootScope.socket.emit('setDuration', {duration: decoded.duration, sc: false});
+        context.source.buffer = decoded;
+        context.source.connect(sound.destination);
+        context.source.start();
+        source.onended = function() {
+          setTimeout(function() {
+            $rootScope.socket.emit('ended');
+          }, 1750);
+        }
+      })
+    } else {
+      console.log('ERROR');
     }
   });
 

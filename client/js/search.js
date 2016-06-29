@@ -71,13 +71,14 @@ angular.module('search', ['ngAnimate'])
         var video = result.data.items[0];
         var length = video.contentDetails.duration.split(/[A-Za-z]/);
         var seconds = (Number(length[2]) * 60) + Number(length[3]);
-        $rootScope.socket.emit('enqueue', { id: video.id,
-                                 title: video.snippet.title,
-                                 thumbnail: video.snippet.thumbnails.default.url,
-                                 username: $rootScope.username,
-                                 socket: $rootScope.socket.id, 
-                                 duration: seconds,
-                                 soundcloud: false });
+        $rootScope.socket.emit('enqueue', { 
+          id: video.id,
+          title: video.snippet.title,
+          thumbnail: video.snippet.thumbnails.default.url,
+          username: $rootScope.username,
+          socket: $rootScope.socket.id, 
+          duration: seconds,
+          type: 'youtube' });
       });
     } else {
       $rootScope.socket.emit('enqueue', {
@@ -87,7 +88,7 @@ angular.module('search', ['ngAnimate'])
         username: $rootScope.username,
         socket: $rootScope.socket.id,
         duration: thumbnail.duration,
-        soundcloud: true
+        type: 'soundcloud'
       });
     };
   };

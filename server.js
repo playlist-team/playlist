@@ -127,6 +127,9 @@ var reset = function() {
   upvotes = 0;
   downvotes = 0;
   io.emit('clearVotes');
+  if (current && current.type === 'upload') {
+    current.file = uploads[current.id];
+  }
   io.emit('nextVideo', current);
   io.emit('setQueue', queue);
 }
@@ -134,9 +137,9 @@ var reset = function() {
 io.on('connection', function(socket) {
   
   socket.on('upload', function(upload) {
-    uploads[upload.name] = upload.file;
-    console.log(uploads[upload.name]);
-    //io.sockets.connected[socket.id].emit('backatya', mpthree[0]);
+    console.log(upload);
+    uploads[upload.key] = upload.file;
+    io.sockets.connected[socket.id].emit('uploaded');
   })
 
   //Receives username from client and emits username, socket id, users online back to client
@@ -166,6 +169,9 @@ io.on('connection', function(socket) {
   //Sends current video to client
   socket.on('getCurrent', function() {
     if (current) {
+      if (current.type === 'upload') {
+        current.file = uploads[current.id];
+      }
       io.sockets.connected[socket.id].emit('setCurrent', current);
     } else {
       io.sockets.connected[socket.id].emit('setVolume');
@@ -189,7 +195,6 @@ io.on('connection', function(socket) {
 
   socket.on('enqueue', function(data) {
     if (current) {
-
       queue.push(data);
       io.emit('addVideo', data);
 
@@ -384,6 +389,10 @@ io.on('connection', function(socket) {
   //Sends clock time to client when requested
   socket.on('getSync', function() {
     io.sockets.connected[socket.id].emit('setSync', timeTotal - timeLeft || timeTotal);
+  });
+
+  socket.on('getDuration', function() {
+    io.sockets.connected[socket.id].emit('uploadDuration', timeTotal - timeLeft || timeTotal);
   });
 
 });
