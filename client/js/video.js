@@ -66,6 +66,7 @@ angular.module('app', ['chat', 'search'])
     $rootScope.socket.emit('upload', {key: key, file: file});
 
     $rootScope.socket.on('uploaded', function() {
+
       if (!uploadHistory[file.name + $rootScope.socket.id]) {
         $rootScope.socket.emit('enqueue', { 
           id: file.name + $rootScope.socket.id,
@@ -191,8 +192,10 @@ angular.module('app', ['chat', 'search'])
           $rootScope.socket.on('uploadDuration', function(duration) {
             context.source.buffer = decoded;
             context.source.connect(context.gain);
-            context.source.start(context.audio.currentTime, duration);
-            $rootScope.$emit('setTimer', duration);
+            setTimeout(function() {
+              context.source.start(context.audio.currentTime, duration);
+              $rootScope.$emit('setTimer', duration);
+            }, 2000)
           })
           context.source.onended = function() {
             setTimeout(function() {
@@ -285,8 +288,10 @@ angular.module('app', ['chat', 'search'])
         $rootScope.socket.emit('setDuration', {duration: decoded.duration, sc: false});
         context.source.buffer = decoded;
         context.source.connect(context.gain);
-        context.source.start();
-        $rootScope.$emit('setTimer', decoded.duration);
+        setTimeout(function() {
+          context.source.start();
+          $rootScope.$emit('setTimer', decoded.duration);
+        }, 2000)
         context.source.onended = function() {
           setTimeout(function() {
             $rootScope.socket.emit('ended');
