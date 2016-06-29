@@ -97,6 +97,7 @@ angular.module('app', ['chat', 'search'])
   this.time= null;
   this.volume = null;
   this.source = null;
+  this.audio = new AudioContext();
 
   //Instantiate new YouTube player after iFrame API has loaded
   $window.onYouTubeIframeAPIReady = function() {
@@ -181,16 +182,15 @@ angular.module('app', ['chat', 'search'])
         $rootScope.$emit('showTube');
         player.loadVideoById(video.id);
       } else if (video.type === 'upload') {
-        var sound = new AudioContext();
-        context.source = sound.createBufferSource();
-        sound.decodeAudioData(video.file, function(decoded) {
+        context.source = context.audio.createBufferSource();
+        context.audio.decodeAudioData(video.file, function(decoded) {
           $rootScope.socket.emit('getDuration')
           $rootScope.socket.on('uploadDuration', function(duration) {
             context.source.buffer = decoded;
-            context.source.connect(sound.destination);
-            context.source.start(sound.currentTime, duration);
+            context.source.connect(context.audio.destination);
+            context.source.start(context.audio.currentTime, duration);
           })
-          source.onended = function() {
+          context.source.onended = function() {
             setTimeout(function() {
               $rootScope.socket.emit('ended');
             }, 1750);
@@ -275,14 +275,13 @@ angular.module('app', ['chat', 'search'])
       if (context.source) {
         context.source.stop();
       }
-      var sound = new AudioContext();
-      context.source = sound.createBufferSource();
-      sound.decodeAudioData(video.file, function(decoded) {
+      context.source = context.audio.createBufferSource();
+      context.audio.decodeAudioData(video.file, function(decoded) {
         $rootScope.socket.emit('setDuration', {duration: decoded.duration, sc: false});
         context.source.buffer = decoded;
-        context.source.connect(sound.destination);
+        context.source.connect(context.audio.destination);
         context.source.start();
-        source.onended = function() {
+        context.source.onended = function() {
           setTimeout(function() {
             $rootScope.socket.emit('ended');
           }, 1750);
@@ -295,6 +294,9 @@ angular.module('app', ['chat', 'search'])
 
   $rootScope.socket.on('stopVideo', function() {
     $rootScope.$emit('placeHodor');
+    if (context.source) {
+      context.source.stop();
+    }
     player.stopVideo();
     widget.pause();
   });
@@ -320,7 +322,6 @@ angular.module('app', ['chat', 'search'])
   });
 
   $rootScope.socket.on('setSync', function(time) {
-    console.log("TIME: ", time);
     if (context.current.soundcloud === false) {
       player.pauseVideo();
       player.seekTo(time, true);
