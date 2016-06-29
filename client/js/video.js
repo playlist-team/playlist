@@ -98,6 +98,9 @@ angular.module('app', ['chat', 'search'])
   this.volume = null;
   this.source = null;
   this.audio = new AudioContext();
+  this.gain = this.audio.createGain();
+  this.gain.connect(this.audio.destination);
+  this.gain.gain.value = 0.5;
 
   //Instantiate new YouTube player after iFrame API has loaded
   $window.onYouTubeIframeAPIReady = function() {
@@ -187,7 +190,7 @@ angular.module('app', ['chat', 'search'])
           $rootScope.socket.emit('getDuration')
           $rootScope.socket.on('uploadDuration', function(duration) {
             context.source.buffer = decoded;
-            context.source.connect(context.audio.destination);
+            context.source.connect(context.gain);
             context.source.start(context.audio.currentTime, duration);
           })
           context.source.onended = function() {
@@ -211,6 +214,7 @@ angular.module('app', ['chat', 'search'])
     //Listens for volumeChange from Controller and sets the volume
     $rootScope.$on('volumeChange', function(event, volume) {
       context.volume = volume/100;
+      context.gain.gain.value  = volume/100;
       player.setVolume(volume);
       widget.setVolume(context.volume);
     });
@@ -279,7 +283,7 @@ angular.module('app', ['chat', 'search'])
       context.audio.decodeAudioData(video.file, function(decoded) {
         $rootScope.socket.emit('setDuration', {duration: decoded.duration, sc: false});
         context.source.buffer = decoded;
-        context.source.connect(context.audio.destination);
+        context.source.connect(context.gain);
         context.source.start();
         context.source.onended = function() {
           setTimeout(function() {
