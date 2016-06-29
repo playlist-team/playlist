@@ -249,7 +249,9 @@ angular.module('app', ['chat', 'search'])
   $rootScope.socket.on('nextVideo', function(video) {
     context.current = video;
     if (video.type === 'soundcloud') {
-      context.source.stop();
+      if (context.source) {
+        context.source.stop();
+      }
       player.stopVideo();
       $rootScope.$emit('showCloud');
       widget.load(video.id, {auto_play: false, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, visual: true, callback: function() {
@@ -260,7 +262,9 @@ angular.module('app', ['chat', 'search'])
       $rootScope.socket.emit('setDuration', {duration: video.duration, sc: true});
     } else if (video.type === 'youtube') {
       widget.pause();
-      context.source.stop();
+      if (context.source) {
+        context.source.stop();
+      }
       $rootScope.$emit('showTube');
       player.loadVideoById(video.id);
       $rootScope.$emit('changeQueue');
@@ -268,7 +272,9 @@ angular.module('app', ['chat', 'search'])
     } else if (video.type === 'upload') {
       player.stopVideo();
       widget.pause();
-      context.source.stop();
+      if (context.source) {
+        context.source.stop();
+      }
       var sound = new AudioContext();
       context.source = sound.createBufferSource();
       sound.decodeAudioData(video.file, function(decoded) {
