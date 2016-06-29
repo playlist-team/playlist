@@ -61,6 +61,8 @@ header {
 }
 
 #added-by {
+  -webkit-user-select: none;
+  -moz-user-select: none;
   font-size: 12px;
   font-style: italic;
   float: left;
@@ -68,6 +70,8 @@ header {
 }
 
 #arrows {
+  -webkit-user-select: none;
+  -moz-user-select: none;
   margin-top: 5px;
   margin-bottom: 5px;
   float: right;
@@ -662,6 +666,8 @@ header {
 }
 
 #duration {
+  -webkit-user-select: none;
+  -moz-user-select: none;
   float: right;
   padding-top: 0px;
   padding-right: 16px;
