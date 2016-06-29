@@ -33,21 +33,62 @@ angular.module('app', ['chat', 'search'])
     });
   });
 
+  var lastTarget = null;
+
+  window.addEventListener('dragenter', function(event) {
+    lastTarget = event.target;
+    document.getElementById('dropzone').style.visibility = 'visible';
+  });
+
+  window.addEventListener('dragleave', function(event) {
+    if(event.target === lastTarget) {
+      document.getElementById('dropzone').style.visibility = 'hidden';
+    }
+  });
+
   document.getElementById('dropzone').addEventListener('dragover', function(event) {
     event.preventDefault();
     event.stopPropagation();
-    console.log('HERE');
   })
 
   document.getElementById('dropzone').addEventListener('drop', function(event) {
     event.preventDefault();
     event.stopPropagation();
-    $rootScope.socket.emit('file', event.dataTransfer.files[0]);
+
+    if(event.target === lastTarget) {
+      document.getElementById('dropzone').style.visibility = 'hidden';
+    }
+
+    var file = event.dataTransfer.files[0];
+
+
+    $rootScope.socket.emit('enload', { 
+      id: $rootScope.socket.id,
+      title: file.name,
+      thumbnail: null,
+      username: $rootScope.username,
+      socket: $rootScope.socket.id, 
+      duration: null,
+      soundcloud: false,
+      upload: true 
+    });
+
+    console.log(event.dataTransfer.files[0]);
+
+    $rootScope.socket.emit('upload', {key: file.name + $rootScope.socket.id, file: file});
   })
 
-  $rootScope.socket.on('backatya', function(file) {
-    console.log("COMING BACK AT YOU: ", file);
-  })
+  // $rootScope.socket.on('backatya', function(file) {
+    // var sound = new AudioContext();
+    // var source = sound.createBufferSource();
+    // sound.decodeAudioData(file, function(decoded) {
+    //   console.log('DECODED', decoded);
+    //   source.buffer = decoded;
+    //   source.connect(sound.destination);
+    //   source.start();
+    // })
+    // console.log("COMING BACK AT YOU: ", file);
+  // })
 })
 
 .config(function($locationProvider){

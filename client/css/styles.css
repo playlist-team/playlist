@@ -772,6 +772,7 @@ input[type=range]::-moz-range-thumb {
 }
 
 #dropzone {
+  visibility: hidden;
   z-index: 10;
   position: absolute;
   height: 100%;
