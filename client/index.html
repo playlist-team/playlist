@@ -15,8 +15,13 @@
     <link rel="stylesheet" type="text/css" href="./css/styles.css">
     <base href="/"></base>
   </head>
-  <body ng-controller="YouTubeController">
-    <div id="interface">
+  <body ng-controller="YouTubeController"> 
+    <div id="interface"> 
+    <div id="dropzone">
+      <form class="box" method="post" action="" enctype="multipart/form-data">
+        <input type="file" name="file" id="file"> 
+      </form>  
+    </div>   
     <header>
       <img src="./img/logo.png" id="logo-image" ng-cloak>
       <form id="search" ng-submit="searchQuery(); toggleResults()" ng-controller="SearchController">

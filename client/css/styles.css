@@ -766,3 +766,16 @@ input[type=range]::-moz-range-thumb {
   display: table-cell;
   vertical-align: middle;
 }
+
+#file {
+  display: none;
+}
+
+#dropzone {
+  z-index: 10;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+}

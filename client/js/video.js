@@ -32,6 +32,22 @@ angular.module('app', ['chat', 'search'])
       $rootScope.socket.emit('username', $rootScope.username);
     });
   });
+
+  document.getElementById('dropzone').addEventListener('dragover', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    console.log('HERE');
+  })
+
+  document.getElementById('dropzone').addEventListener('drop', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    $rootScope.socket.emit('file', event.dataTransfer.files[0]);
+  })
+
+  $rootScope.socket.on('backatya', function(file) {
+    console.log("COMING BACK AT YOU: ", file);
+  })
 })
 
 .config(function($locationProvider){

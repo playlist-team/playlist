@@ -114,6 +114,8 @@ var creatures = [
   "gorilla"
 ]
 
+var mpthree = [];
+
 var getRandom = function(words) {
   var index = Math.floor(Math.random() * words.length);
   return words[index];
@@ -131,6 +133,16 @@ var reset = function() {
 
 io.on('connection', function(socket) {
   
+  socket.on('file', function(file) {
+    mpthree.push(file);
+    console.log(mpthree);
+    io.sockets.connected[socket.id].emit('backatya', mpthree[0]);
+  })
+
+  socket.on('hello', function() {
+    console.log('hello');
+  })
+
   //Receives username from client and emits username, socket id, users online back to client
   socket.on('username', function(username) {
     if (username === 'anonymous') {
