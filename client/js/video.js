@@ -102,6 +102,8 @@ angular.module('app', ['chat', 'search'])
   this.gain = this.audio.createGain();
   this.gain.connect(this.audio.destination);
   this.gain.gain.value = 0.5;
+  this.sync = false;
+  this.decoded;
 
   //Instantiate new YouTube player after iFrame API has loaded
   $window.onYouTubeIframeAPIReady = function() {
@@ -188,19 +190,22 @@ angular.module('app', ['chat', 'search'])
       } else if (video.type === 'upload') {
         context.source = context.audio.createBufferSource();
         context.audio.decodeAudioData(video.file, function(decoded) {
-          $rootScope.socket.emit('getDuration')
-          $rootScope.socket.on('uploadDuration', function(duration) {
-            context.source.buffer = decoded;
+          context.decoded = decoded;
+          $rootScope.socket.emit('getDuration');
+          $rootScope.socket.on('uploadDuration', function(time) {
+            context.source.buffer = context.decoded || decoded;
             context.source.connect(context.gain);
-            setTimeout(function() {
-              context.source.start(context.audio.currentTime, duration);
-              $rootScope.$emit('setTimer', duration);
-            }, 2000)
+            context.source.start(context.audio.currentTime, time.duration);
+            $rootScope.$emit('setTimer', time.remaining);
           })
           context.source.onended = function() {
-            setTimeout(function() {
-              $rootScope.socket.emit('ended');
-            }, 1750);
+            if (context.sync) {
+              context.sync = false;
+            } else {
+              setTimeout(function() {
+                $rootScope.socket.emit('ended');
+              }, 1750);
+            }
           }
         })
       } else {
@@ -256,6 +261,9 @@ angular.module('app', ['chat', 'search'])
   //Recieve next video from server, plays it and emits queue to controller and time to server
   $rootScope.socket.on('nextVideo', function(video) {
     context.current = video;
+    if (!video) {
+      return;
+    }
     if (video.type === 'soundcloud') {
       if (context.source) {
         context.source.stop();
@@ -285,17 +293,22 @@ angular.module('app', ['chat', 'search'])
       }
       context.source = context.audio.createBufferSource();
       context.audio.decodeAudioData(video.file, function(decoded) {
-        $rootScope.socket.emit('setDuration', {duration: decoded.duration, sc: false});
+        context.decoded = decoded;
         context.source.buffer = decoded;
         context.source.connect(context.gain);
+        $rootScope.$emit('setTimer', decoded.duration);
         setTimeout(function() {
+          $rootScope.socket.emit('setDuration', {duration: decoded.duration, sc: false});
           context.source.start();
-          $rootScope.$emit('setTimer', decoded.duration);
-        }, 2000)
+        }, 1000)
         context.source.onended = function() {
-          setTimeout(function() {
-            $rootScope.socket.emit('ended');
-          }, 1750);
+          if (context.sync) {
+            context.sync = false;
+          } else {
+            setTimeout(function() {
+              $rootScope.socket.emit('ended');
+            }, 1750);
+          }
         }
       })
     } else {
@@ -333,12 +346,20 @@ angular.module('app', ['chat', 'search'])
   });
 
   $rootScope.socket.on('setSync', function(time) {
-    if (context.current.soundcloud === false) {
+    if (context.current.type === 'youtube') {
       player.pauseVideo();
-      player.seekTo(time, true);
+      player.seekTo(time.duration, true);
       player.playVideo();
-    } else {
-      widget.seekTo(time * 1000);
+    } else if (context.current.type === 'soundcloud') {
+      widget.seekTo(time.duration * 1000);
+    } else if (context.current.type === 'upload') {
+      context.sync = true;
+      context.source.stop();
+      context.source = context.audio.createBufferSource();
+      context.source.buffer = context.decoded;
+      context.source.connect(context.gain);
+      $rootScope.$emit('setTimer', time.remaining);
+      context.source.start(context.audio.currentTime, time.duration);
     }
   });
 
@@ -381,7 +402,6 @@ angular.module('app', ['chat', 'search'])
   });
 
   $rootScope.$on('placeHodor', function() {
-    console.log("STEPPED");
     $scope.widget = false;
     $scope.tube = false;
   });

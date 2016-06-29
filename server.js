@@ -287,6 +287,7 @@ io.on('connection', function(socket) {
     if (video.sc === true) {
       video.duration = video.duration/1000;
     }
+    console.log(video.duration);
     if (!set) {
       set = true;
       timeTotal = video.duration;
@@ -294,6 +295,8 @@ io.on('connection', function(socket) {
       clearInterval(sync);
       setTimeout(function() {
         sync = setInterval(function() {
+          console.log(timeLeft);
+          console.log(timeTotal);
           timeLeft--;
           if (timeLeft === 0) {
             clearInterval(sync);
@@ -387,12 +390,12 @@ io.on('connection', function(socket) {
   });
 
   //Sends clock time to client when requested
-  socket.on('getSync', function() {
-    io.sockets.connected[socket.id].emit('setSync', timeTotal - timeLeft || timeTotal);
+  socket.on('getSync', function(type) {
+    io.sockets.connected[socket.id].emit('setSync', {duration: timeTotal - timeLeft || timeTotal, remaining: timeLeft});
   });
 
   socket.on('getDuration', function() {
-    io.sockets.connected[socket.id].emit('uploadDuration', timeTotal - timeLeft || timeTotal);
+    io.sockets.connected[socket.id].emit('uploadDuration', {duration: timeTotal - timeLeft || timeTotal, remaining: timeLeft});
   });
 
 });
