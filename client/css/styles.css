@@ -157,6 +157,8 @@ header {
 }
 
 #chat-icon {
+  -moz-user-select: none;
+  -webkit-user-select: none;
   position: relative;
   top: 4px;
   width: 12%;
@@ -181,6 +183,8 @@ header {
 }
 
 #users-icon {
+  -moz-user-select: none;
+  -webkit-user-select: none;
   display: inline-block;
   position: relative;
   width: 12%;
@@ -421,6 +425,8 @@ header {
 }
 
 #users-connected {
+  -moz-user-select: none;
+  -webkit-user-select: none;
   display: inline-block;
   position: relative;
   font-size: 20px;
