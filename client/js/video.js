@@ -55,8 +55,9 @@ angular.module('app', ['chat', 'search'])
     event.preventDefault();
 
     if(event.target === lastTarget) {
-      document.getElementById('dropzone').style.visibility = 'hidden';
+      document.getElementById('dropicon').src="./img/rolling.gif"
     }
+
     var file = event.dataTransfer.files[0];
 
     var key = file.name + $rootScope.socket.id;
@@ -72,6 +73,10 @@ angular.module('app', ['chat', 'search'])
         type: 'upload',
         file: null
       });
+      if(event.target === lastTarget) {
+        document.getElementById('dropzone').style.visibility = 'hidden';
+        document.getElementById('dropicon').src="./img/dragicon.png"
+      }
     });
   })
 })
