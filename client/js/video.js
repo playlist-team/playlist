@@ -323,7 +323,6 @@ angular.module('app', ['chat', 'search'])
     if (context.source) {
       context.source.stop();
     }
-    player.stopVideo();
     widget.pause();
   });
 
