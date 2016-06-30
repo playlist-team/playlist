@@ -287,7 +287,7 @@ io.on('connection', function(socket) {
     if (video.sc === true) {
       video.duration = video.duration/1000;
     }
-    console.log(video.duration);
+    console.log("VIDEO: ", video, video.duration);
     if (!set) {
       set = true;
       timeTotal = video.duration;
@@ -295,8 +295,8 @@ io.on('connection', function(socket) {
       clearInterval(sync);
       setTimeout(function() {
         sync = setInterval(function() {
-          console.log(timeLeft);
-          console.log(timeTotal);
+          console.log('timeLeft: ', timeLeft);
+          console.log('timeTotal: ', timeTotal);
           timeLeft--;
           if (timeLeft === 0) {
             clearInterval(sync);
