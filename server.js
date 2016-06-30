@@ -129,8 +129,8 @@ var reset = function() {
   io.emit('clearVotes');
   if (current && current.type === 'upload') {
     current.file = uploads[current.id];
+    delete uploads[current.id];
   }
-  console.log(current);
   io.emit('nextVideo', current);
   io.emit('setQueue', queue);
 }
@@ -153,7 +153,7 @@ io.on('connection', function(socket) {
     socket.broadcast.emit('joinMessage', {joined: "›› " + users[socket.id] + " has joined ››"});
     io.sockets.connected[socket.id].emit('chatMessage', {
       username: "playbot",
-      message: "Hello, " + users[socket.id] + "! " + "To get started, search for videos or sounds to add to the playlist. You can also type '/help' to see a list of commands."
+      message: "Hello, " + users[socket.id] + "! " + "To get started, search for videos or sounds to add to the playlist. You can also drag and drop an mp3 track to the playlist. Type '/help' to see a list of commands."
     });
     io.emit('usersOnline', users);
     io.sockets.connected[socket.id].emit('setQueue', queue);
@@ -171,6 +171,7 @@ io.on('connection', function(socket) {
     if (current) {
       if (current.type === 'upload') {
         current.file = uploads[current.id];
+        delete uploads[current.id];
       }
       io.sockets.connected[socket.id].emit('setCurrent', current);
     } else {
