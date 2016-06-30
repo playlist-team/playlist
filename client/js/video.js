@@ -86,6 +86,18 @@ angular.module('app', ['chat', 'search'])
 })
 
 .service('VideoService', ['$window', '$rootScope', '$q', function($window, $rootScope, $q) {
+
+
+  var request = function(event, data) {
+    var deferred = $q.defer();
+    $rootScope.socket.emit(event, data);
+    $rootScope.socket.on(event, function(result) {
+      socket.off(event);
+      deferred.resolve(results);
+    });
+    return deferred.promise;
+  }
+
   var context = this;
 
   this.current = null;
@@ -161,12 +173,19 @@ angular.module('app', ['chat', 'search'])
     });
   })
 
+  var request = function(event, data) {
+    var deferred = $q.defer();
+    $rootScope.socket.emit(event, data);
+    $rootScope.socket.on(event, function(result) {
+      $rootScope.socket.off(event);
+      deferred.resolve(result);
+    });
+    return deferred.promise;
+  }
   //Event listener for when YouTube player finished loading
   var onPlayerReady = function(event) {
     //Emits request to server to get current video
-    $rootScope.socket.emit('getCurrent');
-    //Receives current video from server
-    $rootScope.socket.on('setCurrent', function(video) {
+    request('getCurrent').then(function(video) {
       context.current = video;
       $rootScope.socket.emit('getTime');
       $rootScope.$emit('changeQueue');
@@ -207,6 +226,9 @@ angular.module('app', ['chat', 'search'])
       } else {
         console.log('ERROR');
       }
+    })
+    //Receives current video from server
+    $rootScope.socket.on('setCurrent', function(video) {
     });
 
     //Receives event from server to initalize volume to 50
@@ -378,14 +400,14 @@ angular.module('app', ['chat', 'search'])
   });
 
   $rootScope.$on('showTube', function() {
-    $scope.$apply(function() {
+    $scope.$evalAsync(function() {
       $scope.widget = false;
       $scope.tube = true;
     });
   });
 
   $rootScope.$on('showCloud', function() {
-    $scope.$apply(function() {
+    $scope.$evalAsync(function() {
       $scope.widget = true;
       $scope.tube = false;
     });
@@ -402,7 +424,7 @@ angular.module('app', ['chat', 'search'])
     clearInterval($scope.timer);
     $scope.timer = setInterval(function() {
       $scope.timeleft--;
-      $scope.$apply(function() {
+      $scope.$evalAsync(function() {
         $scope.seconds = $scope.timeleft % 60;
         if($scope.seconds < 10) {
           $scope.seconds = '0' + $scope.seconds;
@@ -435,7 +457,7 @@ angular.module('app', ['chat', 'search'])
   }
 
   $rootScope.$on('changeQueue', function() {
-    $scope.$apply(function() {
+    $scope.$evalAsync(function() {
       $scope.current = VideoService.current;
       $scope.playlist = VideoService.queue;
     });
@@ -450,14 +472,14 @@ angular.module('app', ['chat', 'search'])
   }
 
   $rootScope.socket.on('changeVotes', function(votes) {
-    $scope.$apply(function() {
+    $scope.$evalAsync(function() {
       $scope.upvotes = votes.up;
       $scope.downvotes = votes.down;
     });
   });
 
   $rootScope.socket.on('clearVotes', function() {
-    $scope.$apply(function() {
+    $scope.$evalAsync(function() {
       $scope.upvotes = 0;
       $scope.downvotes = 0;
     });

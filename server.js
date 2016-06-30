@@ -169,7 +169,7 @@ io.on('connection', function(socket) {
   //Sends current video to client
   socket.on('getCurrent', function() {
     if (current) {
-      io.sockets.connected[socket.id].emit('setCurrent', current);
+      io.sockets.connected[socket.id].emit('getCurrent', current);
     } else {
       io.sockets.connected[socket.id].emit('setVolume');
     }
