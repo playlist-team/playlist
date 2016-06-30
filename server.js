@@ -298,11 +298,11 @@ io.on('connection', function(socket) {
           console.log('timeLeft: ', timeLeft);
           console.log('timeTotal: ', timeTotal);
           timeLeft--;
-          if (timeLeft === 0) {
+          if (timeLeft < 0) {
             clearInterval(sync);
           }
         }, 1000);
-      }, 2000)
+      }, 2000);
     }
   });
 
