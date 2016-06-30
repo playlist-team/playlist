@@ -93,9 +93,7 @@ angular.module('app', ['chat', 'search'])
   this.gain = this.audio.createGain();
   this.gain.connect(this.audio.destination);
   this.gain.gain.value = 0.5;
-  this.sync = false;
   this.decoded;
-  this.skip = false;
 
   //Instantiate new YouTube player after iFrame API has loaded
   $window.onYouTubeIframeAPIReady = function() {
@@ -191,16 +189,9 @@ angular.module('app', ['chat', 'search'])
             $rootScope.$emit('setTimer', time.remaining);
           })
           context.source.onended = function() {
-            console.log(context.skip);
-            if (context.sync) {
-              context.sync = false;
-            } else if (context.skip) {
-              context.skip = false;
-            } else {
-              setTimeout(function() {
-                $rootScope.socket.emit('ended');
-              }, 1750);
-            }
+            setTimeout(function() {
+              $rootScope.socket.emit('ended');
+            }, 1750);
           }
         })
       } else {
@@ -299,16 +290,9 @@ angular.module('app', ['chat', 'search'])
         }, 2000);
 
         context.source.onended = function() {
-          console.log(context.skip);
-          if (context.sync) {
-            context.sync = false;
-          } else if (context.skip) {
-            context.skip = false;
-          } else {
-            setTimeout(function() {
-              $rootScope.socket.emit('ended');
-            }, 1750);
-          }
+          setTimeout(function() {
+            $rootScope.socket.emit('ended');
+          }, 1750);
         }
       })
     } else {
@@ -353,7 +337,6 @@ angular.module('app', ['chat', 'search'])
     } else if (context.current.type === 'soundcloud') {
       widget.seekTo(time.duration * 1000);
     } else if (context.current.type === 'upload') {
-      context.sync = true;
       context.source.stop();
       context.source = context.audio.createBufferSource();
       context.source.buffer = context.decoded;
@@ -436,7 +419,6 @@ angular.module('app', ['chat', 'search'])
   }
 
   $scope.skip = function() {
-    VideoService.skip = true;
     $rootScope.socket.emit('skip');
   }
 
@@ -456,7 +438,6 @@ angular.module('app', ['chat', 'search'])
   }
 
   $scope.downVote = function() {
-    VideoService.skip = true;
     $rootScope.socket.emit('downVote');
   }
 
