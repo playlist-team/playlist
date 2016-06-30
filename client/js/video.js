@@ -297,10 +297,10 @@ angular.module('app', ['chat', 'search'])
         context.source.buffer = decoded;
         context.source.connect(context.gain);
         $rootScope.$emit('setTimer', decoded.duration);
+        $rootScope.socket.emit('setDuration', {duration: decoded.duration, sc: false});
         setTimeout(function() {
-          $rootScope.socket.emit('setDuration', {duration: decoded.duration, sc: false});
           context.source.start();
-        }, 1000)
+        }, 2000)
         context.source.onended = function() {
           if (context.sync) {
             context.sync = false;
