@@ -136,10 +136,9 @@ var reset = function() {
 
 io.on('connection', function(socket) {
   
-  socket.on('upload', function(upload) {
-    console.log(upload);
+  socket.on('upload', function(upload, callback) {
     uploads[upload.key] = upload.file;
-    io.sockets.connected[socket.id].emit('uploaded');
+    callback(upload.file.name);
   })
 
   //Receives username from client and emits username, socket id, users online back to client
@@ -264,11 +263,15 @@ io.on('connection', function(socket) {
     }
   });
 
+  socket.on('triggerSkip', function(callback) {
+    socket.broadcast.emit('lockEvent');
+    callback();
+  })
   //Allows skipping if event is emitted by client who enqueued video
   socket.on('skip', function(easterEgg) {
     var id = socket.id;
     if (current && id.slice(2) === current.socket || easterEgg) {
-
+      socket.broadcast.emit('lockEvent');
       if (queue.length) {
         set = false;
         current = queue.shift();
@@ -287,7 +290,6 @@ io.on('connection', function(socket) {
     if (video.sc === true) {
       video.duration = video.duration/1000;
     }
-    console.log("VIDEO: ", video, video.duration);
     if (!set) {
       set = true;
       timeTotal = video.duration;
@@ -295,8 +297,6 @@ io.on('connection', function(socket) {
       clearInterval(sync);
       setTimeout(function() {
         sync = setInterval(function() {
-          console.log('timeLeft: ', timeLeft);
-          console.log('timeTotal: ', timeTotal);
           timeLeft--;
           if (timeLeft < 0) {
             clearInterval(sync);

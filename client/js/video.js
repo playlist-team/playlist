@@ -35,8 +35,6 @@ angular.module('app', ['chat', 'search'])
 
   var lastTarget = null;
 
-  var uploadHistory = {};
-
   window.addEventListener('dragenter', function(event) {
     lastTarget = event.target;
     document.getElementById('dropzone').style.visibility = 'visible';
@@ -63,25 +61,18 @@ angular.module('app', ['chat', 'search'])
 
     var key = file.name + $rootScope.socket.id;
 
-    $rootScope.socket.emit('upload', {key: key, file: file});
-
-    $rootScope.socket.on('uploaded', function() {
-
-      if (!uploadHistory[file.name + $rootScope.socket.id]) {
-        $rootScope.socket.emit('enqueue', { 
-          id: file.name + $rootScope.socket.id,
-          title: file.name,
-          thumbnail: null,
-          username: $rootScope.username,
-          socket: $rootScope.socket.id, 
-          duration: null,
-          type: 'upload',
-          file: null
-        });
-
-        uploadHistory[file.name + $rootScope.socket.id] = true;
-      }
-    })
+    $rootScope.socket.emit('upload', {key: key, file: file}, function(name) {
+      $rootScope.socket.emit('enqueue', { 
+        id: file.name + $rootScope.socket.id,
+        title: file.name,
+        thumbnail: null,
+        username: $rootScope.username,
+        socket: $rootScope.socket.id, 
+        duration: null,
+        type: 'upload',
+        file: null
+      });
+    });
   })
 })
 
@@ -104,6 +95,7 @@ angular.module('app', ['chat', 'search'])
   this.gain.gain.value = 0.5;
   this.sync = false;
   this.decoded;
+  this.skip = false;
 
   //Instantiate new YouTube player after iFrame API has loaded
   $window.onYouTubeIframeAPIReady = function() {
@@ -199,8 +191,11 @@ angular.module('app', ['chat', 'search'])
             $rootScope.$emit('setTimer', time.remaining);
           })
           context.source.onended = function() {
+            console.log(context.skip);
             if (context.sync) {
               context.sync = false;
+            } else if (context.skip) {
+              context.skip = false;
             } else {
               setTimeout(function() {
                 $rootScope.socket.emit('ended');
@@ -298,12 +293,17 @@ angular.module('app', ['chat', 'search'])
         context.source.connect(context.gain);
         $rootScope.$emit('setTimer', decoded.duration);
         $rootScope.socket.emit('setDuration', {duration: decoded.duration, sc: false});
+
         setTimeout(function() {
           context.source.start();
-        }, 2000)
+        }, 2000);
+
         context.source.onended = function() {
+          console.log(context.skip);
           if (context.sync) {
             context.sync = false;
+          } else if (context.skip) {
+            context.skip = false;
           } else {
             setTimeout(function() {
               $rootScope.socket.emit('ended');
@@ -436,12 +436,21 @@ angular.module('app', ['chat', 'search'])
   }
 
   $scope.skip = function() {
-    $rootScope.socket.emit('skip');
+    VideoService.skip = true;
+    $rootScope.socket.emit('triggerSkip', function() {
+      $rootScope.socket.emit('skip');
+    });
   }
 
   $scope.sync = function() {
     $rootScope.socket.emit('getSync');
   }
+
+  $rootScope.socket.on('lockEvent', function() {
+    VideoService.skip = true;
+    VideoService.sync = true;
+    callback();
+  });
 
   $rootScope.$on('changeQueue', function() {
     $scope.$apply(function() {
@@ -455,6 +464,7 @@ angular.module('app', ['chat', 'search'])
   }
 
   $scope.downVote = function() {
+    VideoService.skip = true;
     $rootScope.socket.emit('downVote');
   }
 
