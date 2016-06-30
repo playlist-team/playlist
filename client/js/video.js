@@ -123,6 +123,7 @@ angular.module('app', ['chat', 'search'])
   var widget = SC.Widget(widgetElement);
 
   widget.bind(SC.Widget.Events.FINISH, function() {
+    context.skip = false;
     setTimeout(function() {
       $rootScope.socket.emit('ended');
     }, 1750);
@@ -228,6 +229,7 @@ angular.module('app', ['chat', 'search'])
   var onPlayerStateChange = function(event) {
     //Emit event notifying server that player has ended video
     if (event.data === YT.PlayerState.ENDED) {
+      context.skip = false;
       setTimeout(function() {
         $rootScope.socket.emit('ended');
       }, 1750);
@@ -341,6 +343,8 @@ angular.module('app', ['chat', 'search'])
   });
 
   $rootScope.socket.on('setQueue', function(queue) {
+    context.skip = false;
+    context.sync = false;
     context.queue = queue;
     $rootScope.$emit('changeQueue');
   });
@@ -448,7 +452,6 @@ angular.module('app', ['chat', 'search'])
 
   $rootScope.socket.on('lockEvent', function() {
     VideoService.skip = true;
-    VideoService.sync = true;
     callback();
   });
 

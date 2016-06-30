@@ -271,7 +271,6 @@ io.on('connection', function(socket) {
   socket.on('skip', function(easterEgg) {
     var id = socket.id;
     if (current && id.slice(2) === current.socket || easterEgg) {
-      socket.broadcast.emit('lockEvent');
       if (queue.length) {
         set = false;
         current = queue.shift();
@@ -375,6 +374,7 @@ io.on('connection', function(socket) {
 
     if(haters > 0.5) {
       if (queue.length) {
+        socket.broadcast.emit('lockEvent');
         set = false;
         current = queue.shift();
         reset();
