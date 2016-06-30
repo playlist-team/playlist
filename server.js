@@ -263,14 +263,11 @@ io.on('connection', function(socket) {
     }
   });
 
-  socket.on('triggerSkip', function(callback) {
-    socket.broadcast.emit('lockEvent');
-    callback();
-  })
   //Allows skipping if event is emitted by client who enqueued video
   socket.on('skip', function(easterEgg) {
     var id = socket.id;
     if (current && id.slice(2) === current.socket || easterEgg) {
+
       if (queue.length) {
         set = false;
         current = queue.shift();
@@ -374,7 +371,6 @@ io.on('connection', function(socket) {
 
     if(haters > 0.5) {
       if (queue.length) {
-        socket.broadcast.emit('lockEvent');
         set = false;
         current = queue.shift();
         reset();
