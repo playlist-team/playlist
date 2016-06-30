@@ -240,13 +240,12 @@ io.on('connection', function(socket) {
   //Jerry-rigged so that the fastest client emits the switch and locks other clients out for half of video duration
   socket.on('ended', function() {
     var id = socket.id;
-    var match;
-    if (current) {
-      match = current.socket;
-    } else {
-      match = 'x';
+
+    if (id.slice(2) === current.socket) {
+      switched = false;
     }
-    if (switched === false || id.slice(2) === match) {
+
+    if (switched === false) {
       switched = true;
       console.log('switched', switched);
       set = false;
