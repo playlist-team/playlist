@@ -169,10 +169,6 @@ io.on('connection', function(socket) {
   //Sends current video to client
   socket.on('getCurrent', function() {
     if (current) {
-      if (current.type === 'upload') {
-        current.file = uploads[current.id];
-        delete uploads[current.id];
-      }
       io.sockets.connected[socket.id].emit('setCurrent', current);
     } else {
       io.sockets.connected[socket.id].emit('setVolume');
