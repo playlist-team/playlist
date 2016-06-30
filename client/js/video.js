@@ -190,6 +190,7 @@ angular.module('app', ['chat', 'search'])
             $rootScope.$emit('setTimer', time.remaining);
           })
           context.source.onended = function() {
+            console.log('onended1');
             if (context.syncing) {
               context.syncing = false;
             } else {
@@ -286,6 +287,7 @@ angular.module('app', ['chat', 'search'])
         }, 2000);
 
         context.source.onended = function() {
+          console.log('onended')
           if (context.syncing) {
             context.syncing = false;
           } else {
@@ -294,6 +296,7 @@ angular.module('app', ['chat', 'search'])
             }, 1750);
           }
         }
+
       })
     } else {
       console.log('ERROR');
@@ -344,6 +347,7 @@ angular.module('app', ['chat', 'search'])
   });
 
   $rootScope.socket.on('triggerEnded', function() {
+    console.log('tirggerENDED');
     context.source.stop();
   })
 

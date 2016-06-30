@@ -130,6 +130,7 @@ var reset = function() {
   if (current && current.type === 'upload') {
     current.file = uploads[current.id];
   }
+  console.log(current);
   io.emit('nextVideo', current);
   io.emit('setQueue', queue);
 }
@@ -238,16 +239,26 @@ io.on('connection', function(socket) {
   //Receives video ended from client and sets current to next in queue
   //Jerry-rigged so that the fastest client emits the switch and locks other clients out for half of video duration
   socket.on('ended', function() {
-    if (!switched) {
+    var id = socket.id;
+    var match;
+    if (current) {
+      match = current.socket;
+    } else {
+      match = 'x';
+    }
+    if (switched === false || id.slice(2) === match) {
       switched = true;
+      console.log('switched', switched);
       set = false;
       if (queue.length) {
         current = queue.shift();
         var timer;
-        if (current.soundcloud === true) {
+        if (current.type === 'soundcloud') {
           timer = current.duration/2;
-        } else {
+        } else if (current.type === 'youtube') {
           timer = ((current.duration/60) * 1000)/2;
+        } else if (current.type === 'upload') {
+          timer = 7500;
         }
         reset();
         setTimeout(function() {
