@@ -267,16 +267,19 @@ io.on('connection', function(socket) {
   socket.on('skip', function(easterEgg) {
     var id = socket.id;
     if (current && id.slice(2) === current.socket || easterEgg) {
-
-      if (queue.length) {
-        set = false;
-        current = queue.shift();
-        reset();
+      if (current.type === 'upload') {
+        io.emit('triggerEnded');
       } else {
-        set = false;
-        current = null;
-        reset();
-        io.emit('stopVideo');
+        if (queue.length) {
+          set = false;
+          current = queue.shift();
+          reset();
+        } else {
+          set = false;
+          current = null;
+          reset();
+          io.emit('stopVideo');
+        }
       }
     }
   });
@@ -370,15 +373,19 @@ io.on('connection', function(socket) {
     var haters = downvotes/Object.keys(users).length;
 
     if(haters > 0.5) {
-      if (queue.length) {
-        set = false;
-        current = queue.shift();
-        reset();
+      if (current.type === 'upload') {
+        io.emit('triggerEnded');
       } else {
-        set= false;
-        current = null;
-        reset();
-        io.emit('stopVideo');
+        if (queue.length) {
+          set = false;
+          current = queue.shift();
+          reset();
+        } else {
+          set= false;
+          current = null;
+          reset();
+          io.emit('stopVideo');
+        }
       }
     }
     

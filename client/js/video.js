@@ -94,6 +94,7 @@ angular.module('app', ['chat', 'search'])
   this.gain.connect(this.audio.destination);
   this.gain.gain.value = 0.5;
   this.decoded;
+  this.syncing = false;
 
   //Instantiate new YouTube player after iFrame API has loaded
   $window.onYouTubeIframeAPIReady = function() {
@@ -189,9 +190,13 @@ angular.module('app', ['chat', 'search'])
             $rootScope.$emit('setTimer', time.remaining);
           })
           context.source.onended = function() {
-            setTimeout(function() {
-              $rootScope.socket.emit('ended');
-            }, 1750);
+            if (context.syncing) {
+              context.syncing = false;
+            } else {
+              setTimeout(function() {
+                $rootScope.socket.emit('ended');
+              }, 1750);
+            }
           }
         })
       } else {
@@ -251,9 +256,6 @@ angular.module('app', ['chat', 'search'])
       return;
     }
     if (video.type === 'soundcloud') {
-      if (context.source) {
-        context.source.stop();
-      }
       player.stopVideo();
       $rootScope.$emit('showCloud');
       widget.load(video.id, {auto_play: false, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, visual: true, callback: function() {
@@ -264,9 +266,6 @@ angular.module('app', ['chat', 'search'])
       $rootScope.socket.emit('setDuration', {duration: video.duration, sc: true});
     } else if (video.type === 'youtube') {
       widget.pause();
-      if (context.source) {
-        context.source.stop();
-      }
       $rootScope.$emit('showTube');
       player.loadVideoById(video.id);
       $rootScope.$emit('changeQueue');
@@ -274,9 +273,6 @@ angular.module('app', ['chat', 'search'])
     } else if (video.type === 'upload') {
       player.stopVideo();
       widget.pause();
-      if (context.source) {
-        context.source.stop();
-      }
       context.source = context.audio.createBufferSource();
       context.audio.decodeAudioData(video.file, function(decoded) {
         context.decoded = decoded;
@@ -290,9 +286,13 @@ angular.module('app', ['chat', 'search'])
         }, 2000);
 
         context.source.onended = function() {
-          setTimeout(function() {
-            $rootScope.socket.emit('ended');
-          }, 1750);
+          if (context.syncing) {
+            context.syncing = false;
+          } else {
+            setTimeout(function() {
+              $rootScope.socket.emit('ended');
+            }, 1750);
+          }
         }
       })
     } else {
@@ -302,9 +302,6 @@ angular.module('app', ['chat', 'search'])
 
   $rootScope.socket.on('stopVideo', function() {
     $rootScope.$emit('placeHodor');
-    if (context.source) {
-      context.source.stop();
-    }
     player.stopVideo();
     widget.pause();
   });
@@ -345,6 +342,10 @@ angular.module('app', ['chat', 'search'])
       context.source.start(context.audio.currentTime, time.duration);
     }
   });
+
+  $rootScope.socket.on('triggerEnded', function() {
+    context.source.stop();
+  })
 
 }])
 
@@ -423,6 +424,7 @@ angular.module('app', ['chat', 'search'])
   }
 
   $scope.sync = function() {
+    VideoService.syncing = true;
     $rootScope.socket.emit('getSync');
   }
 
