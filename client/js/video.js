@@ -343,8 +343,6 @@ angular.module('app', ['chat', 'search'])
   });
 
   $rootScope.socket.on('setQueue', function(queue) {
-    context.skip = false;
-    context.sync = false;
     context.queue = queue;
     $rootScope.$emit('changeQueue');
   });
