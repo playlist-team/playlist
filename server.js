@@ -241,7 +241,7 @@ io.on('connection', function(socket) {
   socket.on('ended', function() {
     var id = socket.id;
 
-    if (id.slice(2) === current.socket) {
+    if (current && id.slice(2) === current.socket) {
       switched = false;
     }
 
