@@ -273,6 +273,7 @@ io.on('connection', function(socket) {
   socket.on('seekForward', function(seconds) {
     var id = socket.id;
     if (current && id.slice(2) === current.socket) {
+      timeLeft -= seconds;
       io.emit('seekForward', seconds);
     }
   })
