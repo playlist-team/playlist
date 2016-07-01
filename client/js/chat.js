@@ -179,6 +179,9 @@ angular.module('chat', ['ngSanitize'])
 
       } else if (message.indexOf('/clear') !== -1) {
         $scope.messages = [];
+      } else if (message.indexOf('/seek') !== -1) {
+        var seconds = Number(message.split(' ')[1]);
+        $rootScope.socket.emit('seekForward', seconds);
       } else {
         var helpMessage = {
           username: 'playbot',

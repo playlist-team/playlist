@@ -378,6 +378,11 @@ angular.module('app', ['chat', 'search'])
     context.source.stop();
   })
 
+  $rootScope.socket.on('seekForward', function(seconds) {
+    if (context.current.type === 'youtube') {
+      player.seekTo(player.getCurrentTime() + seconds);
+    }
+  })
 }])
 
 .controller('YouTubeController', ['$scope', 'VideoService', '$rootScope', function($scope, VideoService, $rootScope) {
