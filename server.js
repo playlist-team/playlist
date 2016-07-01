@@ -277,6 +277,7 @@ io.on('connection', function(socket) {
       if (current.type === 'upload') {
         io.emit('triggerEnded');
       } else {
+        io.emit('resetTimer');
         if (queue.length) {
           set = false;
           current = queue.shift();

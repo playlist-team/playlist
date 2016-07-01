@@ -104,7 +104,7 @@ angular.module('app', ['chat', 'search'])
   this.player;
   this.queue = [];
   this.time= null;
-  this.volume = null;
+  this.volume = .5;
   this.source = null;
   this.audio = new AudioContext();
   this.gain = this.audio.createGain();
@@ -145,6 +145,7 @@ angular.module('app', ['chat', 'search'])
   })
 
   widget.bind(SC.Widget.Events.READY, function() {
+    widget.setVolume(.5);
   })
 
   widget.bind(SC.Widget.Events.PLAY, function() {
@@ -278,6 +279,7 @@ angular.module('app', ['chat', 'search'])
 
   //Recieve next video from server, plays it and emits queue to controller and time to server
   $rootScope.socket.on('nextVideo', function(video) {
+    $rootScope.$emit('setTimer', 0);
     context.current = video;
     if (!video) {
       return;
@@ -298,6 +300,7 @@ angular.module('app', ['chat', 'search'])
       $rootScope.$emit('changeQueue');
       $rootScope.socket.emit('setDuration', {duration: video.duration, sc: false});
     } else if (video.type === 'upload') {
+      $rootScope.$emit('placeHodor');
       player.stopVideo();
       widget.pause();
       context.source = context.audio.createBufferSource();
@@ -484,5 +487,11 @@ angular.module('app', ['chat', 'search'])
       $scope.downvotes = 0;
     });
   });
+
+  $rootScope.socket.on('resetTimer', function() {
+    $scope.$evalAsync(function() {
+      $scope.duration = '--:--';
+    });
+  })
 
 }]);
