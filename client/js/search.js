@@ -1,6 +1,6 @@
 angular.module('search', ['ngAnimate'])
 //Load YouTube search results in a modal
-.directive('searchDirective', function() {
+.directive('searchDirective', function($rootScope) {
   return {
     restrict: 'E',
     scope: {
@@ -18,9 +18,17 @@ angular.module('search', ['ngAnimate'])
       scope.hideResults = function() {
         scope.show = false;
       }
+      scope.noResults = function() {
+        $rootScope.noResults = false;
+      }
     },
     transclude: true,
-    template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='hideResults()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
+    template: "<div class='ng-modal' ng-show='show'>" + 
+                "<div class='ng-modal-overlay' ng-click='hideResults(); noResults()'></div>" + 
+                "<div class='ng-modal-dialog' ng-style='dialogStyle'>" + 
+                  "<div class='ng-modal-dialog-content' ng-transclude></div>" +
+                "</div>" +
+              "</div>"
   }
 })
 
@@ -40,6 +48,7 @@ angular.module('search', ['ngAnimate'])
   }
 
   $scope.searchQuery = function() {
+    $scope.searchList = undefined;
     if ($scope.image === './img/soundcloud.png') {
       $scope.getSound();
     } else {
@@ -50,15 +59,28 @@ angular.module('search', ['ngAnimate'])
   //Retrieve and populate scope with YouTube search results
   $scope.getSearch = function() {
     SearchFactory.fetchSearch($scope.field, function(results) {
+      if (results.data.items.length === 0) {
+        $rootScope.noResults = true;
+      } else {
+        $rootScope.noResults = false;
+      }
       $scope.searchList = results.data.items;
     });
   }
 
   $scope.getSound = function() {
     SearchFactory.fetchSound($scope.field).then(function(results) {
+      if (results === null) {
+        $rootScope.noResults = true;
+      } else {
+        $rootScope.noResults = false;
+      }
       if (Array.isArray(results)) {
         $scope.searchList = results;
       } else {
+        if (results === null) {
+          return;
+        }
         $scope.searchList = [results];
       }
     });
@@ -94,6 +116,7 @@ angular.module('search', ['ngAnimate'])
   };
 
   $scope.showResults = false;
+  $scope.noResults = false;
 
   //Toggles the modal view
   $scope.toggleResults = function() {

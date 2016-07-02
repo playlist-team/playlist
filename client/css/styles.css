@@ -489,7 +489,7 @@ header {
 
 .ng-modal-overlay {
   position: absolute;
-  z-index:9999;
+  z-index: 5000;
   top: 0;
   left: 0;
   width: 100%;
@@ -515,10 +515,9 @@ header {
   overflow-y:auto;
 }
 .ng-modal-dialog {
-  z-index:10000;
+  z-index: 6000;
   position: absolute;
   width: 100%;
-
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -796,4 +795,24 @@ input[type=range]::-moz-range-thumb {
   bottom:0;
   left:0;
   right:0;
+}
+
+.no-results {
+  z-index: 99999;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  pointer-events: none;
+  left: 0;
+  text-align: center;
+}
+
+#no-results {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: 100%;
+  max-height: 100%;
+  transform: translateX(-50%) translateY(-50%);
 }

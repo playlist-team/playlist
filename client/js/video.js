@@ -16,21 +16,23 @@ angular.module('app', ['chat', 'search'])
   });
 
   $rootScope.socket.on('connect', function() {
-    swal({
-      title: 'Welcome to Playlist',
-      text: 'Enter your username',
-      type: 'input',
-      inputType: 'text',
-      showCancelButton: true,
-      loseOnConfirm: true,
-      confirmButtonColor: '#1171A2'
-    }, function(username) {
-      if (!username) {
-        username = 'anonymous';
-      }
-      $rootScope.username = username.toLowerCase() || 'anonymous';
-      $rootScope.socket.emit('username', $rootScope.username);
-    });
+    if (!$rootScope.username) {
+      swal({
+        title: 'Welcome to Playlist',
+        text: 'Enter your username',
+        type: 'input',
+        inputType: 'text',
+        showCancelButton: true,
+        loseOnConfirm: true,
+        confirmButtonColor: '#1171A2'
+      }, function(username) {
+        if (!username) {
+          username = 'anonymous';
+        }
+        $rootScope.username = username.toLowerCase() || 'anonymous';
+        $rootScope.socket.emit('username', $rootScope.username);
+      });
+    }
   });
 
   var lastTarget = null;
