@@ -1,4 +1,5 @@
-html{
+html {
+  height: 100%;
   overflow: hidden;
 }
 
@@ -8,8 +9,9 @@ body {
   background-size: 100%;
   background-color: white;
   width: 1060px;
-  margin-right: auto;
-  margin-left: auto;
+  height: 100%;
+  display: table;
+  margin: 0 auto;
 }
 
 ::-webkit-scrollbar {
@@ -18,10 +20,12 @@ body {
 }
 
 header {
+  -webkit-user-select: none;
+  -moz-user-select: none;
   color: white;
   background-color: #22242A;
   width: 1060px;
-  height: 83px;
+  height: 90px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
@@ -57,6 +61,8 @@ header {
 }
 
 #added-by {
+  -webkit-user-select: none;
+  -moz-user-select: none;
   font-size: 12px;
   font-style: italic;
   float: left;
@@ -64,6 +70,8 @@ header {
 }
 
 #arrows {
+  -webkit-user-select: none;
+  -moz-user-select: none;
   margin-top: 5px;
   margin-bottom: 5px;
   float: right;
@@ -79,13 +87,16 @@ header {
 #logo-image {
   padding-left: 25px;
   padding-right: 15px;
-  padding-top: 10px;
+  padding-top: 14px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
 }
 
 #volume {
   position: relative;
-  left: 79.25%;
-  bottom: 52.5%;
+  left: 79.75%;
+  bottom: 50.5%;
 }
 
 #skip {
@@ -110,8 +121,10 @@ header {
   float: right;
   font-size: 14px;
   display: inline-block;
-  top: 45px;
+  top: 52.5px;
   left: 49px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
 }
 
 #sync:hover {
@@ -148,6 +161,8 @@ header {
 }
 
 #chat-icon {
+  -moz-user-select: none;
+  -webkit-user-select: none;
   position: relative;
   top: 4px;
   width: 12%;
@@ -172,6 +187,8 @@ header {
 }
 
 #users-icon {
+  -moz-user-select: none;
+  -webkit-user-select: none;
   display: inline-block;
   position: relative;
   width: 12%;
@@ -208,6 +225,8 @@ header {
 #search-submit{
   position: relative;
   right: 667.5px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
   bottom: 12.75px;
 }
 
@@ -316,7 +335,7 @@ header {
 #chat-container {
   position: relative;
   bottom: 35px;
-  height: 500px;
+  height: 490px;
   overflow-x: hidden;
   width: 420px;
   padding-left: 4px;
@@ -410,6 +429,8 @@ header {
 }
 
 #users-connected {
+  -moz-user-select: none;
+  -webkit-user-select: none;
   display: inline-block;
   position: relative;
   font-size: 20px;
@@ -420,7 +441,7 @@ header {
 
 #chat-submit {
   position: relative;
-  bottom: 36px;
+  bottom: 26px;
   border-bottom-right-radius: 10px;
 }
 
@@ -468,7 +489,7 @@ header {
 
 .ng-modal-overlay {
   position: absolute;
-  z-index:9999;
+  z-index: 5000;
   top: 0;
   left: 0;
   width: 100%;
@@ -494,10 +515,9 @@ header {
   overflow-y:auto;
 }
 .ng-modal-dialog {
-  z-index:10000;
+  z-index: 6000;
   position: absolute;
   width: 100%;
-
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -645,6 +665,8 @@ header {
 }
 
 #duration {
+  -webkit-user-select: none;
+  -moz-user-select: none;
   float: right;
   padding-top: 0px;
   padding-right: 16px;
@@ -736,4 +758,61 @@ input[type=range]::-moz-range-thumb {
   padding-left: 10px;
   height: auto;
   max-width: 100%;
+}
+
+#interface {
+  height: 100%;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#file {
+  display: none;
+}
+
+#dropzone {
+  opacity: 0.25;
+  background-color: white;
+  outline: 2px dashed black;
+  outline-offset: -10px;
+  background-size: contain;
+  visibility: hidden;
+  z-index: 10;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+#dropicon {
+  opacity: 0.5;
+  max-width: 100%;
+  max-height: 100%;  
+  position: absolute;
+  margin:auto;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+}
+
+.no-results {
+  z-index: 99999;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  pointer-events: none;
+  left: 0;
+  text-align: center;
+}
+
+#no-results {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: 100%;
+  max-height: 100%;
+  transform: translateX(-50%) translateY(-50%);
 }

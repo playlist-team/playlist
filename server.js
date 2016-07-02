@@ -114,6 +114,8 @@ var creatures = [
   "gorilla"
 ]
 
+var uploads = {};
+
 var getRandom = function(words) {
   var index = Math.floor(Math.random() * words.length);
   return words[index];
@@ -125,12 +127,21 @@ var reset = function() {
   upvotes = 0;
   downvotes = 0;
   io.emit('clearVotes');
+  if (current && current.type === 'upload') {
+    current.file = uploads[current.id];
+    delete uploads[current.id];
+  }
   io.emit('nextVideo', current);
   io.emit('setQueue', queue);
 }
 
 io.on('connection', function(socket) {
   
+  socket.on('upload', function(upload, callback) {
+    uploads[upload.key] = upload.file;
+    callback(upload.file.name);
+  })
+
   //Receives username from client and emits username, socket id, users online back to client
   socket.on('username', function(username) {
     if (username === 'anonymous') {
@@ -142,7 +153,7 @@ io.on('connection', function(socket) {
     socket.broadcast.emit('joinMessage', {joined: "›› " + users[socket.id] + " has joined ››"});
     io.sockets.connected[socket.id].emit('chatMessage', {
       username: "playbot",
-      message: "Hello, " + users[socket.id] + "! " + "To get started, search for videos or sounds to add to the playlist. You can also type '/help' to see a list of commands."
+      message: "Hello, " + users[socket.id] + "! " + "To get started, search for videos or sounds to add to the playlist. You can also drag and drop an mp3 track to the playlist. Type '/help' to see a list of commands."
     });
     io.emit('usersOnline', users);
     io.sockets.connected[socket.id].emit('setQueue', queue);
@@ -158,7 +169,7 @@ io.on('connection', function(socket) {
   //Sends current video to client
   socket.on('getCurrent', function() {
     if (current) {
-      io.sockets.connected[socket.id].emit('setCurrent', current);
+      io.sockets.connected[socket.id].emit('getCurrent', current);
     } else {
       io.sockets.connected[socket.id].emit('setVolume');
     }
@@ -181,7 +192,6 @@ io.on('connection', function(socket) {
 
   socket.on('enqueue', function(data) {
     if (current) {
-
       queue.push(data);
       io.emit('addVideo', data);
 
@@ -226,16 +236,25 @@ io.on('connection', function(socket) {
   //Receives video ended from client and sets current to next in queue
   //Jerry-rigged so that the fastest client emits the switch and locks other clients out for half of video duration
   socket.on('ended', function() {
-    if (!switched) {
+    var id = socket.id;
+
+    if (current && id.slice(2) === current.socket) {
+      switched = false;
+    }
+
+    if (switched === false) {
       switched = true;
+      console.log('switched', switched);
       set = false;
       if (queue.length) {
         current = queue.shift();
         var timer;
-        if (current.soundcloud === true) {
+        if (current.type === 'soundcloud') {
           timer = current.duration/2;
-        } else {
+        } else if (current.type === 'youtube') {
           timer = ((current.duration/60) * 1000)/2;
+        } else if (current.type === 'upload') {
+          timer = 7500;
         }
         reset();
         setTimeout(function() {
@@ -251,20 +270,32 @@ io.on('connection', function(socket) {
     }
   });
 
+  socket.on('seekForward', function(seconds) {
+    var id = socket.id;
+    if (current && id.slice(2) === current.socket) {
+      timeLeft -= seconds;
+      io.emit('seekForward', seconds);
+    }
+  })
+
   //Allows skipping if event is emitted by client who enqueued video
   socket.on('skip', function(easterEgg) {
     var id = socket.id;
     if (current && id.slice(2) === current.socket || easterEgg) {
-
-      if (queue.length) {
-        set = false;
-        current = queue.shift();
-        reset();
+      if (current.type === 'upload') {
+        io.emit('triggerEnded');
       } else {
-        set = false;
-        current = null;
-        reset();
-        io.emit('stopVideo');
+        io.emit('resetTimer');
+        if (queue.length) {
+          set = false;
+          current = queue.shift();
+          reset();
+        } else {
+          set = false;
+          current = null;
+          reset();
+          io.emit('stopVideo');
+        }
       }
     }
   });
@@ -282,11 +313,11 @@ io.on('connection', function(socket) {
       setTimeout(function() {
         sync = setInterval(function() {
           timeLeft--;
-          if (timeLeft === 0) {
+          if (timeLeft < 0) {
             clearInterval(sync);
           }
         }, 1000);
-      }, 2000)
+      }, 2000);
     }
   });
 
@@ -358,15 +389,19 @@ io.on('connection', function(socket) {
     var haters = downvotes/Object.keys(users).length;
 
     if(haters > 0.5) {
-      if (queue.length) {
-        set = false;
-        current = queue.shift();
-        reset();
+      if (current.type === 'upload') {
+        io.emit('triggerEnded');
       } else {
-        set= false;
-        current = null;
-        reset();
-        io.emit('stopVideo');
+        if (queue.length) {
+          set = false;
+          current = queue.shift();
+          reset();
+        } else {
+          set= false;
+          current = null;
+          reset();
+          io.emit('stopVideo');
+        }
       }
     }
     
@@ -374,8 +409,12 @@ io.on('connection', function(socket) {
   });
 
   //Sends clock time to client when requested
-  socket.on('getSync', function() {
-    io.sockets.connected[socket.id].emit('setSync', timeTotal - timeLeft || timeTotal);
+  socket.on('getSync', function(type) {
+    io.sockets.connected[socket.id].emit('setSync', {duration: timeTotal - timeLeft || timeTotal, remaining: timeLeft});
+  });
+
+  socket.on('getDuration', function() {
+    io.sockets.connected[socket.id].emit('uploadDuration', {duration: timeTotal - timeLeft || timeTotal, remaining: timeLeft});
   });
 
 });

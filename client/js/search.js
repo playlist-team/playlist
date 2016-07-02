@@ -1,6 +1,6 @@
 angular.module('search', ['ngAnimate'])
 //Load YouTube search results in a modal
-.directive('searchDirective', function() {
+.directive('searchDirective', function($rootScope) {
   return {
     restrict: 'E',
     scope: {
@@ -16,11 +16,17 @@ angular.module('search', ['ngAnimate'])
         scope.dialogStyle.height = attrs.height;
       }
       scope.hideResults = function() {
+        $rootScope.noResults = false;
         scope.show = false;
       }
     },
     transclude: true,
-    template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='hideResults()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
+    template: "<div class='ng-modal' ng-show='show'>" + 
+                "<div class='ng-modal-overlay' ng-click='hideResults()'></div>" + 
+                "<div class='ng-modal-dialog' ng-style='dialogStyle'>" + 
+                  "<div class='ng-modal-dialog-content' ng-transclude></div>" +
+                "</div>" +
+              "</div>"
   }
 })
 
@@ -30,6 +36,7 @@ angular.module('search', ['ngAnimate'])
   $scope.image = './img/soundcloud.png';
   $scope.yt = './img/yt.jpg';
   $scope.sc = '/img/sc.jpg';
+  $scope.shown = false;
 
   $scope.toggleIcon = function() {
     if ($scope.image === './img/soundcloud.png') {
@@ -40,25 +47,41 @@ angular.module('search', ['ngAnimate'])
   }
 
   $scope.searchQuery = function() {
-    if ($scope.image === './img/soundcloud.png') {
-      $scope.getSound();
-    } else {
-      $scope.getSearch();
+    $scope.searchList = undefined;
+    if ($scope.shown === false) {
+      if ($scope.image === './img/soundcloud.png') {
+        $scope.getSound();
+      } else {
+        $scope.getSearch();
+      }
     }
   }
 
   //Retrieve and populate scope with YouTube search results
   $scope.getSearch = function() {
     SearchFactory.fetchSearch($scope.field, function(results) {
+      if (results.data.items.length === 0) {
+        $rootScope.noResults = true;
+      } else {
+        $rootScope.noResults = false;
+      }
       $scope.searchList = results.data.items;
     });
   }
 
   $scope.getSound = function() {
     SearchFactory.fetchSound($scope.field).then(function(results) {
+      if (results === null) {
+        $rootScope.noResults = true;
+      } else {
+        $rootScope.noResults = false;
+      }
       if (Array.isArray(results)) {
         $scope.searchList = results;
       } else {
+        if (results === null) {
+          return;
+        }
         $scope.searchList = [results];
       }
     });
@@ -71,13 +94,14 @@ angular.module('search', ['ngAnimate'])
         var video = result.data.items[0];
         var length = video.contentDetails.duration.split(/[A-Za-z]/);
         var seconds = (Number(length[2]) * 60) + Number(length[3]);
-        $rootScope.socket.emit('enqueue', { id: video.id,
-                                 title: video.snippet.title,
-                                 thumbnail: video.snippet.thumbnails.default.url,
-                                 username: $rootScope.username,
-                                 socket: $rootScope.socket.id, 
-                                 duration: seconds,
-                                 soundcloud: false });
+        $rootScope.socket.emit('enqueue', { 
+          id: video.id,
+          title: video.snippet.title,
+          thumbnail: video.snippet.thumbnails.default.url,
+          username: $rootScope.username,
+          socket: $rootScope.socket.id, 
+          duration: seconds,
+          type: 'youtube' });
       });
     } else {
       $rootScope.socket.emit('enqueue', {
@@ -87,7 +111,7 @@ angular.module('search', ['ngAnimate'])
         username: $rootScope.username,
         socket: $rootScope.socket.id,
         duration: thumbnail.duration,
-        soundcloud: true
+        type: 'soundcloud'
       });
     };
   };
@@ -96,7 +120,11 @@ angular.module('search', ['ngAnimate'])
 
   //Toggles the modal view
   $scope.toggleResults = function() {
+    $scope.shown = !$scope.shown;
     $scope.showResults = !$scope.showResults;
+    if ($rootScope.noResults === true) {
+      $rootScope.noResults = false;
+    }
   };
 
 }])

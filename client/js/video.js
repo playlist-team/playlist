@@ -16,19 +16,71 @@ angular.module('app', ['chat', 'search'])
   });
 
   $rootScope.socket.on('connect', function() {
-     swal({
-       title: 'Welcome to Playlist',
-       text: 'Enter your username',
-       type: 'input',
-       inputType: 'text',
-       showCancelButton: true,
-       closeOnConfirm: true,
-       confirmButtonColor: '#1171A2'
-     }, function(username) {
-       $rootScope.username = username.toLowerCase() || 'anonymous';
-       $rootScope.socket.emit('username', $rootScope.username);
-     });
+    if (!$rootScope.username) {
+      swal({
+        title: 'Welcome to Playlist',
+        text: 'Enter your username',
+        type: 'input',
+        inputType: 'text',
+        showCancelButton: true,
+        loseOnConfirm: true,
+        confirmButtonColor: '#1171A2'
+      }, function(username) {
+        if (!username) {
+          username = 'anonymous';
+        }
+        $rootScope.username = username.toLowerCase() || 'anonymous';
+        $rootScope.socket.emit('username', $rootScope.username);
+      });
+    }
   });
+
+  var lastTarget = null;
+
+  window.addEventListener('dragenter', function(event) {
+    lastTarget = event.target;
+    document.getElementById('dropzone').style.visibility = 'visible';
+  });
+
+  window.addEventListener('dragleave', function(event) {
+    if(event.target === lastTarget) {
+      document.getElementById('dropzone').style.visibility = 'hidden';
+    }
+  });
+
+  document.getElementById('dropzone').addEventListener('dragover', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  })
+
+  document.getElementById('dropzone').addEventListener('drop', function(event) {
+    event.preventDefault();
+
+    if(event.target === lastTarget) {
+      document.getElementById('dropicon').src="./img/rolling.gif"
+    }
+
+    var file = event.dataTransfer.files[0];
+
+    var key = file.name + $rootScope.socket.id;
+
+    $rootScope.socket.emit('upload', {key: key, file: file}, function(name) {
+      $rootScope.socket.emit('enqueue', { 
+        id: file.name + $rootScope.socket.id,
+        title: file.name,
+        thumbnail: null,
+        username: $rootScope.username,
+        socket: $rootScope.socket.id, 
+        duration: null,
+        type: 'upload',
+        file: null
+      });
+      if(event.target === lastTarget) {
+        document.getElementById('dropzone').style.visibility = 'hidden';
+        document.getElementById('dropicon').src="./img/dragicon.png"
+      }
+    });
+  })
 })
 
 .config(function($locationProvider){
@@ -36,13 +88,32 @@ angular.module('app', ['chat', 'search'])
 })
 
 .service('VideoService', ['$window', '$rootScope', '$q', function($window, $rootScope, $q) {
+
+
+  var request = function(event, data) {
+    var deferred = $q.defer();
+    $rootScope.socket.emit(event, data);
+    $rootScope.socket.on(event, function(result) {
+      socket.off(event);
+      deferred.resolve(results);
+    });
+    return deferred.promise;
+  }
+
   var context = this;
 
   this.current = null;
   this.player;
   this.queue = [];
   this.time= null;
-  this.volume = null;
+  this.volume = .5;
+  this.source = null;
+  this.audio = new AudioContext();
+  this.gain = this.audio.createGain();
+  this.gain.connect(this.audio.destination);
+  this.gain.gain.value = 0.5;
+  this.decoded;
+  this.syncing = false;
 
   //Instantiate new YouTube player after iFrame API has loaded
   $window.onYouTubeIframeAPIReady = function() {
@@ -76,6 +147,7 @@ angular.module('app', ['chat', 'search'])
   })
 
   widget.bind(SC.Widget.Events.READY, function() {
+    widget.setVolume(.5);
   })
 
   widget.bind(SC.Widget.Events.PLAY, function() {
@@ -104,16 +176,23 @@ angular.module('app', ['chat', 'search'])
     });
   })
 
+  var request = function(event, data) {
+    var deferred = $q.defer();
+    $rootScope.socket.emit(event, data);
+    $rootScope.socket.on(event, function(result) {
+      $rootScope.socket.off(event);
+      deferred.resolve(result);
+    });
+    return deferred.promise;
+  }
   //Event listener for when YouTube player finished loading
   var onPlayerReady = function(event) {
     //Emits request to server to get current video
-    $rootScope.socket.emit('getCurrent');
-    //Receives current video from server
-    $rootScope.socket.on('setCurrent', function(video) {
+    request('getCurrent').then(function(video) {
       context.current = video;
       $rootScope.socket.emit('getTime');
       $rootScope.$emit('changeQueue');
-      if (video.soundcloud === true) {
+      if (video.type === 'soundcloud') {
         $rootScope.$emit('showCloud');
         widget.load(video.id, {auto_play: false, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, visual: true, callback: function() {
           widget.setVolume(0);
@@ -123,21 +202,51 @@ angular.module('app', ['chat', 'search'])
             widget.setVolume(.5);
           }, 2000);
         }});
-      } else {
+      } else if (video.type === 'youtube') {
         $rootScope.$emit('showTube');
         player.loadVideoById(video.id);
+      } else if (video.type === 'upload') {
+        context.source = context.audio.createBufferSource();
+        context.audio.decodeAudioData(video.file, function(decoded) {
+          context.decoded = decoded;
+          $rootScope.socket.emit('getDuration');
+          $rootScope.socket.on('uploadDuration', function(time) {
+            context.source.buffer = context.decoded || decoded;
+            context.source.connect(context.gain);
+            context.source.start(context.audio.currentTime, time.duration);
+            $rootScope.$emit('setTimer', time.remaining);
+          })
+          context.source.onended = function() {
+            if (context.syncing) {
+              context.syncing = false;
+            } else {
+              setTimeout(function() {
+                $rootScope.socket.emit('ended');
+              }, 1750);
+            }
+          }
+        })
+      } else {
+        console.log('ERROR');
       }
+    })
+    //Receives current video from server
+    $rootScope.socket.on('setCurrent', function(video) {
     });
+
     //Receives event from server to initalize volume to 50
     $rootScope.socket.on('setVolume', function() {
       context.volume = .5;
       widget.setVolume(.5);
       player.setVolume(50);
     });
+
     //Listens for volumeChange from Controller and sets the volume
     $rootScope.$on('volumeChange', function(event, volume) {
+      context.volume = volume/100;
+      context.gain.gain.value  = volume/100;
       player.setVolume(volume);
-      widget.setVolume(volume/100);
+      widget.setVolume(context.volume);
     });
   }
 
@@ -172,8 +281,12 @@ angular.module('app', ['chat', 'search'])
 
   //Recieve next video from server, plays it and emits queue to controller and time to server
   $rootScope.socket.on('nextVideo', function(video) {
+    $rootScope.$emit('setTimer', 0);
     context.current = video;
-    if (video.soundcloud === true) {
+    if (!video) {
+      return;
+    }
+    if (video.type === 'soundcloud') {
       player.stopVideo();
       $rootScope.$emit('showCloud');
       widget.load(video.id, {auto_play: false, show_comments: false, sharing: false, download: false, liking: false, buying: false, show_playcount: false, visual: true, callback: function() {
@@ -182,12 +295,41 @@ angular.module('app', ['chat', 'search'])
       }});
       $rootScope.$emit('changeQueue');
       $rootScope.socket.emit('setDuration', {duration: video.duration, sc: true});
-    } else {
+    } else if (video.type === 'youtube') {
       widget.pause();
       $rootScope.$emit('showTube');
       player.loadVideoById(video.id);
       $rootScope.$emit('changeQueue');
       $rootScope.socket.emit('setDuration', {duration: video.duration, sc: false});
+    } else if (video.type === 'upload') {
+      $rootScope.$emit('placeHodor');
+      player.stopVideo();
+      widget.pause();
+      context.source = context.audio.createBufferSource();
+      context.audio.decodeAudioData(video.file, function(decoded) {
+        context.decoded = decoded;
+        context.source.buffer = decoded;
+        context.source.connect(context.gain);
+        $rootScope.$emit('setTimer', decoded.duration);
+        $rootScope.socket.emit('setDuration', {duration: decoded.duration, sc: false});
+
+        setTimeout(function() {
+          context.source.start();
+        }, 2000);
+
+        context.source.onended = function() {
+          if (context.syncing) {
+            context.syncing = false;
+          } else {
+            setTimeout(function() {
+              $rootScope.socket.emit('ended');
+            }, 1750);
+          }
+        }
+
+      })
+    } else {
+      console.log('ERROR');
     }
   });
 
@@ -218,16 +360,31 @@ angular.module('app', ['chat', 'search'])
   });
 
   $rootScope.socket.on('setSync', function(time) {
-    console.log("TIME: ", time);
-    if (context.current.soundcloud === false) {
+    if (context.current.type === 'youtube') {
       player.pauseVideo();
-      player.seekTo(time, true);
+      player.seekTo(time.duration, true);
       player.playVideo();
-    } else {
-      widget.seekTo(time * 1000);
+    } else if (context.current.type === 'soundcloud') {
+      widget.seekTo(time.duration * 1000);
+    } else if (context.current.type === 'upload') {
+      context.source.stop();
+      context.source = context.audio.createBufferSource();
+      context.source.buffer = context.decoded;
+      context.source.connect(context.gain);
+      $rootScope.$emit('setTimer', time.remaining);
+      context.source.start(context.audio.currentTime, time.duration);
     }
   });
 
+  $rootScope.socket.on('triggerEnded', function() {
+    context.source.stop();
+  })
+
+  $rootScope.socket.on('seekForward', function(seconds) {
+    if (context.current.type === 'youtube') {
+      player.seekTo(player.getCurrentTime() + seconds);
+    }
+  })
 }])
 
 .controller('YouTubeController', ['$scope', 'VideoService', '$rootScope', function($scope, VideoService, $rootScope) {
@@ -253,21 +410,20 @@ angular.module('app', ['chat', 'search'])
   });
 
   $rootScope.$on('showTube', function() {
-    $scope.$apply(function() {
+    $scope.$evalAsync(function() {
       $scope.widget = false;
       $scope.tube = true;
     });
   });
 
   $rootScope.$on('showCloud', function() {
-    $scope.$apply(function() {
+    $scope.$evalAsync(function() {
       $scope.widget = true;
       $scope.tube = false;
     });
   });
 
   $rootScope.$on('placeHodor', function() {
-    console.log("STEPPED");
     $scope.widget = false;
     $scope.tube = false;
   });
@@ -278,7 +434,7 @@ angular.module('app', ['chat', 'search'])
     clearInterval($scope.timer);
     $scope.timer = setInterval(function() {
       $scope.timeleft--;
-      $scope.$apply(function() {
+      $scope.$evalAsync(function() {
         $scope.seconds = $scope.timeleft % 60;
         if($scope.seconds < 10) {
           $scope.seconds = '0' + $scope.seconds;
@@ -306,11 +462,12 @@ angular.module('app', ['chat', 'search'])
   }
 
   $scope.sync = function() {
+    VideoService.syncing = true;
     $rootScope.socket.emit('getSync');
   }
 
   $rootScope.$on('changeQueue', function() {
-    $scope.$apply(function() {
+    $scope.$evalAsync(function() {
       $scope.current = VideoService.current;
       $scope.playlist = VideoService.queue;
     });
@@ -325,17 +482,23 @@ angular.module('app', ['chat', 'search'])
   }
 
   $rootScope.socket.on('changeVotes', function(votes) {
-    $scope.$apply(function() {
+    $scope.$evalAsync(function() {
       $scope.upvotes = votes.up;
       $scope.downvotes = votes.down;
     });
   });
 
   $rootScope.socket.on('clearVotes', function() {
-    $scope.$apply(function() {
+    $scope.$evalAsync(function() {
       $scope.upvotes = 0;
       $scope.downvotes = 0;
     });
   });
+
+  $rootScope.socket.on('resetTimer', function() {
+    $scope.$evalAsync(function() {
+      $scope.duration = '--:--';
+    });
+  })
 
 }]);

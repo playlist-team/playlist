@@ -15,7 +15,17 @@
     <link rel="stylesheet" type="text/css" href="./css/styles.css">
     <base href="/"></base>
   </head>
-  <body ng-controller="YouTubeController">
+  <body ng-controller="YouTubeController"> 
+    <div id="interface"> 
+      <div id="dropzone">
+      <img id="dropicon" src=./img/dragicon.png>
+        <form class="box" method="post" action="" enctype="multipart/form-data">
+          <input type="file" name="file" id="file" accept=".mp3,audio/*"> 
+        </form>  
+      </div>
+      <div class="no-results" ng-show="noResults">
+        <img id="no-results" ng-cloak src="./img/noresults.png">
+      </div>   
     <header>
       <img src="./img/logo.png" id="logo-image" ng-cloak>
       <form id="search" ng-submit="searchQuery(); toggleResults()" ng-controller="SearchController">
@@ -25,8 +35,8 @@
         <search-directive show='showResults' width='750px' height='62%'>
           <div id="results" ng-if="showResults">
             <div class="video fade" ng-hide="item.clicked" ng-cloak ng-repeat="result in searchList track by $index" ng-click="item.clicked || enqueue(result); item.clicked = true">
-                <img class="video-thumb" ng-show="result.snippet" id="thumb-{{result.snippet.title}}" src="{{result.snippet.thumbnails.default.url || yt}}">
-                <img class="sound-thumb" ng-show="result.title" id="thumb-{{result.title}}" src="{{result.artwork_url || (result.artwork_url).replace('-large', '-t500x500') || (result.artwork_url).replace('-large', '-crop') || (result.artwork_url).replace('-large', '-t300x300') || sc}}">
+                <img class="video-thumb" ng-show="result.snippet" id="thumb-{{result.snippet.title}}" ng-src="{{result.snippet.thumbnails.default.url || yt}}">
+                <img class="sound-thumb" ng-show="result.title" id="thumb-{{result.title}}" ng-src="{{result.artwork_url || (result.artwork_url).replace('-large', '-t500x500') || (result.artwork_url).replace('-large', '-crop') || (result.artwork_url).replace('-large', '-t300x300') || sc}}">
                 <span class="video-title">
                   {{result.snippet.title || result.title | limitTo: 70 }}{{result.snippet.title.length > 70 ? '...' : ''}}
                 </span>
@@ -50,7 +60,7 @@
         <div ng-show="tube">
           <div id="player"></div>
         </div>
-        <iframe id="sc-player" ng-show="widget" height="357" width="640" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url='https://soundcloud.com/jdilla/the-introduction'"></iframe>
+        <iframe id="sc-player" ng-show="widget" height="357" width="640" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url="></iframe>
         <div id="current-song" ng-cloak>
           <span id="default-playlist-message" ng-cloak ng-show="!current.title">
             Playlist is currently empty
@@ -116,7 +126,7 @@
               <tr class="user-message" ng-show="message.url">
                 <td id="user-name" ng-cloak>
                   <div id="gif">
-                    <img id="gif-message" src="{{message.url}}">
+                    <img id="gif-message" ng-src="{{message.url}}">
                   </div>
                 </td>
               </tr>
@@ -133,6 +143,7 @@
           <form id="chat-submit" ng-submit="send(message)" ng-cloak>
             <input id="chat-input" ng-model="message" type="text" placeholder="Say something..." autocomplete="off" required/>
           </form>
+      </div>
       </div>
     <script src="./js/volume.js"></script>
     <script src="./js/chat.js"></script>
