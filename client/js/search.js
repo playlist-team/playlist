@@ -16,15 +16,13 @@ angular.module('search', ['ngAnimate'])
         scope.dialogStyle.height = attrs.height;
       }
       scope.hideResults = function() {
-        scope.show = false;
-      }
-      scope.noResults = function() {
         $rootScope.noResults = false;
+        scope.show = false;
       }
     },
     transclude: true,
     template: "<div class='ng-modal' ng-show='show'>" + 
-                "<div class='ng-modal-overlay' ng-click='hideResults(); noResults()'></div>" + 
+                "<div class='ng-modal-overlay' ng-click='hideResults()'></div>" + 
                 "<div class='ng-modal-dialog' ng-style='dialogStyle'>" + 
                   "<div class='ng-modal-dialog-content' ng-transclude></div>" +
                 "</div>" +
@@ -38,6 +36,7 @@ angular.module('search', ['ngAnimate'])
   $scope.image = './img/soundcloud.png';
   $scope.yt = './img/yt.jpg';
   $scope.sc = '/img/sc.jpg';
+  $scope.shown = false;
 
   $scope.toggleIcon = function() {
     if ($scope.image === './img/soundcloud.png') {
@@ -49,10 +48,12 @@ angular.module('search', ['ngAnimate'])
 
   $scope.searchQuery = function() {
     $scope.searchList = undefined;
-    if ($scope.image === './img/soundcloud.png') {
-      $scope.getSound();
-    } else {
-      $scope.getSearch();
+    if ($scope.shown === false) {
+      if ($scope.image === './img/soundcloud.png') {
+        $scope.getSound();
+      } else {
+        $scope.getSearch();
+      }
     }
   }
 
@@ -116,11 +117,14 @@ angular.module('search', ['ngAnimate'])
   };
 
   $scope.showResults = false;
-  $scope.noResults = false;
 
   //Toggles the modal view
   $scope.toggleResults = function() {
+    $scope.shown = !$scope.shown;
     $scope.showResults = !$scope.showResults;
+    if ($rootScope.noResults === true) {
+      $rootScope.noResults = false;
+    }
   };
 
 }])
