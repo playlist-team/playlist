@@ -1,7 +1,7 @@
 {
-  "name": "2016-01-greenfield",
+  "name": "playlist",
   "version": "1.0.0",
-  "description": "",
+  "description": "a synchronized media player and chat application",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abc810221/2016-01-greenfield.git"
+    "url": "git+https://github.com/playlist-team/playlist.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/abc810221/2016-01-greenfield/issues"
+    "url": "https://github.com/playlist-team/playlist/issues"
   },
-  "homepage": "https://github.com/abc810221/2016-01-greenfield#readme",
+  "homepage": "http://play-list.herokuapp.com",
   "dependencies": {
     "bluebird": "^3.3.1",
     "express": "^4.13.4",
