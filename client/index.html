@@ -15,22 +15,22 @@
     <link rel="stylesheet" type="text/css" href="./css/styles.css">
     <base href="/"></base>
   </head>
-  <body ng-controller="YouTubeController"> 
-    <div id="interface"> 
+  <body ng-controller="YouTubeController">
+    <div id="interface">
       <div id="dropzone">
       <img id="dropicon" src=./img/dragicon.png>
         <form class="box" method="post" action="" enctype="multipart/form-data">
-          <input type="file" name="file" id="file" accept=".mp3,audio/*"> 
-        </form>  
+          <input type="file" name="file" id="file" accept=".mp3,audio/*">
+        </form>
       </div>
       <div class="no-results" ng-show="noResults">
         <img id="no-results" ng-cloak src="./img/noresults.png">
-      </div>   
+      </div>
     <header>
       <img src="./img/logo.png" id="logo-image" ng-cloak>
       <form id="search" ng-submit="searchQuery(); toggleResults()" ng-controller="SearchController">
         <input id="search-input" ng-model="field" type="text" placeholder="Search" autocomplete="off" ng-cloak>
-        <input id="search-submit" type="image" src="./img/search.png" ng-cloak> 
+        <input id="search-submit" type="image" src="./img/search.png" ng-cloak>
         <img id="engine-icon" ng-src={{image}} ng-click="toggleIcon()">
         <search-directive show='showResults' width='750px' height='62%'>
           <div id="results" ng-if="showResults">
